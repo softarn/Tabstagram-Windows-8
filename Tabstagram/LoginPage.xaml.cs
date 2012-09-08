@@ -6,6 +6,7 @@ using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Security.Authentication.Web;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -36,6 +37,36 @@ namespace Tabstagram
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
+        }
+
+        private async void SimulateForceLogoutClick(object sender, RoutedEventArgs args)
+        {
+            NotifyAboutBeingLoggedOut();
+        }
+
+        private async void NotifyAboutBeingLoggedOut()
+        {
+            // Create the message dialog and set its content
+            var messageDialog = new MessageDialog("You have been logged out. This could be due to numerous reasons. Please log in again to use Tabstagram.");
+
+            messageDialog.Commands.Add(new UICommand(
+                "Ok",
+                new UICommandInvokedHandler(this.CommandInvokedHandler)));
+
+            // Set the command that will be invoked by default
+            messageDialog.DefaultCommandIndex = 1;
+
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = 1;
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
+        }
+
+        private void CommandInvokedHandler(IUICommand command)
+        {
+            // Display message showing the label of the command that was invoked
+            Debug.WriteLine("The '" + command.Label + "' command has been selected.");
         }
 
         private void ResetLoginAndNotify()
@@ -77,7 +108,6 @@ namespace Tabstagram
                     Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                     localSettings.Values["access_url"] = parser.getAccessToken();
 
-                    /* GO TO NEXT ACTIVITY! */
                     NavigateToLoggedIn();
                 }
                 else if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.ErrorHttp)
@@ -97,8 +127,8 @@ namespace Tabstagram
                 // Bad Parameter, SSL/TLS Errors and Network Unavailable errors are to be handled here.
                 //
                 Debug.WriteLine(Error.ToString());
+                ResetLoginAndNotify();
             }
-
         }
     }
 }
