@@ -17,5 +17,6 @@
         </TextBlock>
         <Button Content="Authenticate with Instagram" x:Name="authButton" Click="AuthButtonClick" HorizontalAlignment="Center" Margin="0,0,0,-65" VerticalAlignment="Center" FontSize="21.333" Height="75" Width="400"/>
         <TextBlock x:Name="signinRequiredTextBlock" HorizontalAlignment="Center" Margin="0,0,0,-170" TextWrapping="Wrap" Text="*** To use Tabstagram, signing in is required ***" VerticalAlignment="Center" Foreground="#FFFF4040" Visibility="Collapsed" FontFamily="Global User Interface"/>
+        <Button x:Name="simulateLogoutButton" Click="SimulateForceLogoutClick" Content="Simulate forced logout" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>
