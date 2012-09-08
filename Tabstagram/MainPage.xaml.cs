@@ -38,7 +38,7 @@ namespace Tabstagram
         {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
-            tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_url"].ToString();
+            tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_token"].ToString();
 
             BitmapImage bi = new BitmapImage();
             bi.UriSource = new Uri("http://www.abihomeschoolstoo.com/wp-content/uploads/2012/07/thumbs-up.jpg");
@@ -64,6 +64,14 @@ namespace Tabstagram
             Storyboard.SetTarget(storyboard, testImage);
 
             storyboard.Begin();
+        }
+
+        private void LogoutButtonClick(object sender, RoutedEventArgs e)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            localSettings.Values["access_token"] = null;
+            this.Frame.Navigate(typeof(LoginPage));
         }
     }
 }

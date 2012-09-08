@@ -26,7 +26,7 @@ namespace Tabstagram
     {
         public LoginPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();           
         }
 
         /// <summary>
@@ -36,7 +36,6 @@ namespace Tabstagram
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
         }
 
         private async void SimulateForceLogoutClick(object sender, RoutedEventArgs args)
@@ -106,7 +105,7 @@ namespace Tabstagram
                     AuthCallbackParser parser = new AuthCallbackParser(tokenUrl);
 
                     Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                    localSettings.Values["access_url"] = parser.getAccessToken();
+                    localSettings.Values["access_token"] = parser.getAccessToken();
 
                     NavigateToLoggedIn();
                 }

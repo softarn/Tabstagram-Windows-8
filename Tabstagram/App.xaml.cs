@@ -64,9 +64,20 @@ namespace Tabstagram
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(LoginPage), args.Arguments))
+                Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                if (localSettings.Values["access_token"] != null)
                 {
-                    throw new Exception("Failed to create initial page");
+                    if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
+                    {
+                        throw new Exception("Failed to create initial page");
+                    }
+                }
+                else
+                {
+                    if (!rootFrame.Navigate(typeof(LoginPage), args.Arguments))
+                    {
+                        throw new Exception("Failed to create initial page");
+                    }
                 }
             }
             // Ensure the current window is active
