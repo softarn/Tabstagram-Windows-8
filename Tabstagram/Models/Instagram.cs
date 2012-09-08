@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -10,32 +11,27 @@ namespace Tabstagram
     class Instagram
     {
 
-        private static string token = "48448621.f59def8.490b78f9de0041ad8d7a5534a59af67d";
+        public static string access_token = "";
 
         private static string BASE_URL = "https://api.instagram.com/v1/";
         private static string HEADER_VALUE = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
 
-        private static string feed_url = Instagram.BASE_URL + "users/self/feed?access_token=" + token;
-
-        public Instagram(string token)
-        {
-            Instagram.token = token;
-        }
+        private static string feed_url { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
                         
-        private HttpClient GetHttpClient()
+        private static HttpClient GetHttpClient()
         {
             HttpClient httpClient = new HttpClient();
             // Limit the max buffer size for the response so we don't get overwhelmed
             httpClient.MaxResponseContentBufferSize = 256000;
-            httpClient.DefaultRequestHeaders.Add("user-agent", Instagram.HEADER_VALUE);
+            httpClient.DefaultRequestHeaders.Add("user-agent", HEADER_VALUE);
 
             return httpClient;
         }
 
-        public async Task<List<Media>> Feed()
+        public static async Task<List<Media>> Feed()
         {
-            HttpClient client = GetHttpClient();
-
+            HttpClient client = Instagram.GetHttpClient();
+            Debug.WriteLine("connecting to :" + feed_url);
             string response = await client.GetStringAsync(feed_url);
             return Media.ListFromJSON(response);
         }

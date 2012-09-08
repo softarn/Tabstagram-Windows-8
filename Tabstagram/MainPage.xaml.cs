@@ -34,14 +34,18 @@ namespace Tabstagram
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
         /// property is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_token"].ToString();
 
+            Instagram.access_token = localSettings.Values["access_token"].ToString();
+
+            List<Media> feed = await Instagram.Feed();
+
             BitmapImage bi = new BitmapImage();
-            bi.UriSource = new Uri("http://www.abihomeschoolstoo.com/wp-content/uploads/2012/07/thumbs-up.jpg");
+            bi.UriSource = new Uri(feed.First().images.standard_resolution.url);
             testImage.Source = bi;
 
             testImage.ImageOpened += ImageOpened;
@@ -64,14 +68,6 @@ namespace Tabstagram
             Storyboard.SetTarget(storyboard, testImage);
 
             storyboard.Begin();
-        }
-
-        private void LogoutButtonClick(object sender, RoutedEventArgs e)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            localSettings.Values["access_token"] = null;
-            this.Frame.Navigate(typeof(LoginPage));
         }
     }
 }

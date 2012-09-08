@@ -26,7 +26,7 @@ namespace Tabstagram
     {
         public LoginPage()
         {
-            this.InitializeComponent();           
+            this.InitializeComponent();
         }
 
         /// <summary>
@@ -36,6 +36,7 @@ namespace Tabstagram
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
         }
 
         private async void SimulateForceLogoutClick(object sender, RoutedEventArgs args)
