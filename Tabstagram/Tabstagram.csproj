@@ -110,9 +110,10 @@
     <Compile Include="Common\LayoutAwarePage.cs" />
     <Compile Include="Common\RichTextColumns.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ItemsPage1.xaml.cs">
-      <DependentUpon>ItemsPage1.xaml</DependentUpon>
+    <Compile Include="GroupedItemsPage1.xaml.cs">
+      <DependentUpon>GroupedItemsPage1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListsViewModel.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -153,7 +154,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ItemsPage1.xaml">
+    <Page Include="GroupedItemsPage1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

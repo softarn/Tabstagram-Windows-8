@@ -58,7 +58,6 @@ namespace Tabstagram
 
     public class Media
     {
-        public bool loaded { get; set; }
         public string type { get; set; }
         public string filter { get; set; }
         public List<object> tags { get; set; }

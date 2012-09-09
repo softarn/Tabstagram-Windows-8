@@ -17,6 +17,8 @@ namespace Tabstagram
         private static string HEADER_VALUE = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
 
         private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
+        private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + access_token; } }
+        private static string TABSTAGRAM_URL { get { return BASE_URL + "tags/tabstagram/media/recent?access_token=" + access_token; } }
                         
         private static HttpClient GetHttpClient()
         {
@@ -33,8 +35,26 @@ namespace Tabstagram
             Debug.WriteLine(FEED_URL);
             HttpClient client = GetHttpClient();
             string response = await client.GetStringAsync(FEED_URL);
-            return Media.ListFromJSON(response);
+            List<Media> list = Media.ListFromJSON(response);
+            return list;
         }
 
+        public static async Task<List<Media>> Popular()
+        {
+            Debug.WriteLine(POPULAR_URL);
+            HttpClient client = GetHttpClient();
+            string response = await client.GetStringAsync(POPULAR_URL);
+            List<Media> list = Media.ListFromJSON(response);
+            return list;
+        }
+
+        public static async Task<List<Media>> Tabstagram()
+        {
+            Debug.WriteLine(TABSTAGRAM_URL);
+            HttpClient client = GetHttpClient();
+            string response = await client.GetStringAsync(TABSTAGRAM_URL);
+            List<Media> list = Media.ListFromJSON(response);
+            return list;
+        }
     }
 }
