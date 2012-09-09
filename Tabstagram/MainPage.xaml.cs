@@ -59,13 +59,5 @@ namespace Tabstagram
         {
 
         }
-
-        private void LogoutButtonClick(object sender, RoutedEventArgs e)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values["access_token"] = null;
-
-            this.Frame.Navigate(typeof(LoginPage));
-        }
     }
 }

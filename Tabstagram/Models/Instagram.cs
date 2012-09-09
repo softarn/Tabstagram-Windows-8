@@ -16,7 +16,7 @@ namespace Tabstagram
         private static string BASE_URL = "https://api.instagram.com/v1/";
         private static string HEADER_VALUE = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
 
-        private static string feed_url { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
+        private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
                         
         private static HttpClient GetHttpClient()
         {
@@ -30,10 +30,11 @@ namespace Tabstagram
 
         public static async Task<List<Media>> Feed()
         {
-            HttpClient client = Instagram.GetHttpClient();
-            Debug.WriteLine("connecting to :" + feed_url);
-            string response = await client.GetStringAsync(feed_url);
+            Debug.WriteLine(FEED_URL);
+            HttpClient client = GetHttpClient();
+            string response = await client.GetStringAsync(FEED_URL);
             return Media.ListFromJSON(response);
         }
+
     }
 }
