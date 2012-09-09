@@ -48,13 +48,22 @@ namespace Tabstagram
         public StandardResolution standard_resolution { get; set; }
     }
 
+    public class Caption
+    {
+        public string created_time { get; set; }
+        public string text { get; set; }
+        public User from { get; set; }
+        public string id { get; set; }
+    }
+
     public class Media
     {
+        public bool loaded { get; set; }
         public string type { get; set; }
         public string filter { get; set; }
         public List<object> tags { get; set; }
         public Comments comments { get; set; }
-        public object caption { get; set; }
+        public Caption caption { get; set; }
         public Likes likes { get; set; }
         public string link { get; set; }
         public User user { get; set; }
@@ -71,6 +80,11 @@ namespace Tabstagram
         public static List<Media> ListFromJSON(string jsonString)
         {
             return JsonConvert.DeserializeObject<MultipleMedia>(jsonString).data;
+        }
+
+        public override string ToString()
+        {
+            return link;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
@@ -40,13 +41,15 @@ namespace Tabstagram
 
             tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_token"].ToString();
 
-            Instagram.access_token = localSettings.Values["access_token"].ToString();
+            Instagram.access_token = localSettings.Values["access_token"].ToString();   
 
             List<Media> feed = await Instagram.Feed();
+            Debug.WriteLine("OK WE GOT THE FEED WITH SIZE:" + feed.Count());
 
             BitmapImage bi = new BitmapImage();
             bi.UriSource = new Uri(feed.First().images.standard_resolution.url);
-            testImage.Source = bi;
+            ThumbnailView.DataContext = feed.First();
+            Debug.WriteLine(feed.First().link);
 
             testImage.ImageOpened += ImageOpened;
 
@@ -54,20 +57,7 @@ namespace Tabstagram
 
         void ImageOpened(object sender, RoutedEventArgs e)
         {
-            var storyboard = new Storyboard();
 
-            var opacityAnimation = new DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(0.5),
-            };
-            storyboard.Children.Add(opacityAnimation);
-
-            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-            Storyboard.SetTarget(storyboard, testImage);
-
-            storyboard.Begin();
         }
 
         private void LogoutButtonClick(object sender, RoutedEventArgs e)
