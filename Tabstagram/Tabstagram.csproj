@@ -138,6 +138,8 @@
     <None Include="Tabstagram_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\CommentIcon.png" />
+    <Content Include="Assets\HeartIcon.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
