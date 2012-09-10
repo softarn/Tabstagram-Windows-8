@@ -36,7 +36,7 @@ namespace Tabstagram
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromSeconds(0.5),
+                Duration = TimeSpan.FromSeconds(0.8),
             };
             storyboard.Children.Add(opacityAnimation);
 

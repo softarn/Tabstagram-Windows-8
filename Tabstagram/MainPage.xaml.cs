@@ -35,24 +35,13 @@ namespace Tabstagram
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.  The Parameter
         /// property is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_token"].ToString();
 
-            Instagram.access_token = localSettings.Values["access_token"].ToString();   
-
-            List<Media> feed = await Instagram.Feed();
-            Debug.WriteLine("OK WE GOT THE FEED WITH SIZE:" + feed.Count());
-
-            BitmapImage bi = new BitmapImage();
-            bi.UriSource = new Uri(feed.First().images.standard_resolution.url);
-            ThumbnailView.DataContext = feed.First();
-            Debug.WriteLine(feed.First().link);
-
-            testImage.ImageOpened += ImageOpened;
-
+            Instagram.access_token = localSettings.Values["access_token"].ToString();
         }
 
         void ImageOpened(object sender, RoutedEventArgs e)
