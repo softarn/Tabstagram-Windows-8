@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace Tabstagram
 {
@@ -12,6 +13,7 @@ namespace Tabstagram
     {
         public ObservableCollection<Media> Items { get; set; }
         public string category { get; set; }
+        public bool IsLoaded { get; set; }
 
         public Group(string name, ObservableCollection<Media> items)
         {
@@ -20,63 +22,32 @@ namespace Tabstagram
         }
     }
 
-    class ListsViewModel : INotifyPropertyChanged
+    class ListsViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public List<DispatcherTimer> timers = new List<DispatcherTimer>();
         public ObservableCollection<Group> ItemGroups = new ObservableCollection<Group>();
 
-        public async void LoadAll()
+        public async void AddMediaListType(MediaListType mlt, int position = -1)
         {
-            LoadFeed();
-            LoadPopular();
-            LoadTabstagram();
-        }
-        public async void LoadFeed()
-        {
-            ObservableCollection<Media> feed = new ObservableCollection<Media>();
-            ItemGroups.Add(new Group("Feed", feed));
-            List<Media> tmpFeed = await Instagram.Feed();
+            ObservableCollection<Media> List = new ObservableCollection<Media>();
+            
+            if(position == -1)
+                ItemGroups.Add(new Group(mlt.GetName(), List));
+            else
+                ItemGroups.Insert(position, new Group(mlt.GetName(), List));
 
-            foreach (Media m in tmpFeed)
-            {
-                feed.Add(m);
-            }
-
-            Notify("List");
+            List<Media> tmpList = await Instagram.LoadMediaList(mlt);
+            AddAllTo(tmpList, List);
         }
 
-        public async void LoadPopular()
+        private void AddAllTo(List<Media> elements, ObservableCollection<Media> list)
         {
-            ObservableCollection<Media> feed = new ObservableCollection<Media>();
-            ItemGroups.Add(new Group("Popular", feed));
-            List<Media> tmpFeed = await Instagram.Popular();
-
-            foreach (Media m in tmpFeed)
-            {
-                feed.Add(m);
-            }
-
-            Notify("List");
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick += (sender, e) => { if(elements.Count == 0){return;} list.Add(elements.First()); elements.Remove(elements.First()); }; // Everytime timer ticks, timer_Tick will be called             // Timer will tick evert second                       // Enable the timer
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            timer.Start();                              // Start the timer
+            timers.Add(timer);
         }
 
-        public async void LoadTabstagram()
-        {
-            ObservableCollection<Media> feed = new ObservableCollection<Media>();
-            ItemGroups.Add(new Group("#tabstagram", feed));
-            List<Media> tmpFeed = await Instagram.Tabstagram();
-
-            foreach (Media m in tmpFeed)
-            {
-                feed.Add(m);
-            }
-
-            Notify("List");
-        }
-
-        private void Notify(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -35,23 +35,15 @@ namespace Tabstagram
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected async override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Instagram.access_token = localSettings.Values["access_token"].ToString();
             ListsViewModel lvm = new ListsViewModel();
             this.DefaultViewModel["Groups"] = lvm.ItemGroups;
-            lvm.LoadAll();
-
-            List<Media> popular = await Instagram.Popular();
-            
-            var result_pop =
-                from t in popular
-                group t by t.likes.count into g
-                orderby g.Key
-                select g;
-
-            //this.DefaultViewModel["Groups"] = result.Concat(result_pop);
+            lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
+            lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
+            lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
         }
 
     }

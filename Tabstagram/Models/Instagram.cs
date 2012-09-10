@@ -8,9 +8,34 @@ using System.Threading.Tasks;
 
 namespace Tabstagram
 {
+    public class MediaListType
+    {
+        public enum ListType { Feed, Popular, Tag }
+
+        public ListType Type { get; set; }
+        public string Tag { get; set; }
+
+        public MediaListType(ListType type, string tag = "")
+        {
+            this.Type = type;
+            this.Tag = tag;
+        }
+
+        public string GetName()
+        {
+            switch (this.Type)
+            {
+                case MediaListType.ListType.Feed: return "Feed";
+                case MediaListType.ListType.Popular: return "Popular";
+                case MediaListType.ListType.Tag: return "#" + this.Tag;
+            }
+
+            return "Error";
+        }
+    }
+
     class Instagram
     {
-
         public static string access_token = "";
 
         private static string BASE_URL = "https://api.instagram.com/v1/";
@@ -18,7 +43,6 @@ namespace Tabstagram
 
         private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
         private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + access_token; } }
-        private static string TABSTAGRAM_URL { get { return BASE_URL + "tags/tabstagram/media/recent?access_token=" + access_token; } }
                         
         private static HttpClient GetHttpClient()
         {
@@ -30,29 +54,23 @@ namespace Tabstagram
             return httpClient;
         }
 
-        public static async Task<List<Media>> Feed()
+        private static string GetTagUrl(string Tag)
         {
-            Debug.WriteLine(FEED_URL);
-            HttpClient client = GetHttpClient();
-            string response = await client.GetStringAsync(FEED_URL);
-            List<Media> list = Media.ListFromJSON(response);
-            return list;
+            return String.Format("{0}tags/{1}/media/recent?access_token={2}", BASE_URL, Tag, access_token);
         }
 
-        public static async Task<List<Media>> Popular()
+        public static async Task<List<Media>> LoadMediaList(MediaListType mlt)
         {
-            Debug.WriteLine(POPULAR_URL);
             HttpClient client = GetHttpClient();
-            string response = await client.GetStringAsync(POPULAR_URL);
-            List<Media> list = Media.ListFromJSON(response);
-            return list;
-        }
+            string url = "";
+            switch (mlt.Type) {
+                case MediaListType.ListType.Feed: url = FEED_URL; break;
+                case MediaListType.ListType.Popular: url = POPULAR_URL; break;
+                case MediaListType.ListType.Tag: url = GetTagUrl(mlt.Tag); break;
+            }
 
-        public static async Task<List<Media>> Tabstagram()
-        {
-            Debug.WriteLine(TABSTAGRAM_URL);
-            HttpClient client = GetHttpClient();
-            string response = await client.GetStringAsync(TABSTAGRAM_URL);
+            Debug.WriteLine("Getting MediaList from: " + url);
+            string response = await client.GetStringAsync(url);
             List<Media> list = Media.ListFromJSON(response);
             return list;
         }
