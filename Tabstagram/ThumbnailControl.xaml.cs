@@ -20,6 +20,37 @@ namespace Tabstagram
 {
     public sealed partial class ThumbnailControl : UserControl
     {
+        public enum Resolution { Thumbnail, Low, Standard }
+
+        public static readonly DependencyProperty SizeProperty = DependencyProperty.Register
+           (
+                "Size",
+                typeof(int),
+                typeof(ThumbnailControl),
+                new PropertyMetadata(150)
+           );
+
+        public int Size
+        {
+            get { return (int)GetValue(SizeProperty); }
+            set { SetValue(SizeProperty, value); MainGrid.Width = (int)value; MainGrid.Height = (int)value; }
+        }
+
+        public static readonly DependencyProperty ResolutionProperty = DependencyProperty.Register
+        (
+        "Resolution",
+        typeof(Resolution),
+        typeof(ThumbnailControl),
+        new PropertyMetadata(Resolution.Thumbnail)
+        );
+
+        //Get resolution kind and fetch the right url from media
+        public int _resolution
+        {
+            get { return (int)GetValue(ResolutionProperty); }
+            set { SetValue(ResolutionProperty, value); thumbnail.Source =  }
+        }
+
         public ThumbnailControl()
         {
             this.InitializeComponent();

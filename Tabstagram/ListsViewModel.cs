@@ -37,7 +37,7 @@ namespace Tabstagram
                 ItemGroups.Insert(position, new Group(mlt.GetName(), List));
 
             List<Media> tmpList = await Instagram.LoadMediaList(mlt);
-            AddAllTo(tmpList, List);
+            AddAllTo(tmpList, List);        
         }
 
         private void AddAllTo(List<Media> elements, ObservableCollection<Media> list)
