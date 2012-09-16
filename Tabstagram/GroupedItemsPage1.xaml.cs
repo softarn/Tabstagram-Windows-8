@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
@@ -44,6 +45,12 @@ namespace Tabstagram
             lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
             lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
             lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
+        }
+
+        private void RefreshButtonClick(object sender, RoutedEventArgs e)
+        {
+            /* TODO: Implement refreshing the corresponding list click here */
+            Debug.WriteLine("Refresh button click");
         }
 
     }

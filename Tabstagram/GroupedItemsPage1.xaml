@@ -62,14 +62,19 @@
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <Grid Margin="1,0,0,6">
-                                <Button
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
+                                        <Image Source="/Assets/RefreshIcon.png" Width="30" Height="30" Margin="10, 0, 10, 0" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button
                                     AutomationProperties.Name="category"
                                     Style="{StaticResource TextPrimaryButtonStyle}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" />
-                                        <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
-                                    </StackPanel>
-                                </Button>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" />
+                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
                             </Grid>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
