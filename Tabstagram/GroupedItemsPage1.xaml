@@ -67,8 +67,9 @@
                                 <DataTemplate>
                                     <Grid Margin="1,0,0,6">
                                         <Button
-                                        AutomationProperties.Name="category"
-                                        Style="{StaticResource TextPrimaryButtonStyle}">
+                                            AutomationProperties.Name="category"
+                                            Style="{StaticResource TextPrimaryButtonStyle}"
+                                            Click="Button_Click">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" />
                                                 <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>

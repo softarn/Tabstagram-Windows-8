@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -38,7 +39,7 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            // TODO: Assign a bindable collection of items to this.DefaultViewModel["Items"]
+            this.DefaultViewModel["Items"] = App.lvm.GetListFromString(UserSettings.ActiveList);
         }
     }
 }

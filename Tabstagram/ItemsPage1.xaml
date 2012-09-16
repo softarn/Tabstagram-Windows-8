@@ -39,13 +39,13 @@
             AutomationProperties.Name="Items"
             TabIndex="1"
             Grid.RowSpan="2"
-            Padding="116,136,116,46"
+            Padding="66,176,116,46"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             SelectionMode="None"
             IsSwipeEnabled="false">
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <local:ThumbnailControl />
+                    <local:ThumbnailControl Width="150" Height="150" />
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>

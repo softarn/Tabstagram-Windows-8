@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -37,12 +38,22 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Instagram.access_token = localSettings.Values["access_token"].ToString();
+            Instagram.AccessToken = UserSettings.AccessToken;
             this.DefaultViewModel["Groups"] = App.lvm.ItemGroups;
-            App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
-            App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
-            App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
+            App.lvm.LoadFromSettings();
+
+
+            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
+            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
+            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MediaList m = (MediaList)((Button)sender).DataContext;
+
+            UserSettings.ActiveList = m.category;
+            this.Frame.Navigate(typeof(ItemsPage1));
         }
 
     }

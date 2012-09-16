@@ -41,7 +41,7 @@ namespace Tabstagram
 
             tokenTextBlock.Text = "Logged on! \n" + localSettings.Values["access_token"].ToString();
 
-            Instagram.access_token = localSettings.Values["access_token"].ToString();
+            Instagram.AccessToken = localSettings.Values["access_token"].ToString();
         }
 
         void ImageOpened(object sender, RoutedEventArgs e)

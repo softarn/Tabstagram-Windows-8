@@ -9,9 +9,9 @@
     d:DesignHeight="150"
     d:DesignWidth="150">
     
-    <Grid Name="MainGrid" Height="150" Visibility="Collapsed">
-        <Image x:Name="thumbnail" HorizontalAlignment="Center" 
-                Margin="0,0,0,0" VerticalAlignment="Center" ImageOpened="thumbnail_ImageOpened"/>
+    <Grid Name="MainGrid" Height="150" Width="150" Visibility="Collapsed">
+        <Image x:Name="thumbnail" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding images.thumbnail.url}"
+                ImageOpened="thumbnail_ImageOpened"/>
         <Grid VerticalAlignment="Bottom">
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity="0.3"/>

@@ -15,10 +15,10 @@ namespace Tabstagram
         {
             this.responseUrl = responseUrl;
 
-            parse();
+            Parse();
         }
 
-        private void parse()
+        private void Parse()
         {
             string tokenPart = responseUrl.Substring(responseUrl.IndexOf("#") + 1);
 
@@ -31,7 +31,7 @@ namespace Tabstagram
             }
         }
 
-        public string getAccessToken()
+        public string GetAccessToken()
         {
             return dict["access_token"];
         }
