@@ -113,6 +113,7 @@
     <Compile Include="GroupedItemsPage1.xaml.cs">
       <DependentUpon>GroupedItemsPage1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LikedImageConverter.cs" />
     <Compile Include="ListsViewModel.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -140,6 +141,7 @@
   <ItemGroup>
     <Content Include="Assets\CommentIcon.png" />
     <Content Include="Assets\HeartIcon.png" />
+    <Content Include="Assets\HeartIcon_white.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />

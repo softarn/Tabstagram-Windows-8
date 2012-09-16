@@ -66,6 +66,7 @@ namespace Tabstagram
         public Likes likes { get; set; }
         public string link { get; set; }
         public User user { get; set; }
+        public bool user_has_liked { get; set; }
         public string created_time { get; set; }
         public Images images { get; set; }
         public string id { get; set; }
