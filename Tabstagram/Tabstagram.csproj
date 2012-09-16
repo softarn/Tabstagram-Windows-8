@@ -114,6 +114,9 @@
       <DependentUpon>GroupedItemsPage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="LikedImageConverter.cs" />
+    <Compile Include="ItemsPage1.xaml.cs">
+      <DependentUpon>ItemsPage1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ListsViewModel.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -125,6 +128,8 @@
     <Compile Include="Models\Instagram.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Media.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ThumbnailControl.xaml.cs">
@@ -147,7 +152,6 @@
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Common\ReadMe.txt" />
-    <None Include="gitignore" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -159,6 +163,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="GroupedItemsPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsPage1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

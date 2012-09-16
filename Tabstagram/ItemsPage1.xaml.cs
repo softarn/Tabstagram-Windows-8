@@ -13,16 +13,17 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
+// The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
 namespace Tabstagram
 {
     /// <summary>
-    /// A page that displays a grouped collection of items.
+    /// A page that displays a collection of item previews.  In the Split Application this page
+    /// is used to display and select one of the available groups.
     /// </summary>
-    public sealed partial class GroupedItemsPage1 : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class ItemsPage1 : Tabstagram.Common.LayoutAwarePage
     {
-        public GroupedItemsPage1()
+        public ItemsPage1()
         {
             this.InitializeComponent();
         }
@@ -38,23 +39,7 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            Instagram.AccessToken = UserSettings.AccessToken;
-            this.DefaultViewModel["Groups"] = App.lvm.ItemGroups;
-            App.lvm.LoadFromSettings();
-
-
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
+            this.DefaultViewModel["Items"] = App.lvm.GetListFromString(UserSettings.ActiveList);
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MediaList m = (MediaList)((Button)sender).DataContext;
-
-            UserSettings.ActiveList = m.category;
-            this.Frame.Navigate(typeof(ItemsPage1));
-        }
-
     }
 }

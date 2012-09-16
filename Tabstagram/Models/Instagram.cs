@@ -8,41 +8,20 @@ using System.Threading.Tasks;
 
 namespace Tabstagram
 {
-    public class MediaListType
-    {
-        public enum ListType { Feed, Popular, Tag }
-
-        public ListType Type { get; set; }
-        public string Tag { get; set; }
-
-        public MediaListType(ListType type, string tag = "")
-        {
-            this.Type = type;
-            this.Tag = tag;
-        }
-
-        public string GetName()
-        {
-            switch (this.Type)
-            {
-                case MediaListType.ListType.Feed: return "Feed";
-                case MediaListType.ListType.Popular: return "Popular";
-                case MediaListType.ListType.Tag: return "#" + this.Tag;
-            }
-
-            return "Error";
-        }
-    }
 
     class Instagram
     {
-        public static string access_token = "";
+        public static string AccessToken { get; set; }
 
         private static string BASE_URL = "https://api.instagram.com/v1/";
         private static string HEADER_VALUE = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
 
-        private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + access_token; } }
-        private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + access_token; } }
+        private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + AccessToken; } }
+        private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + AccessToken; } }
+        private static string GetTagUrl(string Tag)
+        {
+            return String.Format("{0}tags/{1}/media/recent?access_token={2}", BASE_URL, Tag, AccessToken);
+        }
                         
         private static HttpClient GetHttpClient()
         {
@@ -54,25 +33,37 @@ namespace Tabstagram
             return httpClient;
         }
 
-        private static string GetTagUrl(string Tag)
-        {
-            return String.Format("{0}tags/{1}/media/recent?access_token={2}", BASE_URL, Tag, access_token);
-        }
-
-        public static async Task<List<Media>> LoadMediaList(MediaListType mlt)
+        private static async Task<List<Media>> LoadMediaList(string url, List<Arg> args = null)
         {
             HttpClient client = GetHttpClient();
-            string url = "";
-            switch (mlt.Type) {
-                case MediaListType.ListType.Feed: url = FEED_URL; break;
-                case MediaListType.ListType.Popular: url = POPULAR_URL; break;
-                case MediaListType.ListType.Tag: url = GetTagUrl(mlt.Tag); break;
-            }
-
             Debug.WriteLine("Getting MediaList from: " + url);
             string response = await client.GetStringAsync(url);
             List<Media> list = Media.ListFromJSON(response);
             return list;
+        }
+
+        public static async Task<List<Media>> LoadFeed(List<Arg> args = null)
+        {
+            return await LoadMediaList(FEED_URL, args);
+        }
+
+        public static async Task<List<Media>> LoadPopular(List<Arg> args = null)
+        {
+            return await LoadMediaList(POPULAR_URL, args);
+        }
+
+        public class Arg
+        {
+            public enum Type { MIN_ID, MAX_ID }
+
+            public Type type { get; set; }
+            public string value { get; set; }
+
+            public Arg(Type t, string v) 
+            {
+                type = t;
+                value = v;
+            }
         }
     }
 }

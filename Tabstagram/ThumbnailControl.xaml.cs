@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
@@ -20,6 +21,21 @@ namespace Tabstagram
 {
     public sealed partial class ThumbnailControl : UserControl
     {
+
+        public static readonly DependencyProperty SizeProperty = DependencyProperty.Register
+           (
+                "Size",
+                typeof(int),
+                typeof(ThumbnailControl),
+                new PropertyMetadata(150)
+           );
+
+        public int Size
+        {
+            get { return (int)GetValue(SizeProperty); }
+            set { SetValue(SizeProperty, value); MainGrid.Width = (int)value; MainGrid.Height = (int)value; }
+        }
+
         public ThumbnailControl()
         {
             this.InitializeComponent();

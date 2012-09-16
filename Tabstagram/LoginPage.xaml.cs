@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Security.Authentication.Web;
@@ -104,9 +105,7 @@ namespace Tabstagram
                     Debug.WriteLine(tokenUrl);
 
                     AuthCallbackParser parser = new AuthCallbackParser(tokenUrl);
-
-                    Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                    localSettings.Values["access_token"] = parser.getAccessToken();
+                    UserSettings.AccessToken = parser.GetAccessToken();
 
                     NavigateToLoggedIn();
                 }
