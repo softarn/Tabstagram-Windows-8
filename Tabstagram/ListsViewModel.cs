@@ -13,25 +13,29 @@ namespace Tabstagram
     public abstract class MediaList
     {
         public static List<DispatcherTimer> timers = new List<DispatcherTimer>();
-        public ObservableCollection<Media> Items { get; set; }
+        protected Pagination pagination;
+        public ObservableCollection<Media> ItemsAll { get; set; }
+        public ObservableCollection<Media> ItemsSmall { get; set; }
         public string category { get; set; }
         public bool IsLoaded { get; set; }
 
-        public MediaList()
+        public abstract void LoadList();
+        public abstract Task<bool> LoadMore();
+
+        public abstract string GetName();
+
+        protected void Init()
         {
             this.category = GetName();
-            this.Items = new ObservableCollection<Media>();
-            LoadList();
+            this.ItemsAll = new ObservableCollection<Media>();
+            this.ItemsSmall = new ObservableCollection<Media>();
         }
-
-        protected abstract void LoadList();
-        public abstract string GetName();
 
         public static MediaList GetClassFromString(string listString)
         {
             if (listString[0] == '#')
             {
-                return new HashTag(listString.Substring(1, listString.Length));
+                return new HashTag(listString.Substring(1, listString.Length - 1));
             }
 
             if (listString.Equals("popular"))
@@ -42,41 +46,88 @@ namespace Tabstagram
             throw new System.ArgumentException("listString must be #hashtagname, popular or feed");
         }
 
-        protected void AddAllTo(List<Media> elements, ObservableCollection<Media> list)
+        protected void AddOneByOne(List<Media> elements, ObservableCollection<Media> collection)
         {
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick += (sender, e) => { if (elements.Count == 0) { return; } list.Add(elements.First()); elements.Remove(elements.First()); }; // Everytime timer ticks, timer_Tick will be called             // Timer will tick evert second                       // Enable the timer
+            timer.Tick += (sender, e) =>
+            {
+                if (elements.Count == 0) { return; }
+                collection.Add(elements.First());
+                elements.Remove(elements.First());
+            }; // Everytime timer ticks, timer_Tick will be called
             timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             timer.Start();                              // Start the timer
             timers.Add(timer);
+        }
+
+        protected void AddAllImmediately(List<Media> elements, ObservableCollection<Media> collection)
+        {
+            foreach (Media element in elements)
+            {
+                collection.Add(element);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.GetName().Equals(((MediaList)obj).GetName());
         }
     }
 
     public class Feed : MediaList
     {
 
-        protected override async void LoadList()
+        public Feed() { Init(); }
+
+        public override async void LoadList()
         {
-           List<Media> list = await Instagram.LoadFeed();
-           AddAllTo(list, this.Items);
+            MultipleMedia mm = await Instagram.LoadFeed();
+            pagination = mm.pagination;
+            AddOneByOne(mm.data, ItemsSmall);
+            AddAllImmediately(mm.data, ItemsAll);
         }
 
         public override string GetName()
         {
             return "Feed";
         }
+
+        public async override Task<bool> LoadMore()
+        {
+            Args args = new Args();
+            args.Add(new Args.Arg(Args.Arg.Type.MAX_ID, ItemsAll.Last().id));
+            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "50"));
+            MultipleMedia mm = await Instagram.LoadFeed(args);
+            pagination = mm.pagination;
+            AddAllImmediately(mm.data, ItemsAll);
+            return true;
+        }
     }
 
     public class Popular : MediaList
     {
-        protected override async void LoadList()
+        public Popular() { Init(); }
+
+        public override async void LoadList()
         {
-            List<Media> list = await Instagram.LoadPopular();
-            AddAllTo(list, this.Items);
+            MultipleMedia mm = await Instagram.LoadPopular();
+            pagination = mm.pagination;
+            AddOneByOne(mm.data, ItemsSmall);
+            AddAllImmediately(mm.data, ItemsAll);
         }
         public override string GetName()
         {
             return "Popular";
+        }
+
+        public override async Task<bool> LoadMore()
+        {
+            ItemsAll.Clear();
+            MultipleMedia mm = await Instagram.LoadPopular();
+            pagination = mm.pagination;
+            AddAllImmediately(mm.data, ItemsAll);
+            AddAllImmediately(mm.data, ItemsSmall);
+            return true;
         }
     }
 
@@ -84,26 +135,38 @@ namespace Tabstagram
     {
         public string Tag { get; set; }
 
-        public HashTag(string tag) : base()
+        public HashTag(string tag)
         {
             this.Tag = tag;
+            Init();
         }
 
-        protected override async void LoadList()
+        public override async void LoadList()
         {
-            List<Media> list = await Instagram.LoadFeed();
-            AddAllTo(list, this.Items);
+            MultipleMedia mm = await Instagram.LoadHashtag(Tag);
+            pagination = mm.pagination;
+            AddOneByOne(mm.data, ItemsSmall);
+            AddAllImmediately(mm.data, ItemsAll);
         }
 
         public override string GetName()
         {
             return "#" + this.Tag;
         }
+
+        public override async Task<bool> LoadMore()
+        {
+            Args args = new Args();
+            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "50"));
+            MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url, args);
+            pagination = mm.pagination;
+            AddAllImmediately(mm.data, ItemsAll);
+            return true;
+        }
     }
 
     class ListsViewModel
     {
-        
         public ObservableCollection<MediaList> ItemGroups = new ObservableCollection<MediaList>();
 
         public void LoadFromSettings()
@@ -112,36 +175,30 @@ namespace Tabstagram
 
             foreach (string str in list)
             {
-                ItemGroups.Add(MediaList.GetClassFromString(str));
+                MediaList ml = MediaList.GetClassFromString(str);
+                if (AddToItemsGroup(ml))
+                    ml.LoadList();
             }
         }
 
-        //public async void AddMediaListType(MediaListType mlt, int position = -1)
-        //{
+        public bool AddToItemsGroup(MediaList ml)
+        {
+            if (ItemGroups.Contains(ml))
+                return false;
 
-        //    ObservableCollection<Media> List = new ObservableCollection<Media>();
-            
-        //    if(position == -1)
-        //        ItemGroups.Add(new MediaList(mlt.GetName(), List));
-        //    else
-        //        ItemGroups.Insert(position, new MediaList(mlt.GetName(), List));
+            ItemGroups.Add(ml);
+            return true;
+        }
 
-        //    List<Media> tmpList = await Instagram.LoadMediaList(mlt);
-        //    AddAllTo(tmpList, List);        
-        //}
-
-        public ObservableCollection<Media> GetListFromString(string listName)
+        public MediaList GetListFromString(string listName)
         {
             foreach (MediaList g in ItemGroups)
             {
-                if(g.category.ToLower().Equals(listName.ToLower()))
-                    return g.Items;
+                if (g.category.ToLower().Equals(listName.ToLower()))
+                    return g;
             }
 
             throw new System.ArgumentException("listName must be the name of a Group category");
         }
-
-
-
     }
 }

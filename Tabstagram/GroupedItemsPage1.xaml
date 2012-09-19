@@ -20,7 +20,7 @@
             x:Name="groupedItemsViewSource"
             Source="{Binding Groups}"
             IsSourceGrouped="true"
-            ItemsPath="Items"/>
+            ItemsPath="ItemsSmall"/>
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>

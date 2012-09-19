@@ -42,15 +42,18 @@
             Padding="66,176,116,46"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             SelectionMode="None"
-            IsSwipeEnabled="false">
+            IsSwipeEnabled="false"
+            IsItemClickEnabled="True"
+            ItemClick="itemGridView_ItemClick_1"
+            >
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <local:ThumbnailControl Width="150" Height="150" />
+                    <local:ThumbnailControl Width="150" Height="150"/>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
 
-        <!-- Vertical scrolling list only used when snapped -->
+            <!-- Vertical scrolling list only used when snapped -->
         <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemsListView"

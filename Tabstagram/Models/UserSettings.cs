@@ -43,8 +43,9 @@ namespace Tabstagram.Models
         private static List<string> LoadDefaultMediaLists()
         {
             List<string> l = new List<string>();
-            l.Add("popular");
             l.Add("feed");
+            l.Add("popular");
+            l.Add("#tabstagram");
 
             MediaStringsList = l;
             return l;

@@ -33,33 +33,63 @@ namespace Tabstagram
             return httpClient;
         }
 
-        private static async Task<List<Media>> LoadMediaList(string url, List<Arg> args = null)
+        private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
         {
             HttpClient client = GetHttpClient();
+            if (args != null)
+            {
+                url = url + args.ToString();
+            }
             Debug.WriteLine("Getting MediaList from: " + url);
             string response = await client.GetStringAsync(url);
-            List<Media> list = Media.ListFromJSON(response);
-            return list;
+            MultipleMedia mm = Media.ListFromJSON(response);
+            return mm;
         }
 
-        public static async Task<List<Media>> LoadFeed(List<Arg> args = null)
+        public static async Task<MultipleMedia> LoadFeed(Args args = null)
         {
             return await LoadMediaList(FEED_URL, args);
         }
 
-        public static async Task<List<Media>> LoadPopular(List<Arg> args = null)
+        public static async Task<MultipleMedia> LoadPopular(Args args = null)
         {
             return await LoadMediaList(POPULAR_URL, args);
         }
 
+        public static async Task<MultipleMedia> LoadHashtag(string hashtag, Args args = null)
+        {
+            return await LoadMediaList(GetTagUrl(hashtag), args);
+        }
+
+        public static async Task<MultipleMedia> LoadFromCustomUrl(string url, Args args = null)
+        {
+            return await LoadMediaList(url, args);
+        }
+    }
+
+    public class Args : List<Tabstagram.Args.Arg>
+    {
+        public override string ToString()
+            {
+                Debug.WriteLine(this.First().type.ToString());
+                string delim = "&";
+                StringBuilder sb = new StringBuilder();
+                foreach (Arg a in this)
+                {
+                    sb.Append(String.Format("{0}{1}={2}", delim, a.type.ToString().ToLower(), a.value));
+                    delim = "&";
+                }
+                return sb.ToString();
+            }
+
         public class Arg
         {
-            public enum Type { MIN_ID, MAX_ID }
+            public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT }
 
             public Type type { get; set; }
             public string value { get; set; }
 
-            public Arg(Type t, string v) 
+            public Arg(Type t, string v)
             {
                 type = t;
                 value = v;

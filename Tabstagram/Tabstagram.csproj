@@ -128,6 +128,7 @@
     <Compile Include="Models\Instagram.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Media.cs" />
+    <Compile Include="Models\Pagination.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Models\Tag.cs" />

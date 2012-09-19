@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tabstagram.Models;
 
 namespace Tabstagram
 {
@@ -77,9 +78,9 @@ namespace Tabstagram
             return JsonConvert.DeserializeObject<SingleMedia>(jsonString).data;
         }
 
-        public static List<Media> ListFromJSON(string jsonString)
+        public static MultipleMedia ListFromJSON(string jsonString)
         {
-            return JsonConvert.DeserializeObject<MultipleMedia>(jsonString).data;
+            return JsonConvert.DeserializeObject<MultipleMedia>(jsonString);
         }
 
         public override string ToString()
@@ -90,11 +91,15 @@ namespace Tabstagram
 
     public class SingleMedia
     {
+        public Pagination pagination { get; set; }
+        public Meta meta { get; set; }
         public Media data { get; set; }
     }
 
     public class MultipleMedia
     {
+        public Pagination pagination { get; set; }
+        public Meta meta { get; set; }
         public List<Media> data { get; set; }
     }
 }

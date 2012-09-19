@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Tabstagram.Models;
@@ -23,6 +24,8 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class ItemsPage1 : Tabstagram.Common.LayoutAwarePage
     {
+        MediaList mediaList = null;
+
         public ItemsPage1()
         {
             this.InitializeComponent();
@@ -37,9 +40,35 @@ namespace Tabstagram
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        protected override async void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            this.DefaultViewModel["Items"] = App.lvm.GetListFromString(UserSettings.ActiveList);
+            mediaList = App.lvm.GetListFromString(UserSettings.ActiveList);
+            this.DefaultViewModel["Items"] = mediaList.ItemsAll;
+            if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
+                 await mediaList.LoadMore();
+            AddLoadMore();
+        }
+
+        private void AddLoadMore()
+        {
+            Media m = new Media();
+            m.id = "load more";
+            m.images = new Images();
+            m.images.thumbnail = new Thumbnail();
+            m.images.thumbnail.url = "ms-appx:/Assets/HeartIcon.png";
+            mediaList.ItemsAll.Add(m);
+        }
+
+        private async void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
+        {
+            Media m = e.ClickedItem as Media;
+
+            if (m.id.Equals("load more"))
+            {
+                mediaList.ItemsAll.RemoveAt(mediaList.ItemsAll.Count - 1);
+                await mediaList.LoadMore();
+                AddLoadMore();
+            }
         }
     }
 }

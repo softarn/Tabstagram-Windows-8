@@ -41,11 +41,6 @@ namespace Tabstagram
             Instagram.AccessToken = UserSettings.AccessToken;
             this.DefaultViewModel["Groups"] = App.lvm.ItemGroups;
             App.lvm.LoadFromSettings();
-
-
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Feed));
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Popular));
-            //App.lvm.AddMediaListType(new MediaListType(MediaListType.ListType.Tag, "tabstagram"));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
