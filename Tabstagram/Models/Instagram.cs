@@ -22,6 +22,10 @@ namespace Tabstagram
         {
             return String.Format("{0}tags/{1}/media/recent?access_token={2}", BASE_URL, Tag, AccessToken);
         }
+        private static string GetUserMediaUrl(User u)
+        {
+            return String.Format("{0}users/{1}/media/recent?access_token={2}", BASE_URL, u.id, AccessToken);
+        }
                         
         private static HttpClient GetHttpClient()
         {
@@ -64,6 +68,11 @@ namespace Tabstagram
         public static async Task<MultipleMedia> LoadFromCustomUrl(string url, Args args = null)
         {
             return await LoadMediaList(url, args);
+        }
+
+        internal static async Task<MultipleMedia> LoadUserMedia(User user, Args args = null)
+        {
+            return await LoadMediaList(GetUserMediaUrl(user), args);
         }
     }
 

@@ -96,8 +96,35 @@ namespace Tabstagram
         {
             Args args = new Args();
             args.Add(new Args.Arg(Args.Arg.Type.MAX_ID, ItemsAll.Last().id));
-            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "50"));
+            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "25"));
             MultipleMedia mm = await Instagram.LoadFeed(args);
+            pagination = mm.pagination;
+            AddAllImmediately(mm.data, ItemsAll);
+            return true;
+        }
+    }
+
+    public class UserMedia : MediaList
+    {
+        private User User;
+
+        public UserMedia(User user) { User = user; Init(); }
+
+        public override async void LoadList()
+        {
+            MultipleMedia mm = await Instagram.LoadUserMedia(this.User);
+            pagination = mm.pagination;
+            AddAllImmediately(mm.data, ItemsAll);
+        }
+
+        public override string GetName()
+        {
+            return "Feed";
+        }
+
+        public async override Task<bool> LoadMore()
+        {
+            MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url);
             pagination = mm.pagination;
             AddAllImmediately(mm.data, ItemsAll);
             return true;
@@ -157,7 +184,7 @@ namespace Tabstagram
         public override async Task<bool> LoadMore()
         {
             Args args = new Args();
-            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "50"));
+            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "25"));
             MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url, args);
             pagination = mm.pagination;
             AddAllImmediately(mm.data, ItemsAll);

@@ -33,7 +33,7 @@ namespace Tabstagram
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
+        /// provided wh     en recreating a page from a prior session.
         /// </summary>
         /// <param name="navigationParameter">The parameter value passed to
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.
@@ -43,6 +43,7 @@ namespace Tabstagram
         protected override async void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             mediaList = App.lvm.GetListFromString(UserSettings.ActiveList);
+            pageTitle.Text = "Tabstagram - " + mediaList.category;
             this.DefaultViewModel["Items"] = mediaList.ItemsAll;
             if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
                  await mediaList.LoadMore();
@@ -68,6 +69,10 @@ namespace Tabstagram
                 mediaList.ItemsAll.RemoveAt(mediaList.ItemsAll.Count - 1);
                 await mediaList.LoadMore();
                 AddLoadMore();
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(BasicPage1), m);
             }
         }
     }
