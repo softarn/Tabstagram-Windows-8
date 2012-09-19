@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Tabstagram.Models;
@@ -49,6 +50,12 @@ namespace Tabstagram
 
             UserSettings.ActiveList = m.category;
             this.Frame.Navigate(typeof(ItemsPage1));
+        }
+
+        private void RefreshButtonClick(object sender, RoutedEventArgs e)
+        {
+            /* TODO: Implement refreshing the corresponding list click here */
+            Debug.WriteLine("Refresh button click");
         }
 
     }
