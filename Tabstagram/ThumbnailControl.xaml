@@ -13,8 +13,7 @@
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
     </UserControl.Resources>
 
-
-    <Grid Name="MainGrid" Width="150" Height="150" Visibility="Collapsed">
+    <Grid Name="MainGrid" Width="150" Height="150" Opacity="0">
         <Border BorderBrush="#000" BorderThickness="2"/>
         <Image x:Name="thumbnail" Source="{Binding images.thumbnail.url}" HorizontalAlignment="Center" 
                 Margin="2" VerticalAlignment="Center" ImageOpened="thumbnail_ImageOpened"/>

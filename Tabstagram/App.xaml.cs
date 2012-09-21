@@ -23,7 +23,6 @@ namespace Tabstagram
     /// </summary>
     sealed partial class App : Application
     {
-        internal static ListsViewModel lvm = new ListsViewModel();
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

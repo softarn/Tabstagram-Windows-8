@@ -42,7 +42,7 @@
         </Grid>
         <Grid x:Name="MediaGrid" Grid.Row="1" Margin="15,0,15,15" >
         	<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="8*"/>
         		<ColumnDefinition Width="3*"/>
         	</Grid.ColumnDefinitions>
@@ -84,20 +84,31 @@
         			</Grid>
         		</Grid>
         	</Grid>
-            <ListView ItemsSource="{Binding RelatedMedia.ItemsAll}" SelectionMode="None" HorizontalAlignment="Center">
+            <ListView ItemsSource="{Binding RelatedMedia.ItemsAll}" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <local:ThumbnailControl />
+                        <Viewbox>
+                        <local:ThumbnailControl HorizontalAlignment="Center"/>
+                        </Viewbox>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
             <Grid Grid.Column="2" Margin="0" Background="#0C000000">
-            	<Grid.RowDefinitions>
-            		<RowDefinition Height="Auto"/>
-            		<RowDefinition/>
-            	</Grid.RowDefinitions>
             	<Grid Margin="0">
+            		<Grid.RowDefinitions>
+            			<RowDefinition/>
+            			<RowDefinition Height="7*"/>
+            		</Grid.RowDefinitions>
             		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.full_name}" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI"/>
+            		<ListView Margin="0" Grid.Row="1" ItemsSource="{Binding CurrentMedia.comments.data}">
+					                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Viewbox>
+                        <local:CommentControl HorizontalAlignment="Center"/>
+                        </Viewbox>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+					</ListView>
             	</Grid>
             </Grid>
         </Grid>

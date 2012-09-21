@@ -23,9 +23,13 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class GroupedItemsPage1 : Tabstagram.Common.LayoutAwarePage
     {
+        ListsViewModel lvm = null;
+
         public GroupedItemsPage1()
         {
             this.InitializeComponent();
+
+            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
         /// <summary>
@@ -39,17 +43,20 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            Instagram.AccessToken = UserSettings.AccessToken;
-            this.DefaultViewModel["Groups"] = App.lvm.ItemGroups;
-            App.lvm.LoadFromSettings();
+            if (lvm == null)
+            {
+                lvm = new ListsViewModel();
+                Instagram.AccessToken = UserSettings.AccessToken;
+                this.DefaultViewModel["Groups"] = lvm.ItemGroups;
+                lvm.LoadFromSettings();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MediaList m = (MediaList)((Button)sender).DataContext;
 
-            UserSettings.ActiveList = m.category;
-            this.Frame.Navigate(typeof(ItemsPage1));
+            this.Frame.Navigate(typeof(ItemsPage1), m);
         }
 
         private void RefreshButtonClick(object sender, RoutedEventArgs e)

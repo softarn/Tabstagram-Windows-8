@@ -31,6 +31,18 @@ namespace Tabstagram
             this.InitializeComponent();
         }
 
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            mediaList = e.Parameter as MediaList;
+            pageTitle.Text = "Tabstagram - " + mediaList.category;
+            this.DefaultViewModel["Items"] = mediaList.ItemsAll;
+            if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
+                await mediaList.LoadMore();
+            AddLoadMore();
+
+            base.OnNavigatedTo(e);
+        }
+
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided wh     en recreating a page from a prior session.
@@ -40,14 +52,9 @@ namespace Tabstagram
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override async void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            mediaList = App.lvm.GetListFromString(UserSettings.ActiveList);
-            pageTitle.Text = "Tabstagram - " + mediaList.category;
-            this.DefaultViewModel["Items"] = mediaList.ItemsAll;
-            if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
-                 await mediaList.LoadMore();
-            AddLoadMore();
+
         }
 
         private void AddLoadMore()

@@ -1,0 +1,25 @@
+﻿<UserControl
+    x:Class="Tabstagram.CommentControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tabstagram"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400" Width="350" Height="Auto">
+    
+    <Grid Margin="0">
+    	<Grid.RowDefinitions>
+    		<RowDefinition/>
+    		<RowDefinition Height="3*"/>
+    	</Grid.RowDefinitions>
+    	<Grid.ColumnDefinitions>
+    		<ColumnDefinition/>
+    		<ColumnDefinition Width="4*"/>
+    	</Grid.ColumnDefinitions>
+    	<TextBlock HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="16" Grid.Column="1"/>
+    	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Source="{Binding from.profile_picture}"/>
+    	<TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding text}" VerticalAlignment="Top" FontSize="13.333"/>
+    </Grid>
+</UserControl>

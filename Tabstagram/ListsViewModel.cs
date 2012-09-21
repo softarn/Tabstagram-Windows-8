@@ -48,16 +48,17 @@ namespace Tabstagram
 
         protected void AddOneByOne(List<Media> elements, ObservableCollection<Media> collection)
         {
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick += (sender, e) =>
-            {
-                if (elements.Count == 0) { return; }
-                collection.Add(elements.First());
-                elements.Remove(elements.First());
-            }; // Everytime timer ticks, timer_Tick will be called
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            timer.Start();                              // Start the timer
-            timers.Add(timer);
+            AddAllImmediately(elements, collection);
+            //DispatcherTimer timer = new DispatcherTimer();
+            //timer.Tick += (sender, e) =>
+            //{
+            //    if (elements.Count == 0) { return; }
+            //    collection.Add(elements.First());
+            //    elements.Remove(elements.First());
+            //}; // Everytime timer ticks, timer_Tick will be called
+            //timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            //timer.Start();                              // Start the timer
+            //timers.Add(timer);
         }
 
         protected void AddAllImmediately(List<Media> elements, ObservableCollection<Media> collection)
