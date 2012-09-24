@@ -28,7 +28,7 @@
     -->
     <Grid Style="{StaticResource LayoutRootStyle}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="105"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -38,16 +38,16 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="Tabstagram" Style="{StaticResource PageHeaderTextStyle}"/>
+            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,27"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="Tabstagram" Style="{StaticResource PageHeaderTextStyle}" Margin="0,0,30,35" FontSize="48"/>
         </Grid>
         <Grid x:Name="MediaGrid" Grid.Row="1" Margin="15,0,15,15" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="8*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="#33000000">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
@@ -56,7 +56,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid Grid.Column="1">
+            <Grid x:Name="MidGrid" Grid.Column="1">
                 <Grid Margin="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="4*"/>
@@ -87,15 +87,54 @@
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid x:Name="Comments" Grid.Column="2" Margin="0" Background="#4C000000">
-                <Grid Margin="0">
+            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" MaxWidth="400">
+                <Grid Margin="0" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
-                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,10,0">
-                		<TextBlock Margin="0,0,0,10" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top">
+                    <Grid x:Name="UserInfo1" Background="#33000000">
+                		<Grid Margin="5">
+                			<Grid.RowDefinitions>
+                				<RowDefinition/>
+                				<RowDefinition Height="3*"/>
+                			</Grid.RowDefinitions>
+                			<Grid.ColumnDefinitions>
+                				<ColumnDefinition/>
+                				<ColumnDefinition Width="4*"/>
+                			</Grid.ColumnDefinitions>
+                			<Border HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.RowSpan="2" Background="Black" BorderThickness="2">
+                				<Image Source="{Binding CurrentMedia.user.profile_picture}"/>
+                			</Border>
+                			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" FontFamily="Segoe UI" Margin="0" Grid.Column="1" Text="{Binding CurrentMedia.user.full_name}"/>
+                			<Grid Grid.Column="1" Margin="0,3,0,0" Grid.Row="1">
+                				<Grid.ColumnDefinitions>
+                					<ColumnDefinition/>
+                					<ColumnDefinition/>
+                					<ColumnDefinition/>
+                				</Grid.ColumnDefinitions>
+                				<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                				</StackPanel>
+                				<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="1">
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Images" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                				</StackPanel>
+                				<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="2">
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Following " VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                					<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                				</StackPanel>
+                			</Grid>
+                		</Grid>
+                	</Grid>
+                    <Grid x:Name="Comments" Margin="20,15,20,0" Grid.Row="1" Background="#33000000">
+                    	<Grid.RowDefinitions>
+                    		<RowDefinition Height="Auto"/>
+                    		<RowDefinition/>
+                    	</Grid.RowDefinitions>
+                		<TextBlock Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="1">
                 			<ListView.ItemContainerStyle>
                 				<Style TargetType="ListViewItem">
                 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -105,44 +144,11 @@
 
                 			<ListView.ItemTemplate>
                 				<DataTemplate>
-                					<local:CommentControl Background="#4C000000" />
+                					<local:CommentControl Background="#33000000" />
                 				</DataTemplate>
                 			</ListView.ItemTemplate>
                 		</ListView>
-                	</StackPanel>
-                    <Grid x:Name="UserInfo" Background="#33979797">
-						<Grid.RowDefinitions>
-							<RowDefinition/>
-							<RowDefinition Height="3*"/>
-						</Grid.RowDefinitions>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition/>
-							<ColumnDefinition Width="4*"/>
-						</Grid.ColumnDefinitions>
-                    	<Border HorizontalAlignment="Center" Margin="3" VerticalAlignment="Center" Grid.RowSpan="2" Background="Black" BorderThickness="2">
-                    		<Image Source="{Binding CurrentMedia.user.profile_picture}"/>
-                    	</Border>
-                    	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.full_name}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI" Margin="0" Grid.Column="1"/>
-                    	<Grid Grid.Column="1" Margin="0" Grid.Row="1">
-                    		<Grid.ColumnDefinitions>
-                    			<ColumnDefinition/>
-                    			<ColumnDefinition/>
-                    			<ColumnDefinition/>
-                    		</Grid.ColumnDefinitions>
-                    		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
-                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-                    		</StackPanel>
-				      		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="1">
-                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Images" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-                    		</StackPanel>
-							<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="2">
-                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Following " VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
-                    		</StackPanel>
-                    	</Grid>
-                    </Grid>
+                	</Grid>
                 </Grid>
             </Grid>
         </Grid>

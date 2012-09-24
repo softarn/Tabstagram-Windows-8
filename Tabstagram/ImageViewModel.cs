@@ -47,7 +47,7 @@ namespace Tabstagram
         public ImageViewModel(Media media)
         {
             CurrentMedia = media;
-            RelatedMedia = new UserMedia(media.user);
+            RelatedMedia = new UserMedia(media.user);   
             RelatedMedia.LoadList();
             OnPropertyChanged("CurrentMedia");
             LoadUserInfo(media.user.id);
