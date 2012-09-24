@@ -65,5 +65,11 @@ namespace Tabstagram
             Debug.WriteLine("Refresh button click");
         }
 
+        private void Item_Click(object sender, ItemClickEventArgs e)
+        {
+            Media m = e.ClickedItem as Media;
+
+            this.Frame.Navigate(typeof(BasicPage1), m);
+        }
     }
 }

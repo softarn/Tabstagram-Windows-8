@@ -18,6 +18,7 @@
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">My Application</x:String>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
+        <local:TimeConverter x:Name="TimeConverter"/>
     </Page.Resources>
 
     <!--
@@ -41,75 +42,108 @@
             <TextBlock x:Name="pageTitle" Grid.Column="1" Text="Tabstagram" Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
         <Grid x:Name="MediaGrid" Grid.Row="1" Margin="15,0,15,15" >
-        	<Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="8*"/>
-        		<ColumnDefinition Width="3*"/>
-        	</Grid.ColumnDefinitions>
-            <Grid Grid.Column="1" Margin="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-            	<Grid.RowDefinitions>
-            		<RowDefinition Height="4*"/>
-            		<RowDefinition/>
-            	</Grid.RowDefinitions>
-        		<Border BorderBrush="#000" BorderThickness="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
-        			<Image Source="{Binding CurrentMedia.images.standard_resolution.url}" CacheMode="BitmapCache" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False"/>
-        		</Border>
-        		<Grid ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#33000000" Margin="0" Grid.Row="1">
-        			<Grid.RowDefinitions>
-        				<RowDefinition/>
-        				<RowDefinition/>
-        			</Grid.RowDefinitions>
-        			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16"/>
-        			<Grid Height="20" VerticalAlignment="Center" Margin="15,0" Grid.Row="1" Background="#33000000">
-        				<Grid.ColumnDefinitions>
-        					<ColumnDefinition/>
-        					<ColumnDefinition/>
-        					<ColumnDefinition/>
-        					<ColumnDefinition/>
-        				</Grid.ColumnDefinitions>
-        				<StackPanel HorizontalAlignment="Center" Height="15" VerticalAlignment="Center" Orientation="Horizontal" Margin="0">
-        					<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
-        					<TextBlock Text="{Binding CurrentMedia.likes.count}" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
-        				</StackPanel>
-        				<StackPanel HorizontalAlignment="Center" Height="15" VerticalAlignment="Center" Orientation="Horizontal" Margin="0" Grid.Column="1">
-        					<Image Source="/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
-        					<TextBlock Text="{Binding CurrentMedia.comments.count}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
-        				</StackPanel>
-        				<StackPanel Grid.Column="2" HorizontalAlignment="Center" Height="20" Margin="22,0,0,0" VerticalAlignment="Center" Width="100" Orientation="Horizontal">
-        					<TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.user.username}" VerticalAlignment="Center"/>
-        				</StackPanel>
-        				<StackPanel Grid.Column="3" HorizontalAlignment="Center" Height="20" Margin="0" VerticalAlignment="Center" Width="100" Orientation="Horizontal">
-        					<TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.created_time}"/>
-        				</StackPanel>
-        			</Grid>
-        		</Grid>
-        	</Grid>
-            <ListView ItemsSource="{Binding RelatedMedia.ItemsAll}" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
-                        <local:ThumbnailControl HorizontalAlignment="Center"/>
+                            <local:ThumbnailControl HorizontalAlignment="Center"/>
                         </Viewbox>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid Grid.Column="2" Margin="0" Background="#0C000000">
-            	<Grid Margin="0">
-            		<Grid.RowDefinitions>
-            			<RowDefinition/>
-            			<RowDefinition Height="7*"/>
-            		</Grid.RowDefinitions>
-            		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.full_name}" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI"/>
-            		<ListView Margin="0" Grid.Row="1" ItemsSource="{Binding CurrentMedia.comments.data}">
-					                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Viewbox>
-                        <local:CommentControl HorizontalAlignment="Center"/>
-                        </Viewbox>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-					</ListView>
-            	</Grid>
+            <Grid Grid.Column="1">
+                <Grid Margin="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="#000" BorderThickness="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
+                        <Image Source="{Binding CurrentMedia.images.standard_resolution.url}" CacheMode="BitmapCache" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" MaxWidth="612" MaxHeight="612"/>
+                    </Border>
+                    <Grid ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#33000000" Margin="0" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16"/>
+                        <StackPanel Margin="82,0,71,42" Orientation="Horizontal" HorizontalAlignment="Center">
+                        	<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,3,0,2">
+                        		<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
+                        		<TextBlock Text="{Binding CurrentMedia.likes.count}" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
+                        	</StackPanel>
+                        	<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,3,0,2">
+                        		<Image Source="/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
+                        		<TextBlock Text="{Binding CurrentMedia.comments.count}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
+                        	</StackPanel>
+                        	<StackPanel HorizontalAlignment="Center" Margin="0" Orientation="Horizontal">
+                        		<TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.created_time, Converter={StaticResource TimeConverter}}" />
+                        	</StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid x:Name="Comments" Grid.Column="2" Margin="0" Background="#4C000000">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="6*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,10,0">
+                		<TextBlock Margin="0,0,0,10" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top">
+                			<ListView.ItemContainerStyle>
+                				<Style TargetType="ListViewItem">
+                					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                					<Setter Property="Margin" Value="0" />
+                				</Style>
+                			</ListView.ItemContainerStyle>
+
+                			<ListView.ItemTemplate>
+                				<DataTemplate>
+                					<local:CommentControl Background="#4C000000" />
+                				</DataTemplate>
+                			</ListView.ItemTemplate>
+                		</ListView>
+                	</StackPanel>
+                    <Grid x:Name="UserInfo" Background="#33979797">
+						<Grid.RowDefinitions>
+							<RowDefinition/>
+							<RowDefinition Height="3*"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition Width="4*"/>
+						</Grid.ColumnDefinitions>
+                    	<Border HorizontalAlignment="Center" Margin="3" VerticalAlignment="Center" Grid.RowSpan="2" Background="Black" BorderThickness="2">
+                    		<Image Source="{Binding CurrentMedia.user.profile_picture}"/>
+                    	</Border>
+                    	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.full_name}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI" Margin="0" Grid.Column="1"/>
+                    	<Grid Grid.Column="1" Margin="0" Grid.Row="1">
+                    		<Grid.ColumnDefinitions>
+                    			<ColumnDefinition/>
+                    			<ColumnDefinition/>
+                    			<ColumnDefinition/>
+                    		</Grid.ColumnDefinitions>
+                    		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
+                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+                    		</StackPanel>
+				      		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="1">
+                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Images" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+                    		</StackPanel>
+							<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="2">
+                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Following " VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+								<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333"/>
+                    		</StackPanel>
+                    	</Grid>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
 

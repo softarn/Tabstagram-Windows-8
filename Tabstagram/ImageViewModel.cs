@@ -50,6 +50,30 @@ namespace Tabstagram
             RelatedMedia = new UserMedia(media.user);
             RelatedMedia.LoadList();
             OnPropertyChanged("CurrentMedia");
+            LoadUserInfo(media.user.id);
+            LoadComments(media.id);
+        }
+
+        public void LoadNewMedia(Media media)
+        {
+            media.user = CurrentMedia.user;
+            CurrentMedia = media;
+            OnPropertyChanged("CurrentMedia");
+        }
+
+        public async void LoadUserInfo(string userId)
+        {
+            User user = await Instagram.LoadUserInfo(userId);
+            CurrentMedia.user = user;
+        }
+
+        public async void LoadComments(string mediaId)
+        {
+            if (CurrentMedia.comments.count == CurrentMedia.comments.data.Count)
+                return;
+
+            List<Comment> comments = await Instagram.LoadComments(mediaId);
+            CurrentMedia.comments.data = comments;
         }
 
         protected void OnPropertyChanged(string name)

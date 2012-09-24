@@ -4,13 +4,16 @@ using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -58,6 +61,12 @@ namespace Tabstagram
             viewModel = new ImageViewModel(m);
             MediaGrid.DataContext = viewModel;
             base.OnNavigatedTo(e);
+        }
+
+        private void RelatedMediaList_Click(object sender, ItemClickEventArgs e)
+        {
+            Media media = e.ClickedItem as Media;
+            viewModel.LoadNewMedia(media);
         }
     }
 }

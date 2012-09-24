@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,29 @@ using Tabstagram.Models;
 namespace Tabstagram
 {
 
-    public class Comments
+    public class Comments : INotifyPropertyChanged
     {
-        public List<Comment> data { get; set; }
+        private List<Comment> _data;
+        public List<Comment> data
+        {
+            get { return _data; }
+            set
+            {
+                _data = value;
+                OnPropertyChanged("data");
+            }
+        }
         public int count { get; set; }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class Likes
@@ -57,7 +77,7 @@ namespace Tabstagram
         public string id { get; set; }
     }
 
-    public class Media
+    public class Media : INotifyPropertyChanged
     {
         public string type { get; set; }
         public string filter { get; set; }
@@ -66,7 +86,16 @@ namespace Tabstagram
         public Caption caption { get; set; }
         public Likes likes { get; set; }
         public string link { get; set; }
-        public User user { get; set; }
+        private User _user;
+        public User user
+        {
+            get { return _user; }
+            set 
+            {
+                _user = value;
+                OnPropertyChanged("user");
+            }
+        }
         public bool user_has_liked { get; set; }
         public string created_time { get; set; }
         public Images images { get; set; }
@@ -87,6 +116,16 @@ namespace Tabstagram
         {
             return link;
         }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class SingleMedia

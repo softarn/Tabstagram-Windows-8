@@ -48,6 +48,8 @@
                 AutomationProperties.AutomationId="ItemGridView"
                 AutomationProperties.Name="Grouped Items"
                 ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
+                ItemClick="Item_Click"
+                IsItemClickEnabled="True"
                 SelectionMode="None"
                 IsSwipeEnabled="false" 
                 Margin="0,-10" Background="#3F000000" Padding="25,10,0,10" BorderThickness="0,2" BorderBrush="Black">

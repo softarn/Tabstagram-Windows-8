@@ -18,15 +18,13 @@ namespace Tabstagram
 
         private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + AccessToken; } }
         private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + AccessToken; } }
-        private static string GetTagUrl(string Tag)
-        {
-            return String.Format("{0}tags/{1}/media/recent?access_token={2}", BASE_URL, Tag, AccessToken);
-        }
-        private static string GetUserMediaUrl(User u)
-        {
-            return String.Format("{0}users/{1}/media/recent?access_token={2}", BASE_URL, u.id, AccessToken);
-        }
-                        
+        private static string GetTagUrl(string Tag)     { return String.Format("{0}tags/{1}/media/recent?access_token={2}",  BASE_URL, Tag, AccessToken); }
+        private static string GetUserMediaUrl(User u)   { return String.Format("{0}users/{1}/media/recent?access_token={2}", BASE_URL, u.id, AccessToken); }
+        private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}?access_token={2}",              BASE_URL, id, AccessToken); }
+        private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments?access_token={2}",     BASE_URL, id, AccessToken); }
+
+        private static HttpClient client = GetHttpClient();
+
         private static HttpClient GetHttpClient()
         {
             HttpClient httpClient = new HttpClient();
@@ -37,17 +35,56 @@ namespace Tabstagram
             return httpClient;
         }
 
-        private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
+        private static async Task<string> GetString(string url, Args args, int tries = 0)
         {
-            HttpClient client = GetHttpClient();
+            if (tries > 3)
+                return null;
+
+            Task<string> task = null;
+            string response = null;
+
             if (args != null)
             {
                 url = url + args.ToString();
             }
+
+            try
+            {
+                response = await client.GetStringAsync(url);
+            }
+            catch (Exception e)
+            {
+                task = GetString(url, null, tries + 1);
+            }
+
+            if (task != null)
+                response = await task;
+
+            return response;
+        }
+
+        private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
+        {
             Debug.WriteLine("Getting MediaList from: " + url);
-            string response = await client.GetStringAsync(url);
+            string response = await GetString(url, args);
             MultipleMedia mm = Media.ListFromJSON(response);
             return mm;
+        }
+
+        private static async Task<User> LoadUser(string url, Args args = null, int tries = 0)
+        {
+            string response = await GetString(url, args);
+            User user = User.SingleFromJSON(response);
+            return user;
+        }
+
+        public static async Task<List<Comment>> LoadComments(string mediaId, Args args = null)
+        {
+            string url = GetCommentsUrl(mediaId);
+            Debug.WriteLine("Getting comments from: " + url);
+            string response = await GetString(url, args);
+            List<Comment> comments = Comment.ListFromJSON(response);
+            return comments;
         }
 
         public static async Task<MultipleMedia> LoadFeed(Args args = null)
@@ -73,6 +110,11 @@ namespace Tabstagram
         internal static async Task<MultipleMedia> LoadUserMedia(User user, Args args = null)
         {
             return await LoadMediaList(GetUserMediaUrl(user), args);
+        }
+
+        internal static async Task<User> LoadUserInfo(string userId, Args args = null)
+        {
+            return await LoadUser(GetUserInfoUrl(userId), args);
         }
     }
 

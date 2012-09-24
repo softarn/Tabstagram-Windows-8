@@ -148,6 +148,7 @@
       <DependentUpon>ThumbnailControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -161,6 +162,7 @@
     <Content Include="Assets\HeartIcon_white.png" />
     <Content Include="Assets\image_test.jpeg" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\noise_100.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />

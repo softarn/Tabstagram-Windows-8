@@ -7,13 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="150"
-    d:DesignWidth="150">
+    d:DesignWidth="150"
+    x:Name="MainGrid"
+    Opacity="0">
 
     <UserControl.Resources>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
     </UserControl.Resources>
 
-    <Grid Name="MainGrid" Width="150" Height="150" Opacity="0">
+    <Grid Width="150" Height="150">
         <Border BorderBrush="#000" BorderThickness="2"/>
         <Image x:Name="thumbnail" Source="{Binding images.thumbnail.url}" HorizontalAlignment="Center" 
                 Margin="2" VerticalAlignment="Center" ImageOpened="thumbnail_ImageOpened"/>

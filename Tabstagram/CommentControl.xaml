@@ -6,20 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400" Width="350" Height="Auto">
+    d:DesignHeight="200"
+    d:DesignWidth="400" ScrollViewer.VerticalScrollBarVisibility="Disabled" Padding="0">
     
-    <Grid Margin="0">
-    	<Grid.RowDefinitions>
-    		<RowDefinition/>
-    		<RowDefinition Height="3*"/>
-    	</Grid.RowDefinitions>
-    	<Grid.ColumnDefinitions>
-    		<ColumnDefinition/>
-    		<ColumnDefinition Width="4*"/>
-    	</Grid.ColumnDefinitions>
-    	<TextBlock HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="16" Grid.Column="1"/>
-    	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Source="{Binding from.profile_picture}"/>
-    	<TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding text}" VerticalAlignment="Top" FontSize="13.333"/>
-    </Grid>
+    <Grid Background="#FF3C0000">
+    
+		<Grid Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition Height="3*"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="4*"/>
+			</Grid.ColumnDefinitions>
+			<TextBlock x:Name="Name" HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="16" Grid.Column="1"/>
+			<Image x:Name="ProfilePicture" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Source="{Binding from.profile_picture}"/>
+			<TextBlock x:Name="Comment" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding text}" VerticalAlignment="Top" FontSize="13.333"/>
+		</Grid>
+	</Grid>
 </UserControl>
