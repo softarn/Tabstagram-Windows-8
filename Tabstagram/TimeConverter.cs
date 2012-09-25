@@ -17,12 +17,14 @@ namespace Tabstagram
             TimeSpan ts = TimeSpan.FromSeconds(now - val);
             if (ts.Days > 0)
                 return String.Format("Uploaded {0} {1} ago", ts.Days, StripLastIfOne("days", ts.Days));
-            else if(ts.Hours > 0)
+            else if (ts.Hours > 0)
                 return String.Format("Uploaded {0} {1} ago", ts.Hours, StripLastIfOne("hours", ts.Hours));
-            else if(ts.Minutes > 0)
+            else if (ts.Minutes > 0)
                 return String.Format("Uploaded {0} {1} ago", ts.Minutes, StripLastIfOne("minutes", ts.Minutes));
-            else
+            else if (ts.Seconds > 0)
                 return String.Format("Uploaded {0} {1} ago", ts.Seconds, StripLastIfOne("seconds", ts.Seconds));
+            else
+                return "Uploaded just now";
         }
 
         private string StripLastIfOne(string str, int i)

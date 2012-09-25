@@ -1,0 +1,43 @@
+﻿<UserControl
+    x:Class="Tabstagram.FullImageControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tabstagram"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    
+        <UserControl.Resources>
+            <local:LikedImageConverter x:Name="LikedImageConverter"/>
+            <local:TimeConverter x:Name="TimeConverter"/>
+        </UserControl.Resources>
+
+        <Grid x:Name="MainGrid"  MaxWidth="612" MaxHeight="632" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        	<Grid.RowDefinitions>
+        		<RowDefinition/>
+        		<RowDefinition Height="20"/>
+        	</Grid.RowDefinitions>
+            <Border BorderBrush="#000" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            	<Image x:Name="image" Source="{Binding CurrentMedia.images.standard_resolution.url}" HorizontalAlignment="Center" 
+            		Margin="0" VerticalAlignment="Center" ImageOpened="fullImage_ImageOpened"/>
+            </Border>
+            <Grid Margin="0" Grid.Row="1" Background="#33000000">
+            	<Grid.ColumnDefinitions>
+            		<ColumnDefinition Width="3*"/>
+            		<ColumnDefinition Width="3*"/>
+            		<ColumnDefinition Width="5*"/>
+            	</Grid.ColumnDefinitions>
+            	<StackPanel x:Name="Like" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="20,0,0,0">
+            		<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" HorizontalAlignment="Center" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
+            		<TextBlock Text="{Binding CurrentMedia.likes.count}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontSize="12" TextTrimming="WordEllipsis" />
+            	</StackPanel>
+            	<StackPanel x:Name="Comments" HorizontalAlignment="Center" Height="15" VerticalAlignment="Center" Orientation="Horizontal" Margin="0" Grid.Column="1">
+            		<Image Source="/Assets/CommentIcon.png" HorizontalAlignment="Center" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
+            		<TextBlock Text="{Binding CurrentMedia.comments.count}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontSize="12" TextTrimming="WordEllipsis" />
+            	</StackPanel>
+            	<TextBlock x:Name="Uploaded" TextWrapping="Wrap" Text="{Binding CurrentMedia.created_time, Converter={StaticResource TimeConverter}}" Margin="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+        </Grid>
+</UserControl>

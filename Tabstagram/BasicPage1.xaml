@@ -47,7 +47,7 @@
                 <ColumnDefinition Width="13*"/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Hidden" Background="#33000000">
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#33000000" HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
@@ -57,35 +57,14 @@
                 </ListView.ItemTemplate>
             </ListView>
             <Grid x:Name="MidGrid" Grid.Column="1">
-                <Grid Margin="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                    <Grid.RowDefinitions>
+			        <Grid.RowDefinitions>
                         <RowDefinition Height="4*"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Border BorderBrush="#000" BorderThickness="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
-                        <Image Source="{Binding CurrentMedia.images.standard_resolution.url}" CacheMode="BitmapCache" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" MaxWidth="612" MaxHeight="612"/>
-                    </Border>
-                    <Grid ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#33000000" Margin="0" Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16"/>
-                        <StackPanel Margin="82,0,71,42" Orientation="Horizontal" HorizontalAlignment="Center">
-                        	<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,3,0,2">
-                        		<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
-                        		<TextBlock Text="{Binding CurrentMedia.likes.count}" HorizontalAlignment="Right" Margin="0,2" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
-                        	</StackPanel>
-                        	<StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,3,0,2">
-                        		<Image Source="/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
-                        		<TextBlock Text="{Binding CurrentMedia.comments.count}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
-                        	</StackPanel>
-                        	<StackPanel HorizontalAlignment="Center" Margin="0" Orientation="Horizontal">
-                        		<TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.created_time, Converter={StaticResource TimeConverter}}" />
-                        	</StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+                <local:FullImageControl />
+                <StackPanel Margin="70,30" Orientation="Vertical" Grid.Row="1" Background="#33000000" VerticalAlignment="Top" MinHeight="50">
+                	<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16" Margin="0,10,0,0"/>
+                </StackPanel>
             </Grid>
             <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" MaxWidth="400">
                 <Grid Margin="0" Grid.RowSpan="2">

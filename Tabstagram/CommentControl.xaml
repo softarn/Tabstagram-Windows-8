@@ -14,13 +14,13 @@
 		<Grid Margin="5">
 			<Grid.RowDefinitions>
 				<RowDefinition/>
-				<RowDefinition Height="3*"/>
+				<RowDefinition Height="4*"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition Width="7*"/>
 			</Grid.ColumnDefinitions>
-			<TextBlock x:Name="Name" HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="16" Grid.Column="1"/>
+			<TextBlock x:Name="Name" HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="13.333" Grid.Column="1" Foreground="#FFA6A6A6" FontWeight="Bold"/>
 			<Image x:Name="ProfilePicture" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Source="{Binding from.profile_picture}"/>
 			<TextBlock x:Name="Comment" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding text}" VerticalAlignment="Top" FontSize="13.333"/>
 		</Grid>
