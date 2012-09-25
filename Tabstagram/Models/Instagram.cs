@@ -22,6 +22,7 @@ namespace Tabstagram
         private static string GetUserMediaUrl(User u)   { return String.Format("{0}users/{1}/media/recent?access_token={2}", BASE_URL, u.id, AccessToken); }
         private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}?access_token={2}",              BASE_URL, id, AccessToken); }
         private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments?access_token={2}",     BASE_URL, id, AccessToken); }
+        private static string GetLikeUrl(string id) { return String.Format("{0}media/{1}/likes?access_token={2}", BASE_URL, id, AccessToken); }
 
         private static HttpClient client = GetHttpClient();
 
@@ -35,6 +36,52 @@ namespace Tabstagram
             return httpClient;
         }
 
+        private static async Task<HttpResponseMessage> Delete(string url, Args args = null, int tries = 0)
+        {
+            if (tries > 3)
+                return null;
+
+            Task<HttpResponseMessage> task = null;
+            HttpResponseMessage response = null;
+
+            if (args != null)
+                url = url + args.ToString();
+
+            try { response = await client.DeleteAsync(url); }
+            catch (Exception e)
+            {
+                task = Delete(url, null, tries + 1);
+            }
+
+            if (task != null)
+                response = await task;
+
+            return response;
+        }
+
+        private static async Task<HttpResponseMessage> Post(string url, Args args = null, int tries = 0)
+        {
+            if (tries > 3)
+                return null;
+
+            Task<HttpResponseMessage> task = null;
+            HttpResponseMessage response = null;
+
+            if (args != null)
+                url = url + args.ToString();
+
+            try { response = await client.PostAsync(url, null); }
+            catch (Exception e)
+            {
+                task = Post(url, null, tries + 1);
+            }
+
+            if (task != null)
+                response = await task;
+            
+            return response;
+        }
+
         private static async Task<string> GetString(string url, Args args, int tries = 0)
         {
             if (tries > 3)
@@ -44,14 +91,9 @@ namespace Tabstagram
             string response = null;
 
             if (args != null)
-            {
                 url = url + args.ToString();
-            }
 
-            try
-            {
-                response = await client.GetStringAsync(url);
-            }
+            try { response = await client.GetStringAsync(url); }
             catch (Exception e)
             {
                 task = GetString(url, null, tries + 1);
@@ -85,6 +127,22 @@ namespace Tabstagram
             string response = await GetString(url, args);
             List<Comment> comments = Comment.ListFromJSON(response);
             return comments;
+        }
+
+        public static async Task<bool> Like(string mediaId)
+        {
+            string url = GetLikeUrl(mediaId);
+            Debug.WriteLine("Likeing media: " + mediaId);
+            HttpResponseMessage response = await Post(url);
+            return response.IsSuccessStatusCode;
+        }
+
+        public static async Task<bool> Unlike(string mediaId)
+        {
+            string url = GetLikeUrl(mediaId);
+            Debug.WriteLine("Likeing media: " + mediaId);
+            HttpResponseMessage response = await Delete(url);
+            return response.IsSuccessStatusCode;
         }
 
         public static async Task<MultipleMedia> LoadFeed(Args args = null)

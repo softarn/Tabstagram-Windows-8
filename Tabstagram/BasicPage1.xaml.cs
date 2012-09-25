@@ -68,5 +68,10 @@ namespace Tabstagram
             Media media = e.ClickedItem as Media;
             viewModel.LoadNewMedia(media);
         }
+
+        private void Image_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            viewModel.LikeOrUnlike();
+        }
     }
 }

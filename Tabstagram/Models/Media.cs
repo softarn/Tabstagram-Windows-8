@@ -35,10 +35,29 @@ namespace Tabstagram
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class Likes
+    public class Likes : INotifyPropertyChanged
     {
-        public int count { get; set; }
+        private int _count;
+        public int count
+        {
+            get { return _count; }
+            set
+            {
+                _count = value;
+                OnPropertyChanged("count");
+            }
+        }
         public List<User> data { get; set; }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class LowResolution
@@ -96,11 +115,32 @@ namespace Tabstagram
                 OnPropertyChanged("user");
             }
         }
-        public bool user_has_liked { get; set; }
+        private bool _userHasLiked;
+        public bool user_has_liked
+        {
+            get { return _userHasLiked; }
+            set
+            {
+                _userHasLiked = value;
+                OnPropertyChanged("user_has_liked");
+            }
+        }
         public string created_time { get; set; }
         public Images images { get; set; }
         public string id { get; set; }
         public Location location { get; set; }
+
+        public void Like()
+        {
+            user_has_liked = true;
+            likes.count++;
+        }
+
+        public void Unlike()
+        {
+            user_has_liked = false;
+            likes.count--;
+        }
 
         public static Media SingleFromJSON(string jsonString)
         {
@@ -115,6 +155,11 @@ namespace Tabstagram
         public override string ToString()
         {
             return link;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((Media)obj).id == this.id;
         }
 
         protected void OnPropertyChanged(string name)

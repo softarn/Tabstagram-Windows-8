@@ -76,6 +76,38 @@ namespace Tabstagram
             CurrentMedia.comments.data = comments;
         }
 
+        public async Task<bool> LikeOrUnlike()
+        {
+            Media relatedMediaItem = null;
+            int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+            if (index > -1)
+                relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+
+            bool success = false;
+            if (CurrentMedia.user_has_liked)
+            {
+                success = await Instagram.Unlike(CurrentMedia.id);
+                if (success)
+                {
+                    CurrentMedia.Unlike();
+                    if (relatedMediaItem != null)
+                        relatedMediaItem.Unlike();
+                }
+            }
+            else
+            {
+                success = await Instagram.Like(CurrentMedia.id);
+                if (success)
+                {
+                    CurrentMedia.Like();
+                    if (relatedMediaItem != null)
+                        relatedMediaItem.Like();
+                }
+            }
+
+            return success;
+        }
+
         protected void OnPropertyChanged(string name)
         {
             if (null != PropertyChanged)
