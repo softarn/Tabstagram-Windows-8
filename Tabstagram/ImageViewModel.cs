@@ -90,7 +90,7 @@ namespace Tabstagram
                 if (success)
                 {
                     CurrentMedia.Unlike();
-                    if (relatedMediaItem != null)
+                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
                         relatedMediaItem.Unlike();
                 }
             }
@@ -100,7 +100,7 @@ namespace Tabstagram
                 if (success)
                 {
                     CurrentMedia.Like();
-                    if (relatedMediaItem != null)
+                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
                         relatedMediaItem.Like();
                 }
             }

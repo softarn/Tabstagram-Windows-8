@@ -50,7 +50,7 @@ namespace Tabstagram
             {
                 From = 0,
                 To = 1,
-                Duration = TimeSpan.FromSeconds(0.8),
+                Duration = TimeSpan.FromSeconds(0.5),
             };
             storyboard.Children.Add(opacityAnimation);
 
@@ -58,6 +58,14 @@ namespace Tabstagram
             Storyboard.SetTarget(storyboard, MainGrid);
 
             storyboard.Begin();
+        }
+
+        public void FadeOut()
+        {
+            if (MainGrid.Opacity < 1)
+                return;
+
+            MainGrid.Opacity = 0;
         }
     }
 }

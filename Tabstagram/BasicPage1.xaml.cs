@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
@@ -59,12 +60,13 @@ namespace Tabstagram
         {
             Media m = e.Parameter as Media;
             viewModel = new ImageViewModel(m);
-            MediaGrid.DataContext = viewModel;
-            base.OnNavigatedTo(e);
+            pageRoot.DataContext = viewModel;
+            base.OnNavigatedTo(e);  
         }
 
         private void RelatedMediaList_Click(object sender, ItemClickEventArgs e)
         {
+            FullImage.FadeOut();
             Media media = e.ClickedItem as Media;
             viewModel.LoadNewMedia(media);
         }
@@ -72,6 +74,20 @@ namespace Tabstagram
         private void Image_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             viewModel.LikeOrUnlike();
+        }
+
+        private void NewCommentClick(object sender, RoutedEventArgs e)
+        {
+            WriteComment.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+
+        private void MakeCommentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(
+            Comment.Text
+            );
+
+            WriteComment.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
     }
 }

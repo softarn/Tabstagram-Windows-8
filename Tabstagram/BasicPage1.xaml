@@ -16,7 +16,7 @@
             Source="{Binding Items}"/>
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">My Application</x:String>
+        <x:String x:Key="AppName">Tabstagram</x:String>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
         <local:TimeConverter x:Name="TimeConverter"/>
     </Page.Resources>
@@ -26,28 +26,25 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid Style="{StaticResource LayoutRootStyle}">
+    <Grid Style="{StaticResource LayoutRootStyle}" Background="{x:Null}">
         <Grid.RowDefinitions>
             <RowDefinition Height="105"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,27"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="Tabstagram" Style="{StaticResource PageHeaderTextStyle}" Margin="0,0,30,35" FontSize="48"/>
-        </Grid>
-        <Grid x:Name="MediaGrid" Grid.Row="1" Margin="15,0,15,15" >
+        <ContentControl Content="{Binding CurrentMedia.user.full_name}" Style="{StaticResource Background}" Grid.Row="1" FontFamily="Segoe Script"/>
+
+        <!-- Back button and page title -->
+        <Grid x:Name="MediaGrid" Grid.Row="1" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="13*"/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#33000000" HorizontalContentAlignment="Stretch">
+
+            <!--Left Grid-->
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
@@ -56,23 +53,25 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid x:Name="MidGrid" Grid.Column="1">
+            <!--Middle grid-->
+            <Grid x:Name="MidGrid" Grid.Column="1" Canvas.ZIndex="2">
 			        <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                <local:FullImageControl DoubleTapped="Image_DoubleTapped"/>
-                <StackPanel Margin="70,30,70,0" Orientation="Vertical" Grid.Row="1" Background="#33000000" VerticalAlignment="Top" MinHeight="50">
-                	<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16" Margin="0,10"/>
+                <local:FullImageControl x:Name="FullImage" DoubleTapped="Image_DoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,25" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <StackPanel x:Name="CaptionPanel" Margin="60,5" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" MaxHeight="140" HorizontalAlignment="Center">
+                	<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16" Margin="10"/>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" MaxWidth="400">
-                <Grid Margin="0" Grid.RowSpan="2">
+            <!--Right grid-->
+            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Background="#FF171717">
+                <Grid Margin="0" Grid.RowSpan="2" MaxWidth="450">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
-                    <Grid x:Name="UserInfo1" Background="#33000000">
+                    <Grid x:Name="UserInfo1">
                 		<Grid Margin="5">
                 			<Grid.RowDefinitions>
                 				<RowDefinition/>
@@ -107,13 +106,24 @@
                 			</Grid>
                 		</Grid>
                 	</Grid>
-                    <Grid x:Name="Comments" Margin="20,15,20,0" Grid.Row="1" Background="#33000000">
+                    <Grid x:Name="Comments" Margin="20,15,20,0" Grid.Row="1">
                     	<Grid.RowDefinitions>
+                    		<RowDefinition Height="Auto"/>
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
+                		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="1" Visibility="Collapsed">
+                    		<Grid.RowDefinitions>
+                    			<RowDefinition Height="Auto"/>
+                    			<RowDefinition/>
+                    			<RowDefinition Height="Auto"/>
+                    		</Grid.RowDefinitions>
+                    		<TextBox x:Name="Comment" TextWrapping="Wrap" Background="Black" Foreground="White" Grid.Row="1" HorizontalContentAlignment="Stretch" MinHeight="150"/>
+                    		<Button x:Name="MakeCommentButton" Click="MakeCommentButton_Click" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2"/>
+                    		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
+                    	</Grid>
                 		<TextBlock Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="1">
+                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
                 			<ListView.ItemContainerStyle>
                 				<Style TargetType="ListViewItem">
                 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -127,9 +137,23 @@
                 				</DataTemplate>
                 			</ListView.ItemTemplate>
                 		</ListView>
+                		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Click="NewCommentClick">
+							<TextBlock Text="+"/>
+						</Button>
                 	</Grid>
                 </Grid>
             </Grid>
+            <Grid x:Name="FadeGrid" Margin="-30,-2000,-30,-30" Canvas.ZIndex="1" Background="#CC000000" Grid.ColumnSpan="3" Visibility="Collapsed"/>
+        </Grid>
+        <Grid Background="#FF171717" Margin="0">
+        	<Grid.ColumnDefinitions>
+        		<ColumnDefinition Width="Auto"/>
+        		<ColumnDefinition Width="Auto"/>
+        		<ColumnDefinition Width="*"/>
+        	</Grid.ColumnDefinitions>
+        	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
+        	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0"/>
+        	<TextBlock x:Name="pageTitle1" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,35"/>
         </Grid>
 
         <VisualStateManager.VisualStateGroups>
@@ -140,25 +164,10 @@
                 <VisualState x:Name="Filled"/>
 
                 <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
-                <VisualState x:Name="FullScreenPortrait">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                <VisualState x:Name="FullScreenPortrait"/>
 
                 <!-- The back button and title have different styles when snapped -->
-                <VisualState x:Name="Snapped">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+                <VisualState x:Name="Snapped"/>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>

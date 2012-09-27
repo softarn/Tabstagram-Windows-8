@@ -160,15 +160,15 @@
     <None Include="Tabstagram_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\back.png" />
     <Content Include="Assets\CommentIcon.png" />
     <Content Include="Assets\HeartIcon.png" />
     <Content Include="Assets\HeartIcon_white.png" />
-    <Content Include="Assets\image_test.jpeg" />
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\noise_100.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Tabstagram_icon.png" />
     <Content Include="Common\ReadMe.txt" />
     <Content Include="Assets\RefreshIcon.png" />
     <None Include="gitignore" />

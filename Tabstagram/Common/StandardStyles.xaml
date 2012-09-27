@@ -10,7 +10,7 @@
 
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
 
     <!-- Non-brush values that vary across themes -->
 
@@ -156,23 +156,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ButtonBase">
                     <Grid Background="Transparent">
-                        <ContentPresenter x:Name="Text" Content="{TemplateBinding Content}" />
-                        <Rectangle
-                            x:Name="FocusVisualWhite"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="1.5"/>
-                        <Rectangle
-                            x:Name="FocusVisualBlack"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="0.5"/>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal"/>
@@ -219,6 +202,23 @@
                                 <VisualState x:Name="Indeterminate"/>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter x:Name="Text" Content="{TemplateBinding Content}" />
+                        <Rectangle
+                            x:Name="FocusVisualWhite"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="1.5"/>
+                        <Rectangle
+                            x:Name="FocusVisualBlack"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="0.5"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -257,40 +257,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ButtonBase">
                     <Grid x:Name="RootGrid" Width="100" Background="Transparent">
-                        <StackPanel VerticalAlignment="Top" Margin="0,12,0,11">
-                            <Grid Width="40" Height="40" Margin="0,0,0,5" HorizontalAlignment="Center">
-                                <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
-                                <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0"/>
-                                <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
-                            </Grid>
-                            <TextBlock
-                                x:Name="TextLabel"
-                                Text="{TemplateBinding AutomationProperties.Name}"
-                                Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
-                                Margin="0,0,2,0"
-                                FontSize="12"
-                                TextAlignment="Center"
-                                Width="88"
-                                MaxHeight="32"
-                                TextTrimming="WordEllipsis"
-                                Style="{StaticResource BasicTextStyle}"/>
-                        </StackPanel>
-                        <Rectangle
-                                x:Name="FocusVisualWhite"
-                                IsHitTestVisible="False"
-                                Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
-                                StrokeEndLineCap="Square"
-                                StrokeDashArray="1,1"
-                                Opacity="0"
-                                StrokeDashOffset="1.5"/>
-                        <Rectangle
-                                x:Name="FocusVisualBlack"
-                                IsHitTestVisible="False"
-                                Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
-                                StrokeEndLineCap="Square"
-                                StrokeDashArray="1,1"
-                                Opacity="0"
-                                StrokeDashOffset="0.5"/>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ApplicationViewStates">
@@ -393,6 +359,41 @@
                                 <VisualState x:Name="Indeterminate"/>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <StackPanel VerticalAlignment="Top" Margin="0,12,0,11">
+                            <Grid Width="40" Height="40" Margin="0,0,0,5" HorizontalAlignment="Center">
+                                <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
+                                <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" FontSize="53.333" Margin="-4,-19,0,0"/>
+                                <ContentPresenter x:Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock
+                                x:Name="TextLabel"
+                                Text="{TemplateBinding AutomationProperties.Name}"
+                                Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                                Margin="0,0,2,0"
+                                FontSize="12"
+                                TextAlignment="Center"
+                                Width="88"
+                                MaxHeight="32"
+                                TextTrimming="WordEllipsis"
+                                Style="{StaticResource BasicTextStyle}"/>
+                        </StackPanel>
+                        <Rectangle
+                                x:Name="FocusVisualWhite"
+                                IsHitTestVisible="False"
+                                Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                                StrokeEndLineCap="Square"
+                                StrokeDashArray="1,1"
+                                Opacity="0"
+                                StrokeDashOffset="1.5"/>
+                        <Rectangle
+                                x:Name="FocusVisualBlack"
+                                IsHitTestVisible="False"
+                                Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                                StrokeEndLineCap="Square"
+                                StrokeDashArray="1,1"
+                                Opacity="0"
+                                StrokeDashOffset="0.5"/>
+
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -1440,27 +1441,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="RootGrid">
-                        <Grid Margin="-1,-16,0,0">
-                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" Foreground="{StaticResource BackButtonBackgroundThemeBrush}"/>
-                            <TextBlock x:Name="NormalGlyph" Text="{StaticResource BackButtonGlyph}" Foreground="{StaticResource BackButtonForegroundThemeBrush}"/>
-                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0A6;" Foreground="{StaticResource BackButtonPressedForegroundThemeBrush}" Opacity="0"/>
-                        </Grid>
-                        <Rectangle
-                            x:Name="FocusVisualWhite"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="1.5"/>
-                        <Rectangle
-                            x:Name="FocusVisualBlack"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="0.5"/>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -1519,6 +1499,28 @@
                                 <VisualState x:Name="PointerFocused" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <Grid Margin="-1,-16,0,0">
+                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" Foreground="{StaticResource BackButtonBackgroundThemeBrush}"/>
+                            <TextBlock x:Name="NormalGlyph" Text="{StaticResource BackButtonGlyph}" Foreground="{StaticResource BackButtonForegroundThemeBrush}"/>
+                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0A6;" Foreground="{StaticResource BackButtonPressedForegroundThemeBrush}" Opacity="0"/>
+                        </Grid>
+                        <Rectangle
+                            x:Name="FocusVisualWhite"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="1.5"/>
+                        <Rectangle
+                            x:Name="FocusVisualBlack"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="0.5"/>
+
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -1554,27 +1556,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="RootGrid" Width="36" Height="36" Margin="-3,0,7,33">
-                        <Grid Margin="-1,-1,0,0">
-                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0D4;" Foreground="{StaticResource BackButtonBackgroundThemeBrush}"/>
-                            <TextBlock x:Name="NormalGlyph" Text="{StaticResource BackButtonSnappedGlyph}" Foreground="{StaticResource BackButtonForegroundThemeBrush}"/>
-                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0C4;" Foreground="{StaticResource BackButtonPressedForegroundThemeBrush}" Opacity="0"/>
-                        </Grid>
-                        <Rectangle
-                            x:Name="FocusVisualWhite"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="1.5"/>
-                        <Rectangle
-                            x:Name="FocusVisualBlack"
-                            IsHitTestVisible="False"
-                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
-                            StrokeEndLineCap="Square"
-                            StrokeDashArray="1,1"
-                            Opacity="0"
-                            StrokeDashOffset="0.5"/>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -1633,6 +1614,28 @@
                                 <VisualState x:Name="PointerFocused" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <Grid Margin="-1,-1,0,0">
+                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0D4;" Foreground="{StaticResource BackButtonBackgroundThemeBrush}"/>
+                            <TextBlock x:Name="NormalGlyph" Text="{StaticResource BackButtonSnappedGlyph}" Foreground="{StaticResource BackButtonForegroundThemeBrush}"/>
+                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0C4;" Foreground="{StaticResource BackButtonPressedForegroundThemeBrush}" Opacity="0"/>
+                        </Grid>
+                        <Rectangle
+                            x:Name="FocusVisualWhite"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="1.5"/>
+                        <Rectangle
+                            x:Name="FocusVisualBlack"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="0.5"/>
+
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -1752,16 +1755,9 @@
   -->
     <DataTemplate x:Key="StandardFileWithTooltip190x130ItemTemplate">
         <Grid>
-            <Grid Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <Image
-                    Source="{Binding Image}"
-                    Width="190"
-                    Height="130"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Stretch="Uniform"/>
-            </Grid>
-            <ToolTipService.Placement>Mouse</ToolTipService.Placement>
+            <ToolTipService.Placement>
+            	<PlacementMode>Mouse</PlacementMode>
+</ToolTipService.Placement>
             <ToolTipService.ToolTip>
                 <ToolTip>
                     <ToolTip.Style>
@@ -1793,6 +1789,15 @@
                     </Grid>
                 </ToolTip>
             </ToolTipService.ToolTip>
+            <Grid Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
+                <Image
+                    Source="{Binding Image}"
+                    Width="190"
+                    Height="130"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Stretch="Uniform"/>
+            </Grid>
         </Grid>
     </DataTemplate>
 
@@ -1826,4 +1831,53 @@
             </Setter.Value>
         </Setter>
     </Style>
+	<Style x:Key="Background" TargetType="ContentControl">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ContentControl">
+					<Grid>
+						<Rectangle IsHitTestVisible="False" StrokeThickness="75" Margin="0" Fill="#FFC1C1C1"/>
+						<ContentPresenter Margin="0,0,150,60.491" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+							<ContentPresenter.RenderTransform>
+								<CompositeTransform Rotation="11"/>
+							</ContentPresenter.RenderTransform>
+						</ContentPresenter>
+						<Rectangle IsHitTestVisible="False" Margin="0">
+							<Rectangle.Fill>
+								<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+									<LinearGradientBrush.RelativeTransform>
+										<CompositeTransform CenterY="0.5" CenterX="0.5" Rotation="90"/>
+									</LinearGradientBrush.RelativeTransform>
+									<GradientStop Offset="0.655" Color="#00C1C1C1"/>
+									<GradientStop Color="#FF959595" Offset="1"/>
+								</LinearGradientBrush>
+							</Rectangle.Fill>
+						</Rectangle>
+						<Rectangle StrokeThickness="75" Margin="0">
+							<Rectangle.Fill>
+								<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+									<LinearGradientBrush.RelativeTransform>
+										<CompositeTransform CenterY="0.5" CenterX="0.5" Rotation="90"/>
+									</LinearGradientBrush.RelativeTransform>
+									<GradientStop Offset="0.353" Color="#00C1C1C1"/>
+									<GradientStop Color="#FF959595"/>
+								</LinearGradientBrush>
+							</Rectangle.Fill>
+						</Rectangle>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+		<Setter Property="FontSize" Value="150"/>
+		<Setter Property="Foreground">
+			<Setter.Value>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#42B6B6B6"/>
+					<GradientStop Color="#FFB6B6B6" Offset="1"/>
+				</LinearGradientBrush>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<x:String x:Key="AppName">Tabstagram</x:String>
 </ResourceDictionary>

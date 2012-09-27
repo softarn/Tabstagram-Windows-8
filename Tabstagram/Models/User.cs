@@ -13,7 +13,22 @@ namespace Tabstagram
     {
         public string id { get; set; }
         public string username { get; set; }
-        public string full_name { get; set; }
+        private string _full_name;
+        public string full_name { 
+            get
+            {
+                if (_full_name != null && _full_name.Trim().Equals(""))
+                {
+                    return username;
+                }
+
+                return _full_name;
+            }
+            set
+            {
+                _full_name = value;
+            }
+        }
         public string profile_picture { get; set; }
         public string bio { get; set; }
         public string website { get; set; }
