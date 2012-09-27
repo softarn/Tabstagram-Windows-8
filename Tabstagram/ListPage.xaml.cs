@@ -22,11 +22,11 @@ namespace Tabstagram
     /// A page that displays a collection of item previews.  In the Split Application this page
     /// is used to display and select one of the available groups.
     /// </summary>
-    public sealed partial class ItemsPage1 : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class ListPage : Tabstagram.Common.LayoutAwarePage
     {
         MediaList mediaList = null;
 
-        public ItemsPage1()
+        public ListPage()
         {
             this.InitializeComponent();
         }
@@ -79,7 +79,7 @@ namespace Tabstagram
             }
             else
             {
-                this.Frame.Navigate(typeof(BasicPage1), m);
+                this.Frame.Navigate(typeof(ImagePage), m);
             }
         }
     }

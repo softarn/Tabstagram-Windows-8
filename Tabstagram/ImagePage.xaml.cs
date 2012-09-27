@@ -23,11 +23,11 @@ namespace Tabstagram
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class BasicPage1 : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class ImagePage : Tabstagram.Common.LayoutAwarePage
     {
         ImageViewModel viewModel;
 
-        public BasicPage1()
+        public ImagePage()
         {
             this.InitializeComponent();
         }

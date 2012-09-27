@@ -69,7 +69,7 @@ namespace Tabstagram
                 Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                 if (localSettings.Values["access_token"] != null)
                 {
-                    if (!rootFrame.Navigate(typeof(GroupedItemsPage1), args.Arguments))
+                    if (!rootFrame.Navigate(typeof(GroupedListsPage), args.Arguments))
                     {
                         throw new Exception("Failed to create initial page");
                     }

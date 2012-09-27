@@ -21,11 +21,11 @@ namespace Tabstagram
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class GroupedItemsPage1 : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class GroupedListsPage : Tabstagram.Common.LayoutAwarePage
     {
         ListsViewModel lvm = null;
 
-        public GroupedItemsPage1()
+        public GroupedListsPage()
         {
             this.InitializeComponent();
 
@@ -56,7 +56,7 @@ namespace Tabstagram
         {
             MediaList m = (MediaList)((Button)sender).DataContext;
 
-            this.Frame.Navigate(typeof(ItemsPage1), m);
+            this.Frame.Navigate(typeof(ListPage), m);
         }
 
         private void RefreshButtonClick(object sender, RoutedEventArgs e)
@@ -69,7 +69,7 @@ namespace Tabstagram
         {
             Media m = e.ClickedItem as Media;
 
-            this.Frame.Navigate(typeof(BasicPage1), m);
+            this.Frame.Navigate(typeof(ImagePage), m);
         }
     }
 }

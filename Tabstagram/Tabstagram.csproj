@@ -105,8 +105,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AuthCallbackParser.cs" />
-    <Compile Include="BasicPage1.xaml.cs">
-      <DependentUpon>BasicPage1.xaml</DependentUpon>
+    <Compile Include="ImagePage.xaml.cs">
+      <DependentUpon>ImagePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="CommentControl.xaml.cs">
       <DependentUpon>CommentControl.xaml</DependentUpon>
@@ -120,16 +120,13 @@
     <Compile Include="FullImageControl.xaml.cs">
       <DependentUpon>FullImageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GroupedItemsPage1.xaml.cs">
-      <DependentUpon>GroupedItemsPage1.xaml</DependentUpon>
+    <Compile Include="GroupedListsPage.xaml.cs">
+      <DependentUpon>GroupedListsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ImageViewModel.cs" />
-    <Compile Include="ItemsPage2.xaml.cs">
-      <DependentUpon>ItemsPage2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="LikedImageConverter.cs" />
-    <Compile Include="ItemsPage1.xaml.cs">
-      <DependentUpon>ItemsPage1.xaml</DependentUpon>
+    <Compile Include="ListPage.xaml.cs">
+      <DependentUpon>ListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ListsViewModel.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -178,7 +175,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BasicPage1.xaml">
+    <Page Include="ImagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,15 +191,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GroupedItemsPage1.xaml">
+    <Page Include="GroupedListsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ItemsPage1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ItemsPage2.xaml">
+    <Page Include="ListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
