@@ -5,12 +5,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace Tabstagram
 {
     class ImageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private DispatcherTimer timer = new DispatcherTimer(); 
 
         private Media _currentMedia;
         public Media CurrentMedia
@@ -51,7 +54,7 @@ namespace Tabstagram
             RelatedMedia.LoadList();
             OnPropertyChanged("CurrentMedia");
             LoadUserInfo(media.user.id);
-            LoadComments(media.id);
+            LoadComments();
         }
 
         public void LoadNewMedia(Media media)
@@ -67,13 +70,21 @@ namespace Tabstagram
             CurrentMedia.user = user;
         }
 
-        public async void LoadComments(string mediaId)
+        public async void LoadComments(bool forced = false)
         {
-            if (CurrentMedia.comments.count == CurrentMedia.comments.data.Count)
+            if (CurrentMedia.comments.count == CurrentMedia.comments.observableData.Count && !forced)
                 return;
 
-            List<Comment> comments = await Instagram.LoadComments(mediaId);
-            CurrentMedia.comments.data = comments;
+            List<Comment> comments = await Instagram.LoadComments(CurrentMedia.id);
+            CurrentMedia.comments.ClearAndAddComments(comments);
+
+            Media relatedMediaItem = null;
+            int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+            if (index > -1)
+                relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+
+            if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                relatedMediaItem.comments.ClearAndAddComments(comments);
         }
 
         public async Task<bool> LikeOrUnlike()
@@ -114,6 +125,39 @@ namespace Tabstagram
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        internal async void Comment(string comment)
+        {
+            bool success = await Instagram.CommentMedia(this.CurrentMedia.id, comment);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            timer.Tick += timer_LoadComments;
+            timer.Start();
+        }
+
+        void timer_LoadComments(object sender, object e)
+        {
+            LoadComments(true);
+            timer.Stop();
+        }
+
+        internal async Task<bool> DeleteComment(string commentId)
+        {
+            bool success = await Instagram.DeleteComment(CurrentMedia.id, commentId);
+
+            if (success)
+            {
+                Media relatedMediaItem = null;
+                int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+                if (index > -1)
+                    relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+
+                Comment tmpComment = new Comment();
+                tmpComment.id = commentId;
+                CurrentMedia.comments.RemoveComment(tmpComment);
+                relatedMediaItem.comments.RemoveComment(tmpComment);
+            }
+            return success;
         }
     }
 }

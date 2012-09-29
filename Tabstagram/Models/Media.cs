@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,17 +13,45 @@ namespace Tabstagram
 
     public class Comments : INotifyPropertyChanged
     {
-        private List<Comment> _data;
-        public List<Comment> data
+        public Comments() { observableData = new ObservableCollection<Comment>(); }
+        public Comments(List<Comment> comments)
         {
-            get { return _data; }
-            set
+            observableData = new ObservableCollection<Comment>();
+            data = comments;
+            count = comments.Count;
+        }
+
+        public void AddAllToObservable(List<Comment> from)
+        {
+            foreach(Comment c in from)
             {
-                _data = value;
-                OnPropertyChanged("data");
+                observableData.Add(c);
             }
         }
-        public int count { get; set; }
+
+        public ObservableCollection<Comment> observableData { get; set; }
+
+        public List<Comment> data
+        {
+            set
+            {
+                ClearAndAddComments(value);
+            }
+        }
+
+        private int _count;
+        public int count
+        {
+            get
+            {
+                return _count;
+            }
+            set
+            {
+                _count = value;
+                OnPropertyChanged("count");
+            }
+        }
 
         protected void OnPropertyChanged(string name)
         {
@@ -33,6 +62,29 @@ namespace Tabstagram
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void ClearAndAddComments(List<Comment> comments)
+        {
+            observableData.Clear();
+            AddAllToObservable(comments);
+            count = comments.Count();
+        }
+
+        internal bool RemoveComment(Comment comment)
+        {
+            bool removed = observableData.Remove(comment);
+            if (removed == false) return false;
+
+            count--;
+            return true;
+        }
+
+        internal bool AddComment(Comment comment)
+        {
+            observableData.Add(comment);
+            count++;
+            return true;
+        }
     }
 
     public class Likes : INotifyPropertyChanged
@@ -101,7 +153,19 @@ namespace Tabstagram
         public string type { get; set; }
         public string filter { get; set; }
         public List<object> tags { get; set; }
-        public Comments comments { get; set; }
+        private Comments _comments;
+        public Comments comments
+        {
+            get
+            {
+                return _comments;
+            }
+            set
+            {
+                _comments = value;
+                OnPropertyChanged("comments");
+            }
+        }
         public Caption caption { get; set; }
         public Likes likes { get; set; }
         public string link { get; set; }

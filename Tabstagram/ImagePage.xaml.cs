@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +28,7 @@ namespace Tabstagram
     public sealed partial class ImagePage : Tabstagram.Common.LayoutAwarePage
     {
         ImageViewModel viewModel;
+
 
         public ImagePage()
         {
@@ -87,7 +90,67 @@ namespace Tabstagram
             Comment.Text
             );
 
+            viewModel.Comment(Comment.Text);
             WriteComment.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void DeleteCommentClick(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(((Comment)CommentsList.SelectedItem).text);
+        }
+
+        private void CommentsList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Debug.WriteLine("Go to user profile");
+        }
+
+        private void CommentControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            
+            // We don't want to obscure content, so pass in a rectangle representing the sender of the context menu event.
+            // We registered command callbacks; no need to handle the menu completion event
+            //OutputTextBlock.Text = "Context menu shown";
+            //var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)sender));
+            //if (chosenCommand == null) // The command is null if no command was invoked.
+            //{
+            //    OutputTextBlock.Text = "Context menu dismissed";
+            //}
+        }
+
+        public static Rect GetElementRect(FrameworkElement element)
+        {
+            GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Point point = buttonTransform.TransformPoint(new Point());
+            return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
+        }
+        
+        private async void CommentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CommentsList.SelectedItem == null)
+                return;
+
+            object o = CommentsList.SelectedItem;
+            CommentsList.SelectedItem = null;
+            // Create a menu and add commands specifying a callback delegate for each.
+            // Since command delegates are unique, no need to specify command Ids.
+            var menu = new PopupMenu();
+            menu.Commands.Add(new UICommand("Delete", (command) =>
+            {
+                HandleDelete((Comment)o);
+            }));
+
+            ListViewItem lvi = (ListViewItem)CommentsList.ItemContainerGenerator.ContainerFromItem(o);
+
+            var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)lvi));
+        }
+
+        private async void HandleDelete(Comment comment)
+        {
+            bool deleteSuccess = await viewModel.DeleteComment(comment.id);
+            if (deleteSuccess == false)
+            {
+                TopAppBar.IsOpen = true;
+            }
         }
     }
 }

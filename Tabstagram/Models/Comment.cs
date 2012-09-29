@@ -23,6 +23,11 @@ namespace Tabstagram
         {
             return JsonConvert.DeserializeObject<MultipleComments>(jsonString).data;
         }
+
+        public override bool Equals(object obj)
+        {
+            return ((Comment)obj).id.Equals(this.id);
+        }
     }
 
     public class MultipleComments

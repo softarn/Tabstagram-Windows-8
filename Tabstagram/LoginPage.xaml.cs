@@ -78,7 +78,7 @@ namespace Tabstagram
 
         private void NavigateToLoggedIn()
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(GroupedListsPage));
         }
 
         private async void AuthButtonClick(object sender, RoutedEventArgs args)

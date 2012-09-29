@@ -20,6 +20,17 @@
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
         <local:TimeConverter x:Name="TimeConverter"/>
     </Page.Resources>
+    <Page.TopAppBar>
+        <AppBar x:Name="TopAppBar">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                    <TextBlock Text="Could not remove comment" HorizontalAlignment="Left" FontFamily="Global User Interface" FontSize="22" VerticalAlignment="Center" />
+            </Grid>
+        </AppBar>
+    </Page.TopAppBar>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -123,7 +134,7 @@
                     		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
                     	</Grid>
                 		<TextBlock Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                		<ListView ItemsSource="{Binding CurrentMedia.comments.data}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
+                        <ListView x:Name="CommentsList" SelectionChanged="CommentsList_SelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
                 			<ListView.ItemContainerStyle>
                 				<Style TargetType="ListViewItem">
                 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -137,13 +148,12 @@
                 				</DataTemplate>
                 			</ListView.ItemTemplate>
                 		</ListView>
-                		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Click="NewCommentClick" Visibility="Collapsed">
+                		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Click="NewCommentClick">
 							<TextBlock Text="+"/>
 						</Button>
                 	</Grid>
                 </Grid>
             </Grid>
-            <Grid x:Name="FadeGrid" Margin="-30,-2000,-30,-30" Canvas.ZIndex="1" Background="#CC000000" Grid.ColumnSpan="3" Visibility="Collapsed"/>
         </Grid>
         <Grid Background="#FF171717" Margin="0">
         	<Grid.ColumnDefinitions>

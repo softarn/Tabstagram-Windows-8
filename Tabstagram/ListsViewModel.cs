@@ -96,8 +96,8 @@ namespace Tabstagram
         public async override Task<bool> LoadMore()
         {
             Args args = new Args();
-            args.Add(new Args.Arg(Args.Arg.Type.MAX_ID, ItemsAll.Last().id));
-            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "25"));
+            args.Add(new Arg(Arg.Type.MAX_ID, ItemsAll.Last().id));
+            args.Add(new Arg(Arg.Type.COUNT, "25"));
             MultipleMedia mm = await Instagram.LoadFeed(args);
             pagination = mm.pagination;
             AddAllImmediately(mm.data, ItemsAll);
@@ -185,7 +185,7 @@ namespace Tabstagram
         public override async Task<bool> LoadMore()
         {
             Args args = new Args();
-            args.Add(new Args.Arg(Args.Arg.Type.COUNT, "25"));
+            args.Add(new Arg(Arg.Type.COUNT, "25"));
             MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url, args);
             pagination = mm.pagination;
             AddAllImmediately(mm.data, ItemsAll);

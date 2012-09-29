@@ -11,9 +11,26 @@ namespace Tabstagram.Models
         private static string ACCESS_TOKEN_KEY = "access_token";
         private static string ACITVE_LIST_KEY = "active_list";
         private static string MEDIA_LISTS = "media_lists";
+        private static string USER_ID_KEY = "user_id";
 
-        public static string AccessToken { get { return Get<string>(ACCESS_TOKEN_KEY); } set { Save(ACCESS_TOKEN_KEY, value); } }
-        public static string ActiveList { get { return Get<string>(ACITVE_LIST_KEY); } set { Save(ACITVE_LIST_KEY, value); } }
+        public static string AccessToken 
+        {
+            get { return Get<string>(ACCESS_TOKEN_KEY); } 
+            set { Save(ACCESS_TOKEN_KEY, value); } 
+        }
+
+        public static string ActiveList 
+        { 
+            get { return Get<string>(ACITVE_LIST_KEY); } 
+            set { Save(ACITVE_LIST_KEY, value); } 
+        }
+
+        public string UserId
+        {
+            get { return Get<string>(USER_ID_KEY); }
+            set { Save(USER_ID_KEY, value); }
+        }
+        
         public static List<string> MediaStringsList
         {
             get
@@ -29,7 +46,6 @@ namespace Tabstagram.Models
                 Save(MEDIA_LISTS, ListToString(value));
             }
         }
-
 
         public static void AddMediaString(string str)
         {

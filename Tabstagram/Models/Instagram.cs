@@ -16,13 +16,15 @@ namespace Tabstagram
         private static string BASE_URL = "https://api.instagram.com/v1/";
         private static string HEADER_VALUE = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)";
 
-        private static string FEED_URL { get { return BASE_URL + "users/self/feed?access_token=" + AccessToken; } }
-        private static string POPULAR_URL { get { return BASE_URL + "media/popular?access_token=" + AccessToken; } }
-        private static string GetTagUrl(string Tag)     { return String.Format("{0}tags/{1}/media/recent?access_token={2}",  BASE_URL, Tag, AccessToken); }
-        private static string GetUserMediaUrl(User u)   { return String.Format("{0}users/{1}/media/recent?access_token={2}", BASE_URL, u.id, AccessToken); }
-        private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}?access_token={2}",              BASE_URL, id, AccessToken); }
-        private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments?access_token={2}",     BASE_URL, id, AccessToken); }
-        private static string GetLikeUrl(string id) { return String.Format("{0}media/{1}/likes?access_token={2}", BASE_URL, id, AccessToken); }
+        private static string FEED_URL { get { return BASE_URL + "users/self/feed"; } }
+        private static string POPULAR_URL { get { return BASE_URL + "media/popular"; } }
+
+        private static string GetTagUrl(string Tag) { return String.Format("{0}tags/{1}/media/recent",  BASE_URL, Tag); }
+        private static string GetUserMediaUrl(User u) { return String.Format("{0}users/{1}/media/recent", BASE_URL, u.id); }
+        private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}", BASE_URL, id); }
+        private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments", BASE_URL, id); }
+        private static string GetDeleteCommentsUrl(string mediaId, string commentId) { return String.Format("{0}media/{1}/comments/{2}", BASE_URL, mediaId, commentId); }
+        private static string GetLikeUrl(string id) { return String.Format("{0}media/{1}/likes", BASE_URL, id); }
 
         private static HttpClient client = GetHttpClient();
 
@@ -36,6 +38,12 @@ namespace Tabstagram
             return httpClient;
         }
 
+        private static Args SafeAddAccessToken(Args args)
+        {
+            args = Args.SafeAdd(args, new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
+            return args;
+        }
+
         private static async Task<HttpResponseMessage> Delete(string url, Args args = null, int tries = 0)
         {
             if (tries > 3)
@@ -45,7 +53,7 @@ namespace Tabstagram
             HttpResponseMessage response = null;
 
             if (args != null)
-                url = url + args.ToString();
+                url = url + args.ToGetString();
 
             try { response = await client.DeleteAsync(url); }
             catch (Exception e)
@@ -66,11 +74,12 @@ namespace Tabstagram
 
             Task<HttpResponseMessage> task = null;
             HttpResponseMessage response = null;
+            String argsString = "";
 
             if (args != null)
-                url = url + args.ToString();
+                argsString = args.ToPostString();
 
-            try { response = await client.PostAsync(url, null); }
+            try { response = await client.PostAsync(url, new StringContent(argsString)); }
             catch (Exception e)
             {
                 task = Post(url, null, tries + 1);
@@ -82,7 +91,7 @@ namespace Tabstagram
             return response;
         }
 
-        private static async Task<string> GetString(string url, Args args, int tries = 0)
+        private static async Task<string> Get(string url, Args args, int tries = 0)
         {
             if (tries > 3)
                 return null;
@@ -91,12 +100,12 @@ namespace Tabstagram
             string response = null;
 
             if (args != null)
-                url = url + args.ToString();
+                url = url + args.ToGetString();
 
             try { response = await client.GetStringAsync(url); }
             catch (Exception e)
             {
-                task = GetString(url, null, tries + 1);
+                task = Get(url, null, tries + 1);
             }
 
             if (task != null)
@@ -107,41 +116,64 @@ namespace Tabstagram
 
         private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
         {
+            args = SafeAddAccessToken(args);
             Debug.WriteLine("Getting MediaList from: " + url);
-            string response = await GetString(url, args);
+            string response = await Get(url, args);
             MultipleMedia mm = Media.ListFromJSON(response);
             return mm;
         }
 
         private static async Task<User> LoadUser(string url, Args args = null, int tries = 0)
         {
-            string response = await GetString(url, args);
+            args = SafeAddAccessToken(args);
+            string response = await Get(url, args);
             User user = User.SingleFromJSON(response);
             return user;
         }
 
         public static async Task<List<Comment>> LoadComments(string mediaId, Args args = null)
         {
+            args = SafeAddAccessToken(args);
             string url = GetCommentsUrl(mediaId);
             Debug.WriteLine("Getting comments from: " + url);
-            string response = await GetString(url, args);
+            string response = await Get(url, args);
             List<Comment> comments = Comment.ListFromJSON(response);
             return comments;
         }
 
-        public static async Task<bool> Like(string mediaId)
+        public static async Task<bool> CommentMedia(string mediaId, string comment)
         {
-            string url = GetLikeUrl(mediaId);
-            Debug.WriteLine("Likeing media: " + mediaId);
-            HttpResponseMessage response = await Post(url);
+            Args args = new Args(new Arg(Arg.Type.TEXT, comment));
+            args = SafeAddAccessToken(args);
+            string url = GetCommentsUrl(mediaId);
+            Debug.WriteLine("Commenting on: " + mediaId);
+            HttpResponseMessage response = await Post(url, args);
             return response.IsSuccessStatusCode;
         }
 
-        public static async Task<bool> Unlike(string mediaId)
+        internal static async Task<bool> DeleteComment(string mediaId, string commentId)
         {
+            Args args = new Args(new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
+            string url = GetDeleteCommentsUrl(mediaId, commentId);
+            HttpResponseMessage response = await Delete(url, args);
+            return response.IsSuccessStatusCode;
+        }
+
+        public static async Task<bool> Like(string mediaId, Args args = null)
+        {
+            args = SafeAddAccessToken(args);
             string url = GetLikeUrl(mediaId);
             Debug.WriteLine("Likeing media: " + mediaId);
-            HttpResponseMessage response = await Delete(url);
+            HttpResponseMessage response = await Post(url, args);
+            return response.IsSuccessStatusCode;
+        }
+
+        public static async Task<bool> Unlike(string mediaId, Args args = null)
+        {
+            args = SafeAddAccessToken(args);
+            string url = GetLikeUrl(mediaId);
+            Debug.WriteLine("Likeing media: " + mediaId);
+            HttpResponseMessage response = await Delete(url, args);
             return response.IsSuccessStatusCode;
         }
 
@@ -176,33 +208,56 @@ namespace Tabstagram
         }
     }
 
-    public class Args : List<Tabstagram.Args.Arg>
+    public class Args : List<Arg>
     {
-        public override string ToString()
-            {
-                Debug.WriteLine(this.First().type.ToString());
-                string delim = "&";
-                StringBuilder sb = new StringBuilder();
-                foreach (Arg a in this)
-                {
-                    sb.Append(String.Format("{0}{1}={2}", delim, a.type.ToString().ToLower(), a.value));
-                    delim = "&";
-                }
-                return sb.ToString();
-            }
+        public Args() { }
 
-        public class Arg
+        public Args(Arg arg)
         {
-            public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT }
+            Add(arg);
+        }
 
-            public Type type { get; set; }
-            public string value { get; set; }
-
-            public Arg(Type t, string v)
+        public string ToGetString()
+        {
+            Debug.WriteLine(this.First().type.ToString());
+            StringBuilder sb = new StringBuilder();
+            sb.Append("?");
+            string delim = "";
+            foreach (Arg a in this)
             {
-                type = t;
-                value = v;
+                sb.Append(String.Format("{0}{1}={2}", delim, a.type.ToString().ToLower(), a.value));
+                delim = "&";
             }
+            return sb.ToString();
+        }
+
+        public string ToPostString()
+        {
+            string str = this.ToGetString();
+            return str.Substring(1);
+        }
+
+        public static Args SafeAdd(Args args, Arg arg)
+        {
+            if (args == null)
+                args = new Args();
+
+            args.Add(arg);
+            return args;
+        }
+    }
+
+    public class Arg
+    {
+        public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT, TEXT, ACCESS_TOKEN }
+
+        public Type type { get; set; }
+        public string value { get; set; }
+
+        public Arg(Type t, string v)
+        {
+            type = t;
+            value = v;
         }
     }
 }
