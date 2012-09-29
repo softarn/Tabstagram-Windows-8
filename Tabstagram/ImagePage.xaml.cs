@@ -149,7 +149,18 @@ namespace Tabstagram
             bool deleteSuccess = await viewModel.DeleteComment(comment.id);
             if (deleteSuccess == false)
             {
+                TopAppBar.IsEnabled = true;
                 TopAppBar.IsOpen = true;
+                TopAppBar.IsEnabled = false;
+            }
+        }
+
+        private void TopAppBar_Opened(object sender, object e)
+        {
+            if (TopAppBar.IsEnabled == false)
+            {
+                if (TopAppBar.IsOpen)
+                    TopAppBar.IsOpen = false;
             }
         }
     }

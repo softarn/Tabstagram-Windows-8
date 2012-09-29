@@ -21,7 +21,7 @@
         <local:TimeConverter x:Name="TimeConverter"/>
     </Page.Resources>
     <Page.TopAppBar>
-        <AppBar x:Name="TopAppBar">
+        <AppBar x:Name="TopAppBar" Opened="TopAppBar_Opened" IsEnabled="False" >
             <Grid Margin="20,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
