@@ -28,7 +28,7 @@ namespace Tabstagram
     public sealed partial class ImagePage : Tabstagram.Common.LayoutAwarePage
     {
         ImageViewModel viewModel;
-
+        DispatcherTimer timer = new DispatcherTimer();
 
         public ImagePage()
         {
@@ -64,6 +64,7 @@ namespace Tabstagram
             Media m = e.Parameter as Media;
             viewModel = new ImageViewModel(m);
             pageRoot.DataContext = viewModel;
+            pageTitle.Text = "Tabstagram - " + viewModel.CurrentMedia.user.username;
             base.OnNavigatedTo(e);  
         }
 
@@ -149,18 +150,11 @@ namespace Tabstagram
             bool deleteSuccess = await viewModel.DeleteComment(comment.id);
             if (deleteSuccess == false)
             {
-                TopAppBar.IsEnabled = true;
-                TopAppBar.IsOpen = true;
-                TopAppBar.IsEnabled = false;
-            }
-        }
-
-        private void TopAppBar_Opened(object sender, object e)
-        {
-            if (TopAppBar.IsEnabled == false)
-            {
-                if (TopAppBar.IsOpen)
-                    TopAppBar.IsOpen = false;
+                CommentError.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                timer.Tick += (o, e) => { CommentError.Visibility = Windows.UI.Xaml.Visibility.Collapsed; };
+                timer.Tick += (o, e) => { timer.Stop(); };
+                timer.Interval = new TimeSpan(0, 0, 5);
+                timer.Start();
             }
         }
     }

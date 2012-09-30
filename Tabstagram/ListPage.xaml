@@ -79,7 +79,7 @@
         	</Grid.ColumnDefinitions>
         	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36"/>
         	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
-        	<TextBlock x:Name="pageTitle1" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
+        	<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
         </Grid>
 
         <VisualStateManager.VisualStateGroups>

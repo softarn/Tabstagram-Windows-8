@@ -20,17 +20,6 @@
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
         <local:TimeConverter x:Name="TimeConverter"/>
     </Page.Resources>
-    <Page.TopAppBar>
-        <AppBar x:Name="TopAppBar" Opened="TopAppBar_Opened" IsEnabled="False" >
-            <Grid Margin="20,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                    <TextBlock Text="Could not remove comment" HorizontalAlignment="Left" FontFamily="Global User Interface" FontSize="22" VerticalAlignment="Center" />
-            </Grid>
-        </AppBar>
-    </Page.TopAppBar>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -71,7 +60,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                 <local:FullImageControl x:Name="FullImage" DoubleTapped="Image_DoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,25" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                <StackPanel x:Name="CaptionPanel" Margin="60,5" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" MaxHeight="140" HorizontalAlignment="Center">
+                <StackPanel x:Name="CaptionPanel" Margin="60,5,60,2" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" MaxHeight="140" HorizontalAlignment="Center">
                 	<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16" Margin="10"/>
                 </StackPanel>
             </Grid>
@@ -121,9 +110,11 @@
                     	<Grid.RowDefinitions>
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition Height="Auto"/>
+                    		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
-                		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="1" Visibility="Collapsed">
+                		<TextBlock x:Name="CommentError" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Could not delete comment" VerticalAlignment="Center" Grid.Row="1" FontSize="14.667" Foreground="#FFCF1B1B" Visibility="Collapsed"/>
+                		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="2" Visibility="Collapsed">
                     		<Grid.RowDefinitions>
                     			<RowDefinition Height="Auto"/>
                     			<RowDefinition/>
@@ -133,7 +124,7 @@
                     		<Button x:Name="MakeCommentButton" Click="MakeCommentButton_Click" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2"/>
                     		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
                     	</Grid>
-                		<TextBlock Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                		<TextBlock x:Name="CommentsHeader" Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
                         <ListView x:Name="CommentsList" SelectionChanged="CommentsList_SelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
                 			<ListView.ItemContainerStyle>
                 				<Style TargetType="ListViewItem">
@@ -163,7 +154,7 @@
         	</Grid.ColumnDefinitions>
         	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
         	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0"/>
-        	<TextBlock x:Name="pageTitle1" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,35"/>
+        	<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,35"/>
         </Grid>
 
         <VisualStateManager.VisualStateGroups>

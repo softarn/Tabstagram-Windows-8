@@ -34,7 +34,7 @@ namespace Tabstagram
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             mediaList = e.Parameter as MediaList;
-//pageTitle.Text = "Tabstagram - " + mediaList.category;
+            pageTitle.Text = "Tabstagram - " + mediaList.category;
             this.DefaultViewModel["Items"] = mediaList.ItemsAll;
             if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
                 await mediaList.LoadMore();
