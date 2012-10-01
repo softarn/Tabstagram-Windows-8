@@ -194,7 +194,9 @@ namespace Tabstagram
 
         public static async Task<MultipleMedia> LoadFromCustomUrl(string url, Args args = null)
         {
-            return await LoadMediaList(url, args);
+            string response = await Get(url, args);
+            MultipleMedia mm = Media.ListFromJSON(response);
+            return mm;
         }
 
         internal static async Task<MultipleMedia> LoadUserMedia(User user, Args args = null)

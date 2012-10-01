@@ -36,7 +36,7 @@
         <ContentControl x:Name="Background" Content="Tabstagram" Style="{StaticResource Background}" Grid.Row="1"/>
 
         <!-- Horizontal scrolling grid used in most view states -->
-        <GridView
+        <local:MyGridView
             x:Name="itemGridView"
             AutomationProperties.AutomationId="ItemsGridView"
             AutomationProperties.Name="Items"
@@ -49,14 +49,19 @@
             IsItemClickEnabled="True"
             ItemClick="itemGridView_ItemClick_1"
             >
-            <GridView.ItemTemplate>
+            <local:MyGridView.ItemTemplate>
                 <DataTemplate>
                     <local:ThumbnailControl Width="150" Height="150"/>
                 </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
+            </local:MyGridView.ItemTemplate>
+            <!--<local:MyGridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VariableSizedWrapGrid ItemWidth="150" ItemHeight="150" Orientation="Vertical" Margin="0,0,80,0"/>
+                </ItemsPanelTemplate>
+            </local:MyGridView.ItemsPanel>-->
+        </local:MyGridView>
 
-            <!-- Vertical scrolling list only used when snapped -->
+        <!-- Vertical scrolling list only used when snapped -->
         <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemsListView"

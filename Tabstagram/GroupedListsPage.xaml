@@ -98,7 +98,7 @@
                       Padding="0,30,0,35" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Foreground="Black">
             <!-- Details View -->
             <SemanticZoom.ZoomedInView>
-                <GridView
+                <local:MyGridView
                 x:Name="itemGridView"
                 AutomationProperties.AutomationId="ItemGridView"
                 AutomationProperties.Name="Grouped Items"
@@ -107,33 +107,33 @@
                 IsItemClickEnabled="True"
                 SelectionMode="None"
                 IsSwipeEnabled="false" 
-                Margin="0" Padding="120,10,0,10" BorderThickness="0,2" Foreground="White">
-                    <GridView.ItemTemplate>
+                Padding="120,10,0,10" BorderThickness="0,2" Foreground="White">
+                    <local:MyGridView.ItemTemplate>
                         <DataTemplate>
                             <local:ThumbnailControl />
                         </DataTemplate>
-                    </GridView.ItemTemplate>
-                    <GridView.ItemsPanel>
+                    </local:MyGridView.ItemTemplate>
+                    <local:MyGridView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-                    <GridView.GroupStyle>
+                    </local:MyGridView.ItemsPanel>
+                    <local:MyGridView.GroupStyle>
                     	<GroupStyle>
                     		<GroupStyle.HeaderTemplate>
                     			<DataTemplate>
                     				<Grid Margin="1,0,0,6">
                     					<StackPanel Orientation="Horizontal">
-                                            <!--<Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
-                    							<Image Source="/Assets/RefreshIcon.png" Width="30" Height="30" Margin="10, 0, 10, 0" VerticalAlignment="Center"/>
-                    						</Button>-->
+                                            <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
+                    							<Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
+                    						</Button>
                     						<Button
                     							AutomationProperties.Name="category"
                     							Style="{StaticResource TextPrimaryButtonStyle}"
                     							Click="Button_Click"
                                                 Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
                     							<StackPanel Orientation="Horizontal" >
-                    								<TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
+                    							<TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
                     								<TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black"/>
                     							</StackPanel>
                     						</Button>
@@ -143,12 +143,12 @@
                     		</GroupStyle.HeaderTemplate>
                     		<GroupStyle.Panel>
                     			<ItemsPanelTemplate>
-                    				<VariableSizedWrapGrid Orientation="Vertical" Margin="0,0,80,0" />
+                    				<VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
                     			</ItemsPanelTemplate>
                     		</GroupStyle.Panel>
                     	</GroupStyle>
-                    </GridView.GroupStyle>
-                </GridView>
+                    </local:MyGridView.GroupStyle>
+                </local:MyGridView>
             </SemanticZoom.ZoomedInView>
             <!-- Zoomed out View -->
             <SemanticZoom.ZoomedOutView>

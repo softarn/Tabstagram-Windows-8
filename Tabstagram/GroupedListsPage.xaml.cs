@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
@@ -61,8 +62,9 @@ namespace Tabstagram
 
         private void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
-            /* TODO: Implement refreshing the corresponding list click here */
-            Debug.WriteLine("Refresh button click");
+            MediaList m = (MediaList)((Button)sender).DataContext;
+
+            m.Refresh();
         }
 
         private void Item_Click(object sender, ItemClickEventArgs e)
@@ -70,6 +72,28 @@ namespace Tabstagram
             Media m = e.ClickedItem as Media;
 
             this.Frame.Navigate(typeof(ImagePage), m);
+        }
+
+        private void thumbnail_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            Image MainGrid = (Image)sender;
+            MainGrid.Opacity = 0;
+            MainGrid.Visibility = Visibility.Visible;
+
+            var storyboard = new Storyboard();
+
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.8),
+            };
+            storyboard.Children.Add(opacityAnimation);
+
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            Storyboard.SetTarget(storyboard, MainGrid);
+
+            storyboard.Begin();
         }
     }
 }

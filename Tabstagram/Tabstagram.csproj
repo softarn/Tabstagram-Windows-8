@@ -126,6 +126,7 @@
       <DependentUpon>GroupedListsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ImageViewModel.cs" />
+    <Compile Include="ImportantThumbnailConverter.cs" />
     <Compile Include="LikedImageConverter.cs" />
     <Compile Include="ListPage.xaml.cs">
       <DependentUpon>ListPage.xaml</DependentUpon>
@@ -143,6 +144,7 @@
     <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="MyGridView.cs" />
     <Compile Include="ThumbnailControl.xaml.cs">
       <DependentUpon>ThumbnailControl.xaml</DependentUpon>
     </Compile>

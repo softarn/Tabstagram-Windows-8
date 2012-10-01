@@ -150,6 +150,7 @@ namespace Tabstagram
 
     public class Media : INotifyPropertyChanged
     {
+        public bool IsImportant { get; set; }
         public string type { get; set; }
         public string filter { get; set; }
         public List<object> tags { get; set; }

@@ -13,11 +13,12 @@
 
     <UserControl.Resources>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
+        <local:ImportantThumbnailConverter x:Name="ImportantUrlConverter"/>
     </UserControl.Resources>
 
-    <Grid Width="150" Height="150">
+    <Grid>
         <Border BorderBrush="#000" BorderThickness="2"/>
-        <Image x:Name="thumbnail" Source="{Binding images.thumbnail.url}" HorizontalAlignment="Center" 
+        <Image x:Name="thumbnail" Source="{Binding Converter={StaticResource ImportantUrlConverter}}" HorizontalAlignment="Center" 
                 Margin="2" VerticalAlignment="Center" ImageOpened="thumbnail_ImageOpened"/>
         <Grid VerticalAlignment="Bottom" Height="20" Margin="0,0,0,2">
             <Grid.Background>
