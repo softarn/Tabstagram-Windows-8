@@ -50,8 +50,7 @@ namespace Tabstagram
         public ImageViewModel(Media media)
         {
             CurrentMedia = media;
-            RelatedMedia = new UserMedia(media.user);   
-            RelatedMedia.LoadList();
+            RelatedMedia = new UserMedia(media.user);
             OnPropertyChanged("CurrentMedia");
             LoadUserInfo(media.user.id);
             LoadComments();
@@ -79,9 +78,9 @@ namespace Tabstagram
             CurrentMedia.comments.ClearAndAddComments(comments);
 
             Media relatedMediaItem = null;
-            int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+            int index = RelatedMedia.IndexOf(CurrentMedia);
             if (index > -1)
-                relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+                relatedMediaItem = RelatedMedia.ElementAt(index);
 
             if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
                 relatedMediaItem.comments.ClearAndAddComments(comments);
@@ -90,9 +89,9 @@ namespace Tabstagram
         public async Task<bool> LikeOrUnlike()
         {
             Media relatedMediaItem = null;
-            int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+            int index = RelatedMedia.IndexOf(CurrentMedia);
             if (index > -1)
-                relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+                relatedMediaItem = RelatedMedia.ElementAt(index);
 
             bool success = false;
             if (CurrentMedia.user_has_liked)
@@ -148,9 +147,9 @@ namespace Tabstagram
             if (success)
             {
                 Media relatedMediaItem = null;
-                int index = RelatedMedia.ItemsAll.IndexOf(CurrentMedia);
+                int index = RelatedMedia.IndexOf(CurrentMedia);
                 if (index > -1)
-                    relatedMediaItem = RelatedMedia.ItemsAll.ElementAt(index);
+                    relatedMediaItem = RelatedMedia.ElementAt(index);
 
                 Comment tmpComment = new Comment();
                 tmpComment.id = commentId;

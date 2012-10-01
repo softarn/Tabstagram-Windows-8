@@ -11,9 +11,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <CollectionViewSource
-            x:Name="itemsViewSource"
-            Source="{Binding Items}"/>
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>
@@ -44,7 +41,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Left Grid-->
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia.ItemsAll}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch">
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>

@@ -35,10 +35,10 @@ namespace Tabstagram
         {
             mediaList = e.Parameter as MediaList;
             pageTitle.Text = "Tabstagram - " + mediaList.category;
-            this.DefaultViewModel["Items"] = mediaList.ItemsAll;
-            if (mediaList.ItemsAll.Count < 50 && !mediaList.category.Equals("Popular"))
-                await mediaList.LoadMore();
-            AddLoadMore();
+            this.DefaultViewModel["Items"] = mediaList;
+            //if (mediaList.Count < 50 && !mediaList.category.Equals("Popular"))
+            //    await mediaList.LoadMore();
+            //AddLoadMore();
 
             base.OnNavigatedTo(e);
         }
@@ -57,30 +57,30 @@ namespace Tabstagram
 
         }
 
-        private void AddLoadMore()
-        {
-            Media m = new Media();
-            m.id = "load more";
-            m.images = new Images();
-            m.images.thumbnail = new Thumbnail();
-            m.images.thumbnail.url = "ms-appx:/Assets/HeartIcon.png";
-            mediaList.ItemsAll.Add(m);
-        }
+        //private void AddLoadMore()
+        //{
+        //    Media m = new Media();
+        //    m.id = "load more";
+        //    m.images = new Images();
+        //    m.images.thumbnail = new Thumbnail();
+        //    m.images.thumbnail.url = "ms-appx:/Assets/HeartIcon.png";
+        //    mediaList.ItemsAll.Add(m);
+        //}
 
         private async void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
         {
             Media m = e.ClickedItem as Media;
 
-            if (m.id.Equals("load more"))
-            {
-                mediaList.ItemsAll.RemoveAt(mediaList.ItemsAll.Count - 1);
-                await mediaList.LoadMore();
-                AddLoadMore();
-            }
-            else
-            {
+            //if (m.id.Equals("load more"))
+            //{
+            //    mediaList.ItemsAll.RemoveAt(mediaList.ItemsAll.Count - 1);
+            //    await mediaList.LoadMore();
+            //    AddLoadMore();
+            //}
+            //else
+            //{
                 this.Frame.Navigate(typeof(ImagePage), m);
-            }
+            //}
         }
     }
 }

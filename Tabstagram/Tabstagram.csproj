@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Tabstagram_TemporaryKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>5.0.30709.0</ExpressionBlendVersion>
+    <PackageCertificateThumbprint>A708E7B91327B0DBBF84905A191C80C612FA73F0</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -105,6 +106,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AuthCallbackParser.cs" />
+    <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="ImagePage.xaml.cs">
       <DependentUpon>ImagePage.xaml</DependentUpon>
     </Compile>
@@ -154,7 +156,6 @@
     <None Include="Tabstagram_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\back.png" />
     <Content Include="Assets\CommentIcon.png" />
     <Content Include="Assets\HeartIcon.png" />
     <Content Include="Assets\HeartIcon_white.png" />
@@ -163,6 +164,7 @@
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Tabstagram_icon.png" />
+    <Content Include="Assets\Tabstagram_splash.png" />
     <Content Include="Common\ReadMe.txt" />
     <Content Include="Assets\RefreshIcon.png" />
   </ItemGroup>

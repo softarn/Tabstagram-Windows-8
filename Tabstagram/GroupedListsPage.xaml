@@ -20,7 +20,9 @@
             x:Name="groupedItemsViewSource"
             Source="{Binding Groups}"
             IsSourceGrouped="true"
-            ItemsPath="ItemsSmall"/>
+            ItemsPath="SubCollection"/>
+        
+        <local:BooleanToVisibilityConverter x:Name="BoolConverter" />
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>
@@ -87,15 +89,13 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
-        <!-- Horizontal scrolling grid used in most view states -->
-
+        
         <!-- Horizontal scrolling grid used in most view states -->
         <ContentControl x:Name="Background" Grid.ColumnSpan="2" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}" />
 <!-- Horizontal scrolling grid used in most view states -->
         <SemanticZoom x:Name="semanticZoom"
                       Grid.Row="1"
-                      Padding="0,30,0,35" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Background="{x:Null}" Foreground="Black">
+                      Padding="0,30,0,35" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Foreground="Black">
             <!-- Details View -->
             <SemanticZoom.ZoomedInView>
                 <GridView
@@ -107,7 +107,7 @@
                 IsItemClickEnabled="True"
                 SelectionMode="None"
                 IsSwipeEnabled="false" 
-                Margin="0" Padding="25,10,0,10" BorderThickness="0,2" Foreground="White">
+                Margin="0" Padding="120,10,0,10" BorderThickness="0,2" Foreground="White">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <local:ThumbnailControl />
@@ -130,7 +130,8 @@
                     						<Button
                     							AutomationProperties.Name="category"
                     							Style="{StaticResource TextPrimaryButtonStyle}"
-                    							Click="Button_Click">
+                    							Click="Button_Click"
+                                                Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
                     							<StackPanel Orientation="Horizontal" >
                     								<TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
                     								<TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black"/>

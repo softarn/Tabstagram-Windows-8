@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,59 +13,9 @@ using Windows.UI.Xaml.Data;
 
 namespace Tabstagram
 {
-    public class InfiniteSequence : ObservableCollection<Media>, ISupportIncrementalLoading
+    public abstract class MediaList : ObservableCollection<Media>, ISupportIncrementalLoading, INotifyPropertyChanged
     {
-
-        public InfiniteSequence()
-        {
-        }
-
-        public bool HasMoreItems
-        {
-            get { return true; }
-        }
-
-        //public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
-        //{
-        //    CoreDispatcher dispatcher = Window.Current.Dispatcher;
-
-        //    return Task.Run<LoadMoreItemsResult>(
-        //        () =>
-        //        {
-        //            int[] numbers = Enumerable.Range(this.LastOrDefault(), 100).ToArray();
-
-        //            dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-        //                 () =>
-        //                 {
-        //                     foreach (int item in numbers)
-        //                         if (this.Selector(item))
-        //                             this.Add(item);
-        //                 });
-
-        //            return new LoadMoreItemsResult() { Count = 100 };
-        //        }).AsAsyncOperation<LoadMoreItemsResult>();
-        //}
-
-
-        public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
-        {
-            CoreDispatcher dispatcher = Window.Current.Dispatcher;
-
-            return Task.Run<LoadMoreItemsResult>(
-                () =>
-                {
-                    dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () =>
-                        {
-                            Add(this.Last());
-                        });
-                    return new LoadMoreItemsResult() { Count = 1 };
-                }).AsAsyncOperation<LoadMoreItemsResult>();
-        }
-    }
-
-    public abstract class MediaList : ObservableCollection<Media>, ISupportIncrementalLoading
-    {
+        protected override event PropertyChangedEventHandler PropertyChanged;
         public static List<DispatcherTimer> timers = new List<DispatcherTimer>();
         protected Pagination pagination;
         private ObservableCollection<Media> _subCollection;
@@ -72,17 +23,23 @@ namespace Tabstagram
         {
             get
             {
-                if (_subCollection == null || _subCollection.Count == 0)
-                {
+                if (_subCollection == null)
                     _subCollection = new ObservableCollection<Media>();
-                    IEnumerable<Media> collection = GetSubCollection();
-                    foreach (Media m in collection)
-                    {
-                        _subCollection.Add(m);
-                    }
-                }
-
                 return _subCollection;
+            }
+        }
+        private bool _isLoaded;
+        public bool IsLoaded 
+        {
+            get
+            {
+                return _isLoaded;
+            }
+
+            set
+            {
+                _isLoaded = value;
+                OnPropertyChanged("IsLoaded");
             }
         }
         public string category { get; set; }
@@ -90,8 +47,16 @@ namespace Tabstagram
         {
             get
             {
-                return pagination.next_url != null;
+                return CanLoadMoreItems();
             }
+        }
+
+        protected virtual bool CanLoadMoreItems()
+        {
+            if (pagination == null)
+                return false;
+
+            return pagination.next_url != null;
         }
 
         public abstract string GetName();
@@ -99,17 +64,23 @@ namespace Tabstagram
         protected virtual void Init()
         {
             this.category = GetName();
+            IsLoaded = true;
+            PopulateSubCollection();
         }
 
-        private IEnumerable<Media> GetSubCollection()
+        private void PopulateSubCollection()
         {
             Random rand = new Random();
             int takeInt = this.Count;
-            if(takeInt > 14)
+            if (takeInt > 14)
             {
-                takeInt = rand.Next(15, takeInt);
+                int max = takeInt > 20 ? 20 : takeInt;
+                takeInt = rand.Next(15, max);
             }
-            return this.Take(takeInt);
+            foreach (Media m in this.Take(takeInt))
+            {
+                SubCollection.Add(m);
+            }
         }
 
         public static MediaList GetClassFromString(string listString)
@@ -127,14 +98,11 @@ namespace Tabstagram
             throw new System.ArgumentException("listString must be #hashtagname, popular or feed");
         }
 
-        public virtual async Task<bool> LoadMore()
+        public virtual async Task<MultipleMedia> FetchMedia()
         {
-            if (HasMoreItems == false) return false;
-
             MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url);
-            AddAll(mm.data);
             pagination = mm.pagination;
-            return true;
+            return mm;
         }
 
         protected void AddAll(List<Media> elements)
@@ -147,38 +115,47 @@ namespace Tabstagram
 
         public override bool Equals(object obj)
         {
-            CoreDispatcher dispatcher = Window.Current.Dispatcher;
-
-            return Task.Run<LoadMoreItemsResult>(
-                () =>
-                {
-                    dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () =>
-                        {
-                            LoadMore();
-                        });
-                    return new LoadMoreItemsResult() { Count = 1 };
-                }).AsAsyncOperation<LoadMoreItemsResult>();
+            return this.GetName().Equals(((MediaList)obj).GetName());
         }
-
 
         public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
         {
-            throw new NotImplementedException();
+            CoreDispatcher dispatcher = Window.Current.Dispatcher;
+
+            return Task.Run<LoadMoreItemsResult>(
+               async () =>
+               {
+                   MultipleMedia mm = await FetchMedia();
+
+                   await dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                        () =>
+                        {
+                            AddAll(mm.data);
+                        });
+                   return new LoadMoreItemsResult() { Count = 40 };
+               }).AsAsyncOperation<LoadMoreItemsResult>();
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 
     public class Feed : MediaList
     {
-
         public Feed() { Init(); }
 
         protected async override void Init()
         {
-            base.Init();
-            MultipleMedia mm = await Instagram.LoadFeed();
+            Args args = new Args(new Arg(Arg.Type.COUNT, "40"));
+            MultipleMedia mm = await Instagram.LoadFeed(args);
             pagination = mm.pagination;
             AddAll(mm.data);
+            base.Init();
         }
 
         public override string GetName()
@@ -195,15 +172,15 @@ namespace Tabstagram
 
         protected override async void Init()
         {
-            base.Init();
             MultipleMedia mm = await Instagram.LoadUserMedia(this.User);
             pagination = mm.pagination;
             AddAll(mm.data);
+            base.Init();
         }
 
         public override string GetName()
         {
-            return "Feed";
+            return User.username;
         }
     }
 
@@ -213,20 +190,24 @@ namespace Tabstagram
 
         protected override async void Init()
         {
-            base.Init();
             MultipleMedia mm = await Instagram.LoadPopular();
-            pagination = mm.pagination;
             AddAll(mm.data);
+            base.Init();
         }
+
         public override string GetName()
         {
             return "Popular";
         }
 
-        public override async Task<bool> LoadMore()
+        public override async Task<MultipleMedia> FetchMedia()
         {
             MultipleMedia mm = await Instagram.LoadPopular();
-            AddAll(mm.data);
+            return mm;
+        }
+
+        protected override bool CanLoadMoreItems()
+        {
             return true;
         }
     }
@@ -246,13 +227,13 @@ namespace Tabstagram
             MultipleMedia mm = await Instagram.LoadHashtag(Tag);
             pagination = mm.pagination;
             AddAll(mm.data);
+            base.Init();
         }
 
         public override string GetName()
         {
             return "#" + this.Tag;
         }
-
     }
 
     class ListsViewModel
@@ -266,8 +247,7 @@ namespace Tabstagram
             foreach (string str in list)
             {
                 MediaList ml = MediaList.GetClassFromString(str);
-                if (AddToItemsGroup(ml))
-                    ml.LoadList();
+                AddToItemsGroup(ml);
             }
         }
 
