@@ -114,8 +114,9 @@
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
+                		<TextBlock x:Name="CommentsHeader" Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
                 		<TextBlock x:Name="CommentError" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Could not delete comment" VerticalAlignment="Center" Grid.Row="1" FontSize="14.667" Foreground="#FFCF1B1B" Visibility="Collapsed"/>
-                		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="2" Visibility="Collapsed">
+                		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="2">
                     		<Grid.RowDefinitions>
                     			<RowDefinition Height="Auto"/>
                     			<RowDefinition/>
@@ -125,8 +126,7 @@
                     		<Button x:Name="MakeCommentButton" Click="MakeCommentButton_Click" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2"/>
                     		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
                     	</Grid>
-                		<TextBlock x:Name="CommentsHeader" Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                        <ListView x:Name="CommentsList" SelectionChanged="CommentsList_SelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
+                        <ListView x:Name="CommentsList" SelectionChanged="CommentsList_SelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="3">
                 			<ListView.ItemContainerStyle>
                 				<Style TargetType="ListViewItem">
                 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
