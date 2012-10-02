@@ -82,7 +82,14 @@ namespace Tabstagram
 
         private void NewCommentClick(object sender, RoutedEventArgs e)
         {
-            WriteComment.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            if (WriteComment.Visibility != Windows.UI.Xaml.Visibility.Visible)
+            {
+                WriteComment.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                WriteComment.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
         }
 
         private void MakeCommentButton_Click(object sender, RoutedEventArgs e)
