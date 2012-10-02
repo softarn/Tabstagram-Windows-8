@@ -41,8 +41,8 @@ namespace Tabstagram
 
         private void fullImage_ImageOpened(object sender, RoutedEventArgs e)
         {
-            MainGrid.Opacity = 0;
-            MainGrid.Visibility = Visibility.Visible;
+            ImageBorder.Opacity = 0;
+            ImageBorder.Visibility = Visibility.Visible;
 
             var storyboard = new Storyboard();
 
@@ -55,7 +55,10 @@ namespace Tabstagram
             storyboard.Children.Add(opacityAnimation);
 
             Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-            Storyboard.SetTarget(storyboard, MainGrid);
+            Storyboard.SetTarget(storyboard, ImageBorder);
+
+            ImageProgressRing.IsActive = false;
+            ImageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             storyboard.Begin();
         }
@@ -65,7 +68,7 @@ namespace Tabstagram
             if (MainGrid.Opacity < 1)
                 return;
 
-            MainGrid.Opacity = 0;
+            ImageProgressRing.IsActive = true;
         }
     }
 }

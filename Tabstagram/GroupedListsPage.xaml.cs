@@ -49,6 +49,7 @@ namespace Tabstagram
                 lvm = new ListsViewModel();
                 Instagram.AccessToken = UserSettings.AccessToken;
                 this.DefaultViewModel["Groups"] = lvm.ItemGroups;
+                LoadingGrid.DataContext = lvm;
                 lvm.LoadFromSettings();
             }
         }

@@ -34,15 +34,15 @@ namespace Tabstagram
         private bool _isLoaded;
         public bool IsLoaded 
         {
-            get
-            {
-                return _isLoaded;
-            }
+            get { return _isLoaded; }
 
             set
             {
                 _isLoaded = value;
                 OnPropertyChanged("IsLoaded");
+                
+                if(observer != null)
+                    observer.Update(value);
             }
         }
 
@@ -53,6 +53,8 @@ namespace Tabstagram
                 return CanLoadMoreItems();
             }
         }
+
+        public Observer<Boolean> observer;
 
         protected virtual bool CanLoadMoreItems()
         {
@@ -330,9 +332,30 @@ namespace Tabstagram
         }
     }
 
-    class ListsViewModel
+    class ListsViewModel : INotifyPropertyChanged, Observer<Boolean>
     {
         public ObservableCollection<MediaList> ItemGroups = new ObservableCollection<MediaList>();
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get
+            {
+                return _isLoading;
+            }
+
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged("IsLoading");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ListsViewModel()
+        {
+            IsLoading = true;
+        }
 
         public void LoadFromSettings()
         {
@@ -343,6 +366,8 @@ namespace Tabstagram
                 MediaList ml = MediaList.GetClassFromString(str);
                 AddToItemsGroup(ml);
             }
+
+            ItemGroups.First().observer = this;
         }
 
         public bool AddToItemsGroup(MediaList ml)
@@ -364,5 +389,26 @@ namespace Tabstagram
 
             throw new System.ArgumentException("listName must be the name of a Group category");
         }
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public void Update(bool b)
+        {
+            if (b)
+                ItemGroups.First().observer = null;
+
+            IsLoading = !b;
+        }
+    }
+
+    public interface Observer<T>
+    {
+        void Update(T b);
     }
 }

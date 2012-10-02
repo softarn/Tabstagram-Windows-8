@@ -14,12 +14,13 @@
             <local:TimeConverter x:Name="TimeConverter"/>
         </UserControl.Resources>
 
-        <Grid x:Name="MainGrid" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid x:Name="MainGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
         	<Grid.RowDefinitions>
         		<RowDefinition/>
         		<RowDefinition Height="20"/>
         	</Grid.RowDefinitions>
-            <Border BorderBrush="#000" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing x:Name="ImageProgressRing" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF630D0D" Width="50" Height="50" IsActive="True"/>
+            <Border x:Name="ImageBorder" BorderBrush="#000" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0">
             	<Image x:Name="image" Source="{Binding CurrentMedia.images.standard_resolution.url}" HorizontalAlignment="Center" 
             		Margin="0" VerticalAlignment="Center" ImageOpened="fullImage_ImageOpened"/>
             </Border>
