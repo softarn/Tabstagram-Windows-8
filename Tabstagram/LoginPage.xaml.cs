@@ -16,14 +16,14 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
 namespace Tabstagram
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class LoginPage : Tabstagram.Common.LayoutAwarePage
     {
         public LoginPage()
         {
@@ -37,12 +37,7 @@ namespace Tabstagram
         /// property is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
-        }
-
-        private async void SimulateForceLogoutClick(object sender, RoutedEventArgs args)
-        {
-            NotifyAboutBeingLoggedOut();
+            base.OnNavigatedTo(e);
         }
 
         private async void NotifyAboutBeingLoggedOut()
@@ -72,7 +67,7 @@ namespace Tabstagram
 
         private void ResetLoginAndNotify()
         {
-            authButton.IsEnabled = true;
+            authButton.IsEnabled =   true;
             signinRequiredTextBlock.Visibility = Visibility.Visible;
         }
 

@@ -85,6 +85,13 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemGridView" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="pageTitle">
+                        	<DiscreteObjectKeyFrame KeyTime="0">
+                        		<DiscreteObjectKeyFrame.Value>
+                        			<Visibility>Collapsed</Visibility>
+                        		</DiscreteObjectKeyFrame.Value>
+                        	</DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -131,9 +138,9 @@
                     							AutomationProperties.Name="category"
                     							Style="{StaticResource TextPrimaryButtonStyle}"
                     							Click="Button_Click"
-                                                Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
+                                                Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}" FontFamily="Global User Interface">
                     							<StackPanel Orientation="Horizontal" >
-                    							<TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
+                    							<TextBlock Text="{Binding category}" FontWeight="Normal"	Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
                     								<TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black"/>
                     							</StackPanel>
                     						</Button>
@@ -180,10 +187,13 @@
             Margin="0"
             Padding="10,0,0,60"
             ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-            ItemTemplate="{StaticResource Standard80ItemTemplate}"
             SelectionMode="None"
             IsSwipeEnabled="false" Grid.ColumnSpan="2">
-
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:ThumbnailControl />
+                </DataTemplate>
+            </ListView.ItemTemplate>
             <ListView.GroupStyle>
             	<GroupStyle>
             		<GroupStyle.HeaderTemplate>
@@ -211,9 +221,10 @@
             	<ColumnDefinition Width="Auto"/>
             	<ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36"/>
+            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36" Width="48"/>
             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
         </Grid>
+        <Grid Margin="0" Grid.Row="1" Grid.ColumnSpan="2" Background="#99FFFFFF" Opacity="0.995"/>
     </Grid>
 </common:LayoutAwarePage>

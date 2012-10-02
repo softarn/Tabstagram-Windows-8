@@ -135,9 +135,16 @@ namespace Tabstagram
 
         public virtual void MarkImportantMedia()
         {
+         
+            if(this.Count > 0)
+                this.ElementAt(0).IsImportant = true;
+
+            if (this.Count < 5)
+                return;
+
             int count = 0;
-            Media mostImportant = this.ElementAt(0);
-            foreach(Media m in this)
+            Media mostImportant = this.ElementAt(5);
+            foreach(Media m in this.Skip(5))
             {
                 m.IsImportant = false;
                 if (mostImportant == null)

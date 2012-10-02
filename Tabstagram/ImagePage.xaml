@@ -34,6 +34,10 @@
 
         <!-- Back button and page title -->
         <Grid x:Name="MediaGrid" Grid.Row="1" Margin="0">
+        	<Grid.RowDefinitions>
+        		<RowDefinition/>
+        		<RowDefinition/>
+        	</Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="13*"/>
@@ -41,7 +45,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Left Grid-->
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch">
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia}" IsItemClickEnabled="True" ItemClick="RelatedMediaList_Click" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch" Grid.RowSpan="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
@@ -51,28 +55,28 @@
                 </ListView.ItemTemplate>
             </ListView>
             <!--Middle grid-->
-            <Grid x:Name="MidGrid" Grid.Column="1" Canvas.ZIndex="2">
-			        <Grid.RowDefinitions>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                <local:FullImageControl x:Name="FullImage" DoubleTapped="Image_DoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,25" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                <StackPanel x:Name="CaptionPanel" Margin="60,5,60,2" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" MaxHeight="140" HorizontalAlignment="Center">
-                	<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontFamily="Segoe UI" FontSize="16" Margin="10"/>
-                </StackPanel>
+            <Grid x:Name="MidGrid" Grid.Column="1" Canvas.ZIndex="2" Grid.RowSpan="2">
+            	<Grid.RowDefinitions>
+            		<RowDefinition/>
+            		<RowDefinition Height="Auto"/>
+            	</Grid.RowDefinitions>
+            	<local:FullImageControl x:Name="FullImage" DoubleTapped="Image_DoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,25" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            	<StackPanel x:Name="CaptionPanel" Margin="60,5" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" HorizontalAlignment="Center">
+            		<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="16" Margin="10,10,10,5"/>
+            	</StackPanel>
             </Grid>
             <!--Right grid-->
-            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Background="#FF171717">
+            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Background="#FF171717" Grid.RowSpan="2">
                 <Grid Margin="0" Grid.RowSpan="2" MaxWidth="450">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
-                        <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
                     <Grid x:Name="UserInfo1">
                 		<Grid Margin="5">
                 			<Grid.RowDefinitions>
-                				<RowDefinition/>
-                				<RowDefinition Height="3*"/>
+                				<RowDefinition Height="Auto"/>
+                				<RowDefinition Height="Auto"/>
                 			</Grid.RowDefinitions>
                 			<Grid.ColumnDefinitions>
                 				<ColumnDefinition/>
@@ -165,7 +169,80 @@
                 <VisualState x:Name="FullScreenPortrait"/>
 
                 <!-- The back button and title have different styles when snapped -->
-                <VisualState x:Name="Snapped"/>
+                <VisualState x:Name="Snapped">
+                	<Storyboard>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RelatedMediaList">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<Visibility>Collapsed</Visibility>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RightGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<Visibility>Visible</Visibility>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.ColumnSpan)" Storyboard.TargetName="MidGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>3</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Column)" Storyboard.TargetName="MidGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>0</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.ColumnSpan)" Storyboard.TargetName="RightGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>3</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Column)" Storyboard.TargetName="RightGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>0</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.Row)" Storyboard.TargetName="RightGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>1</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.RowSpan)" Storyboard.TargetName="MidGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>1</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.RowSpan)" Storyboard.TargetName="RightGrid">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<x:Int32>1</x:Int32>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="pageTitle">
+                			<DiscreteObjectKeyFrame KeyTime="0">
+                				<DiscreteObjectKeyFrame.Value>
+                					<Visibility>Collapsed</Visibility>
+                				</DiscreteObjectKeyFrame.Value>
+                			</DiscreteObjectKeyFrame>
+                		</ObjectAnimationUsingKeyFrames>
+                	</Storyboard>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </Grid>

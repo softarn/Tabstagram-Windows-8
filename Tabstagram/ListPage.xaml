@@ -72,9 +72,14 @@
             Margin="0"
             Padding="10,0,0,60"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
-            ItemTemplate="{StaticResource Standard80ItemTemplate}"
             SelectionMode="None"
-            IsSwipeEnabled="false" IncrementalLoadingThreshold="20"/>
+            IsSwipeEnabled="false" IncrementalLoadingThreshold="20">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <local:ThumbnailControl Width="150" Height="150"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <Grid Background="#FF171717">
         	<Grid.ColumnDefinitions>
