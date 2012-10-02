@@ -61,6 +61,7 @@ namespace Tabstagram.Models
             List<string> l = new List<string>();
             l.Add("feed");
             l.Add("popular");
+            l.Add("selfmedia");
             l.Add("#tabstagram");
 
             MediaStringsList = l;
