@@ -8,13 +8,18 @@
     mc:Ignorable="d"
     d:DesignHeight="200"
     d:DesignWidth="400" ScrollViewer.VerticalScrollBarVisibility="Disabled" Padding="0">
-    
+
+    <UserControl.Resources>
+        <local:CommentTimeConverter x:Name="CommentTimeConverter"/>
+    </UserControl.Resources>
+
     <Grid>
     
 		<Grid Margin="5">
 			<Grid.RowDefinitions>
 				<RowDefinition/>
 				<RowDefinition Height="4*"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
@@ -23,6 +28,7 @@
 			<TextBlock x:Name="Name" HorizontalAlignment="Center" Margin="0" TextWrapping="Wrap" Text="{Binding from.username}" VerticalAlignment="Center" FontSize="13.333" Grid.Column="1" Foreground="#FFA6A6A6" FontWeight="Bold"/>
 			<Image x:Name="ProfilePicture" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" Source="{Binding from.profile_picture}"/>
 			<TextBlock x:Name="Comment" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="{Binding text}" VerticalAlignment="Top" FontSize="13.333"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding created_time, Converter={StaticResource CommentTimeConverter}}" VerticalAlignment="Bottom" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"/>
 		</Grid>
 	</Grid>
 </UserControl>
