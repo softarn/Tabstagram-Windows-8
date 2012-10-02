@@ -68,7 +68,9 @@ namespace Tabstagram
             if (MainGrid.Opacity < 1)
                 return;
 
+            ImageBorder.Opacity = 0;
             ImageProgressRing.IsActive = true;
+            ImageProgressRing.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
     }
 }

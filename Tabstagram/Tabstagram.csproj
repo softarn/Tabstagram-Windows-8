@@ -107,6 +107,8 @@
     </Compile>
     <Compile Include="AuthCallbackParser.cs" />
     <Compile Include="BooleanToVisibilityConverter.cs" />
+    <Compile Include="BooleaInverter.cs" />
+    <Compile Include="InvertedBooleanToVisibilityConverter.cs" />
     <Compile Include="ImagePage.xaml.cs">
       <DependentUpon>ImagePage.xaml</DependentUpon>
     </Compile>
@@ -145,6 +147,7 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="MyGridView.cs" />
+    <Compile Include="RefreshButton.cs" />
     <Compile Include="ThumbnailControl.xaml.cs">
       <DependentUpon>ThumbnailControl.xaml</DependentUpon>
     </Compile>

@@ -21,11 +21,14 @@
             Source="{Binding Groups}"
             IsSourceGrouped="true"
             ItemsPath="SubCollection"/>
-        
+
         <local:BooleanToVisibilityConverter x:Name="BoolConverter" />
+        <local:InvertedBooleanToVisibilityConverter x:Name="InvertedBoolToVisibilityConverter" />
+        <local:BooleanInverterConverter x:Name="BoolInverter" />
 
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>
+
     </Page.Resources>
 
     <!--
@@ -86,20 +89,20 @@
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="pageTitle">
-                        	<DiscreteObjectKeyFrame KeyTime="0">
-                        		<DiscreteObjectKeyFrame.Value>
-                        			<Visibility>Collapsed</Visibility>
-                        		</DiscreteObjectKeyFrame.Value>
-                        	</DiscreteObjectKeyFrame>
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+
         <!-- Horizontal scrolling grid used in most view states -->
         <ContentControl x:Name="Background" Grid.ColumnSpan="2" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}" />
-<!-- Horizontal scrolling grid used in most view states -->
+        <!-- Horizontal scrolling grid used in most view states -->
         <SemanticZoom x:Name="semanticZoom"
                       Grid.Row="1"
                       Padding="0,30,0,35" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Foreground="Black">
@@ -109,6 +112,7 @@
                 x:Name="itemGridView"
                 AutomationProperties.AutomationId="ItemGridView"
                 AutomationProperties.Name="Grouped Items"
+                Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                 ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
                 ItemClick="Item_Click"
                 IsItemClickEnabled="True"
@@ -126,34 +130,34 @@
                         </ItemsPanelTemplate>
                     </local:MyGridView.ItemsPanel>
                     <local:MyGridView.GroupStyle>
-                    	<GroupStyle>
-                    		<GroupStyle.HeaderTemplate>
-                    			<DataTemplate>
-                    				<Grid Margin="1,0,0,6">
-                    					<StackPanel Orientation="Horizontal">
-                                            <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
-                    							<Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
-                    						</Button>
-                    						<Button
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="1,0,0,6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ProgressRing Foreground="Black" Width="32" Height="32" Margin="10, 0, 10, 5" IsActive="{Binding IsLoaded, Converter={StaticResource BoolInverter}}" Visibility="{Binding IsLoaded, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                                            <Button Background="Transparent" PointerExited="Button_PointerExited_1" PointerEntered="Button_PointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
+                                                    <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
+                                            </Button>
+                                            <Button
                     							AutomationProperties.Name="category"
                     							Style="{StaticResource TextPrimaryButtonStyle}"
-                    							Click="Button_Click"
-                                                Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}" FontFamily="Global User Interface">
-                    							<StackPanel Orientation="Horizontal" >
-                    							<TextBlock Text="{Binding category}" FontWeight="Normal"	Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
-                    								<TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black"/>
-                    							</StackPanel>
-                    						</Button>
-                    					</StackPanel>
-                    				</Grid>
-                    			</DataTemplate>
-                    		</GroupStyle.HeaderTemplate>
-                    		<GroupStyle.Panel>
-                    			<ItemsPanelTemplate>
-                    				<VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
-                    			</ItemsPanelTemplate>
-                    		</GroupStyle.Panel>
-                    	</GroupStyle>
+                    							Click="Button_Click">
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
+                                                    <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                            <GroupStyle.Panel>
+                                <ItemsPanelTemplate>
+                                    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
+                                </ItemsPanelTemplate>
+                            </GroupStyle.Panel>
+                        </GroupStyle>
                     </local:MyGridView.GroupStyle>
                 </local:MyGridView>
             </SemanticZoom.ZoomedInView>
@@ -195,57 +199,58 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.GroupStyle>
-            	<GroupStyle>
-            		<GroupStyle.HeaderTemplate>
-            			<DataTemplate>
-            				<Grid Margin="7,7,0,0">
-							<StackPanel Orientation="Horizontal">
-								<Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
-                    				<Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
-                    			</Button>
-            					<Button
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Margin="7,7,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
+                                        <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button
             						AutomationProperties.Name="Group Title"
             						Style="{StaticResource TextPrimaryButtonStyle}"
-									Click="Button_Click">
-            						<StackPanel Orientation="Horizontal">
-            							<TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black" />
-            							<TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Black"/>
-            						</StackPanel>
-            					</Button>
-							</StackPanel>
-            				</Grid>
-            			</DataTemplate>
-            		</GroupStyle.HeaderTemplate>
-            	</GroupStyle>
+									Click="Button_Click"
+                                    Foreground="Green">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Green" />
+                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
             </ListView.GroupStyle>
         </ListView>
 
         <!-- Back button and page title -->
         <Grid Grid.ColumnSpan="2" Background="#FF171717">
             <Grid.ColumnDefinitions>
-            	<ColumnDefinition Width="Auto"/>
-            	<ColumnDefinition Width="Auto"/>
-            	<ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36" Width="48"/>
             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
         </Grid>
         <Grid x:Name="LoadingGrid" Visibility="{Binding IsLoading, Converter={StaticResource BoolConverter}}" Margin="0" Grid.Row="1" Grid.ColumnSpan="2" Opacity="0.995">
-        	<Grid.Background>
-        		<ImageBrush/>
-        	</Grid.Background>
-        	<StackPanel Margin="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        		<ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0">
-        			<ProgressRing.Foreground>
-        				<ImageBrush ImageSource="Assets/StoreLogo.png"/>
-        			</ProgressRing.Foreground>
-        			<ProgressRing.Background>
-        				<ImageBrush/>
-        			</ProgressRing.Background>
-        		</ProgressRing>
-        		<TextBlock x:Name="Loading" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Loading images..." VerticalAlignment="Center" FontFamily="Segoe Print" FontSize="21.333" Foreground="Black"/>
-        	</StackPanel>
+            <Grid.Background>
+                <ImageBrush/>
+            </Grid.Background>
+            <StackPanel Margin="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0">
+                    <ProgressRing.Foreground>
+                        <ImageBrush ImageSource="Assets/StoreLogo.png"/>
+                    </ProgressRing.Foreground>
+                    <ProgressRing.Background>
+                        <ImageBrush/>
+                    </ProgressRing.Background>
+                </ProgressRing>
+                <TextBlock x:Name="Loading" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Loading images..." VerticalAlignment="Center" FontFamily="Segoe Print" FontSize="21.333" Foreground="Black"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </common:LayoutAwarePage>

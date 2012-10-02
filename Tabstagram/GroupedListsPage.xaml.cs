@@ -50,6 +50,7 @@ namespace Tabstagram
                 Instagram.AccessToken = UserSettings.AccessToken;
                 this.DefaultViewModel["Groups"] = lvm.ItemGroups;
                 LoadingGrid.DataContext = lvm;
+                itemGridView.DataContext = lvm;
                 lvm.LoadFromSettings();
             }
         }
@@ -61,11 +62,30 @@ namespace Tabstagram
             this.Frame.Navigate(typeof(ListPage), m);
         }
 
-        private void RefreshButtonClick(object sender, RoutedEventArgs e)
+        private async void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
             MediaList m = (MediaList)((Button)sender).DataContext;
 
-            m.Refresh();
+            Button b = (Button)sender;
+
+            var storyboard = new Storyboard();
+
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.8),
+            };
+            storyboard.Children.Add(opacityAnimation);
+
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            Storyboard.SetTarget(storyboard, b);
+
+            storyboard.Begin();
+
+            m.IsLoaded = false;
+            await m.Refresh();
+            m.IsLoaded = true;
         }
 
         private void Item_Click(object sender, ItemClickEventArgs e)
@@ -96,5 +116,44 @@ namespace Tabstagram
 
             storyboard.Begin();
         }
+
+        private void Button_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            var storyboard = new Storyboard();
+
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = 1,
+                To = 0.5,
+                Duration = TimeSpan.FromSeconds(0.1)
+            };
+            storyboard.Children.Add(opacityAnimation);
+
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            Storyboard.SetTarget(storyboard, b);
+
+            storyboard.Begin();
+        }
+
+        private void Button_PointerExited_1(object sender, PointerRoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            var storyboard = new Storyboard();
+
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = 0.5,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.1)
+            };
+            storyboard.Children.Add(opacityAnimation);
+
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            Storyboard.SetTarget(storyboard, b);
+
+            storyboard.Begin();
+        }
+
     }
 }

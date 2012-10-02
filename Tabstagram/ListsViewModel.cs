@@ -15,7 +15,14 @@ namespace Tabstagram
 {
     public abstract class MediaList : ObservableCollection<Media>, ISupportIncrementalLoading, INotifyPropertyChanged
     {
-        public string category { get; set; }
+        private string _category;
+        public string category { get { return _category; }
+            set
+            {
+                _category = value;
+                OnPropertyChanged("category");
+            }
+        }
         protected override event PropertyChangedEventHandler PropertyChanged;
         public static List<DispatcherTimer> timers = new List<DispatcherTimer>();
         protected Pagination pagination;
@@ -77,7 +84,7 @@ namespace Tabstagram
             PopulateSubCollection();
         }
 
-        public async void Refresh()
+        public async Task<bool> Refresh()
         {
             List<Media> newMedia = await FetchNewMedia();
 
@@ -87,6 +94,7 @@ namespace Tabstagram
                 MarkImportantMedia();
                 UpdateSubCollection(newMedia);
             }
+            return true;
         }
 
         private void UpdateSubCollection(IEnumerable<Media> newMedia)

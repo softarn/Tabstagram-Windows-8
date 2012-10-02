@@ -28,6 +28,10 @@
 
     <x:String x:Key="ChevronGlyph">&#xE26B;</x:String>
 
+    <SolidColorBrush x:Key="ApplicationHeaderForegroundThemeBrush" Color="Black"/>
+    <SolidColorBrush x:Key="ApplicationPointerOverForegroundThemeBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="ApplicationPressedForegroundThemeBrush" Color="DarkGray"/>
+
     <!-- RichTextBlock styles -->
 
     <Style x:Key="BasicRichTextStyle" TargetType="RichTextBlock">
