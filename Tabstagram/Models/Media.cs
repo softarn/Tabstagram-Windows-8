@@ -18,7 +18,8 @@ namespace Tabstagram
         {
             observableData = new ObservableCollection<Comment>();
             data = comments;
-            count = comments.Count;
+            // Commented out due to counts being wrong - didn't look like it broke anything. Kept in case.
+            //count = comments.Count;
         }
 
         public void AddAllToObservable(List<Comment> from)
@@ -67,7 +68,8 @@ namespace Tabstagram
         {
             observableData.Clear();
             AddAllToObservable(comments);
-            count = comments.Count();
+            // Commented out due to counts being wrong - didn't look like it broke anything. Kept in case.
+            //count = comments.Count();
         }
 
         internal bool RemoveComment(Comment comment)
