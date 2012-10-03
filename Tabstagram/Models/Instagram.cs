@@ -21,6 +21,7 @@ namespace Tabstagram
 
         private static string GetTagUrl(string Tag) { return String.Format("{0}tags/{1}/media/recent",  BASE_URL, Tag); }
         private static string GetUserMediaUrl(User u) { return String.Format("{0}users/{1}/media/recent", BASE_URL, u.id); }
+        private static string GetSelfMediaUrl() { return String.Format("{0}users/self/media/recent", BASE_URL); }
         private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}", BASE_URL, id); }
         private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments", BASE_URL, id); }
         private static string GetDeleteCommentsUrl(string mediaId, string commentId) { return String.Format("{0}media/{1}/comments/{2}", BASE_URL, mediaId, commentId); }
@@ -202,6 +203,11 @@ namespace Tabstagram
         internal static async Task<MultipleMedia> LoadUserMedia(User user, Args args = null)
         {
             return await LoadMediaList(GetUserMediaUrl(user), args);
+        }
+
+        internal static async Task<MultipleMedia> LoadSelfMedia(Args args = null)
+        {
+            return await LoadMediaList(GetSelfMediaUrl(), args);
         }
 
         internal static async Task<User> LoadUserInfo(string userId, Args args = null)

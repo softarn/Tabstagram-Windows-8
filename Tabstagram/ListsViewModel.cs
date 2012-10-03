@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -132,6 +132,8 @@ namespace Tabstagram
                 return new Popular();
             else if (listString.Equals("feed"))
                 return new Feed();
+            else if (listString.Equals("selfmedia"))
+                return new SelfMedia();
 
             throw new System.ArgumentException("listString must be #hashtagname, popular or feed");
         }
@@ -230,6 +232,35 @@ namespace Tabstagram
         public override string GetName()
         {
             return "Feed";
+        }
+
+        public async override Task<List<Media>> FetchNewMedia()
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
+            args.Add(new Arg(Arg.Type.COUNT, "100"));
+            MultipleMedia mm = await Instagram.LoadFeed(args);
+
+            return mm.data;
+        }
+    }
+
+    public class SelfMedia : MediaList
+    {
+        public SelfMedia() { Init(); }
+
+        protected async override void Init()
+        {
+            Args args = new Args(new Arg(Arg.Type.COUNT, "40"));
+            MultipleMedia mm = await Instagram.LoadSelfMedia(args);
+            pagination = mm.pagination;
+            AddAll(mm.data);
+            base.Init();
+        }
+
+        public override string GetName()
+        {
+            return "My Images";
         }
 
         public async override Task<List<Media>> FetchNewMedia()

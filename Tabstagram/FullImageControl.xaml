@@ -11,7 +11,7 @@
     
         <UserControl.Resources>
             <local:LikedImageConverter x:Name="LikedImageConverter"/>
-            <local:TimeConverter x:Name="TimeConverter"/>
+            <local:UploadTimeConverter x:Name="TimeConverter"/>
         </UserControl.Resources>
 
         <Grid x:Name="MainGrid" HorizontalAlignment="Center" VerticalAlignment="Center">
