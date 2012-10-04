@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Tabstagram.Models;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
@@ -26,7 +17,7 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class GroupedListsPage
     {
-        ListsViewModel lvm = null;
+        ListsViewModel _lvm;
 
         public GroupedListsPage()
         {
@@ -51,91 +42,69 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected async override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            if (lvm == null)
-            {
-                lvm = new ListsViewModel();
-                lvm.CriticalNetworkErrorNotice += OnErrorNotice;
-                Instagram.AccessToken = UserSettings.AccessToken;
-                this.DefaultViewModel["Groups"] = lvm.ItemGroups;
-                LoadingGrid.DataContext = lvm;
-                itemGridView.DataContext = lvm;
-                await lvm.LoadFromSettings();
-                Debug.WriteLine("Loaded state");
-            }
+            if (_lvm != null) return;
+
+            _lvm = new ListsViewModel();
+            _lvm.CriticalNetworkErrorNotice += OnErrorNotice;
+            Instagram.AccessToken = UserSettings.AccessToken;
+            this.DefaultViewModel["Groups"] = _lvm.ItemGroups;
+            LoadingGrid.DataContext = _lvm;
+            itemGridView.DataContext = _lvm;
+            await _lvm.LoadFromSettings();
+            Debug.WriteLine("Loaded state");
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            MediaList m = (MediaList)((Button)sender).DataContext;
+            var m = (MediaList)((Button)sender).DataContext;
 
             this.Frame.Navigate(typeof(ListPage), m);
         }
 
         private async void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
-            MediaList m = (MediaList)((Button)sender).DataContext;
+            var m = (MediaList)((Button)sender).DataContext;
 
-            Button b = (Button)sender;
+            var b = (Button)sender;
 
-            var storyboard = new Storyboard();
-
+            var rotatingStoryboard = new Storyboard();
             var opacityAnimation = new DoubleAnimation
             {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(0.8),
+                To = 359,
+                Duration = TimeSpan.FromSeconds(1),
+                RepeatBehavior = RepeatBehavior.Forever
             };
-            storyboard.Children.Add(opacityAnimation);
+            rotatingStoryboard.Children.Add(opacityAnimation);
 
-            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-            Storyboard.SetTarget(storyboard, b);
+            Storyboard.SetTargetProperty(opacityAnimation, "(UIElement.RenderTransform).(CompositeTransform.Rotation)");
+            Storyboard.SetTarget(rotatingStoryboard, b);
 
-            storyboard.Begin();
-
+            rotatingStoryboard.Begin();
+            b.IsEnabled = false;
             m.IsLoaded = false;
             m.CriticalNetworkErrorNotice += OnErrorNotice;
             await m.Refresh();
             m.CriticalNetworkErrorNotice -= OnErrorNotice;
             m.IsLoaded = true;
+            b.IsEnabled = true;
+            rotatingStoryboard.Pause();
         }
 
         private async void TryAgainCommand(IUICommand command)
         {
-            await lvm.Reset();
+            await _lvm.Reset();
         }
 
-        private void Item_Click(object sender, ItemClickEventArgs e)
+        private void ItemClick(object sender, ItemClickEventArgs e)
         {
-            Media m = e.ClickedItem as Media;
+            var m = e.ClickedItem as Media;
 
             this.Frame.Navigate(typeof(ImagePage), m);
         }
 
-        private void thumbnail_ImageOpened(object sender, RoutedEventArgs e)
+        private void ButtonPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            Image MainGrid = (Image)sender;
-            MainGrid.Opacity = 0;
-            MainGrid.Visibility = Visibility.Visible;
-
-            var storyboard = new Storyboard();
-
-            var opacityAnimation = new DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = TimeSpan.FromSeconds(0.8),
-            };
-            storyboard.Children.Add(opacityAnimation);
-
-            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-            Storyboard.SetTarget(storyboard, MainGrid);
-
-            storyboard.Begin();
-        }
-
-        private void Button_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            Button b = (Button)sender;
+            var b = (Button)sender;
             var storyboard = new Storyboard();
 
             var opacityAnimation = new DoubleAnimation
@@ -152,7 +121,7 @@ namespace Tabstagram
             storyboard.Begin();
         }
 
-        private void Button_PointerExited_1(object sender, PointerRoutedEventArgs e)
+        private void ButtonPointerExited(object sender, PointerRoutedEventArgs e)
         {
             Button b = (Button)sender;
             var storyboard = new Storyboard();

@@ -150,6 +150,9 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="MyGridView.cs" />
     <Compile Include="NotificationEventArgs.cs" />
+    <Compile Include="RotatingButtonControl.xaml.cs">
+      <DependentUpon>RotatingButtonControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ThumbnailControl.xaml.cs">
       <DependentUpon>ThumbnailControl.xaml</DependentUpon>
     </Compile>
@@ -205,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RotatingButtonControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
