@@ -241,14 +241,7 @@
                 <ImageBrush/>
             </Grid.Background>
             <StackPanel Margin="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0">
-                    <ProgressRing.Foreground>
-                        <ImageBrush ImageSource="Assets/StoreLogo.png"/>
-                    </ProgressRing.Foreground>
-                    <ProgressRing.Background>
-                        <ImageBrush/>
-                    </ProgressRing.Background>
-                </ProgressRing>
+                <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0" Foreground="Black"/>
                 <TextBlock x:Name="Loading" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Loading images..." VerticalAlignment="Center" FontFamily="Segoe Print" FontSize="21.333" Foreground="Black"/>
             </StackPanel>
         </Grid>

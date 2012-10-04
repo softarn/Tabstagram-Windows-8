@@ -129,6 +129,7 @@
     </Compile>
     <Compile Include="ImageViewModel.cs" />
     <Compile Include="ImportantThumbnailConverter.cs" />
+    <Compile Include="ErrorDisplayer.cs" />
     <Compile Include="InvertedBooleanToVisibilityConverter.cs" />
     <Compile Include="LikedImageConverter.cs" />
     <Compile Include="ListPage.xaml.cs">
@@ -148,6 +149,7 @@
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="MyGridView.cs" />
+    <Compile Include="NotificationEventArgs.cs" />
     <Compile Include="ThumbnailControl.xaml.cs">
       <DependentUpon>ThumbnailControl.xaml</DependentUpon>
     </Compile>
@@ -216,8 +218,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Z:\Downloads\Json45r9\Bin\WinRT\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">

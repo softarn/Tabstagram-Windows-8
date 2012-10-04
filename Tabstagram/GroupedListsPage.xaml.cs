@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,7 +24,7 @@ namespace Tabstagram
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class GroupedListsPage : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class GroupedListsPage
     {
         ListsViewModel lvm = null;
 
@@ -31,6 +33,11 @@ namespace Tabstagram
             this.InitializeComponent();
 
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+        }
+
+        private void OnErrorNotice(object sender, NotificationEventArgs nea)
+        {
+            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", new UICommandInvokedHandler(this.TryAgainCommand)));
         }
 
         /// <summary>
@@ -42,16 +49,18 @@ namespace Tabstagram
         /// </param>
         /// <param name="pageState">A dictionary of state preserved by this page during an earlier
         /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        protected async override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             if (lvm == null)
             {
                 lvm = new ListsViewModel();
+                lvm.CriticalNetworkErrorNotice += OnErrorNotice;
                 Instagram.AccessToken = UserSettings.AccessToken;
                 this.DefaultViewModel["Groups"] = lvm.ItemGroups;
                 LoadingGrid.DataContext = lvm;
                 itemGridView.DataContext = lvm;
-                lvm.LoadFromSettings();
+                await lvm.LoadFromSettings();
+                Debug.WriteLine("Loaded state");
             }
         }
 
@@ -84,8 +93,15 @@ namespace Tabstagram
             storyboard.Begin();
 
             m.IsLoaded = false;
+            m.CriticalNetworkErrorNotice += OnErrorNotice;
             await m.Refresh();
+            m.CriticalNetworkErrorNotice -= OnErrorNotice;
             m.IsLoaded = true;
+        }
+
+        private async void TryAgainCommand(IUICommand command)
+        {
+            await lvm.Reset();
         }
 
         private void Item_Click(object sender, ItemClickEventArgs e)
@@ -154,6 +170,5 @@ namespace Tabstagram
 
             storyboard.Begin();
         }
-
     }
 }
