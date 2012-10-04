@@ -114,7 +114,7 @@
                 AutomationProperties.Name="Grouped Items"
                 Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                 ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-                ItemClick="Item_Click"
+                ItemClick="ItemClick"
                 IsItemClickEnabled="True"
                 SelectionMode="None"
                 IsSwipeEnabled="false" 
@@ -135,14 +135,16 @@
                                 <DataTemplate>
                                     <Grid Margin="1,0,0,6">
                                         <StackPanel Orientation="Horizontal">
-                                            <ProgressRing Foreground="Black" Width="32" Height="32" Margin="10, 0, 10, 5" IsActive="{Binding IsLoaded, Converter={StaticResource BoolInverter}}" Visibility="{Binding IsLoaded, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
-                                            <Button Background="Transparent" PointerExited="Button_PointerExited_1" PointerEntered="Button_PointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
-                                                    <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
+                                            <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
+                                                <Button.RenderTransform>
+                                                    <CompositeTransform CenterX="16" CenterY="16"/>
+                                                </Button.RenderTransform>
+                                                <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
                                             </Button>
                                             <Button
                     							AutomationProperties.Name="category"
                     							Style="{StaticResource TextPrimaryButtonStyle}"
-                    							Click="Button_Click">
+                    							Click="ButtonClick">
                                                 <StackPanel Orientation="Horizontal" >
                                                     <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
                                                     <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
@@ -210,7 +212,7 @@
                                     <Button
             						AutomationProperties.Name="Group Title"
             						Style="{StaticResource TextPrimaryButtonStyle}"
-									Click="Button_Click"
+									Click="ButtonClick"
                                     Foreground="Green">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Green" />
@@ -241,14 +243,7 @@
                 <ImageBrush/>
             </Grid.Background>
             <StackPanel Margin="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0">
-                    <ProgressRing.Foreground>
-                        <ImageBrush ImageSource="Assets/StoreLogo.png"/>
-                    </ProgressRing.Foreground>
-                    <ProgressRing.Background>
-                        <ImageBrush/>
-                    </ProgressRing.Background>
-                </ProgressRing>
+                <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="90" MinHeight="90" IsActive="True" Margin="6,0,7,0" Foreground="Black"/>
                 <TextBlock x:Name="Loading" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Loading images..." VerticalAlignment="Center" FontFamily="Segoe Print" FontSize="21.333" Foreground="Black"/>
             </StackPanel>
         </Grid>

@@ -47,9 +47,6 @@ namespace Tabstagram
 
         private static async Task<HttpResponseMessage> Delete(string url, Args args = null, int tries = 0)
         {
-            if (tries > 3)
-                return null;
-
             Task<HttpResponseMessage> task = null;
             HttpResponseMessage response = null;
 
@@ -59,7 +56,10 @@ namespace Tabstagram
             try { response = await client.DeleteAsync(url); }
             catch (Exception e)
             {
-                task = Delete(url, null, tries + 1);
+                if (tries > 3)
+                    throw new HttpRequestException("Failed to do Delete", e.InnerException);
+                else
+                    task = Delete(url, null, tries + 1);
             }
 
             if (task != null)
@@ -70,9 +70,6 @@ namespace Tabstagram
 
         private static async Task<HttpResponseMessage> Post(string url, Args args = null, int tries = 0)
         {
-            if (tries > 3)
-                return null;
-
             Task<HttpResponseMessage> task = null;
             HttpResponseMessage response = null;
             String argsString = "";
@@ -83,7 +80,10 @@ namespace Tabstagram
             try { response = await client.PostAsync(url, new StringContent(argsString)); }
             catch (Exception e)
             {
-                task = Post(url, null, tries + 1);
+                if (tries > 3)
+                    throw new HttpRequestException("Failed to do Post", e.InnerException);
+                else
+                    task = Post(url, null, tries + 1);
             }
 
             if (task != null)
@@ -94,19 +94,21 @@ namespace Tabstagram
 
         private static async Task<string> Get(string url, Args args, int tries = 0)
         {
-            if (tries > 3)
-                return null;
-
             Task<string> task = null;
             string response = null;
 
             if (args != null)
                 url = url + args.ToGetString();
 
+            Debug.WriteLine("Get: " + url);
+
             try { response = await client.GetStringAsync(url); }
             catch (Exception e)
             {
-                task = Get(url, null, tries + 1);
+                if (tries > 3)
+                    throw new HttpRequestException("Failed to do Get", e.InnerException);
+                else
+                    task = Get(url, null, tries + 1);
             }
 
             if (task != null)
@@ -118,7 +120,6 @@ namespace Tabstagram
         private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
         {
             args = SafeAddAccessToken(args);
-            Debug.WriteLine("Getting MediaList from: " + url);
             string response = await Get(url, args);
             MultipleMedia mm = Media.ListFromJSON(response);
             return mm;
