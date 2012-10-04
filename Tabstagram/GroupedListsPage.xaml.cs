@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.ApplicationSettings;
+using Windows.UI.Popups;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
@@ -25,6 +27,7 @@ namespace Tabstagram
     public sealed partial class GroupedListsPage : Tabstagram.Common.LayoutAwarePage
     {
         ListsViewModel lvm = null;
+        private bool settingsMenuRegistered;
 
         public GroupedListsPage()
         {
@@ -52,6 +55,28 @@ namespace Tabstagram
                 LoadingGrid.DataContext = lvm;
                 itemGridView.DataContext = lvm;
                 lvm.LoadFromSettings();
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (!this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                this.settingsMenuRegistered = true;
+            }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            if (this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                this.settingsMenuRegistered = false;
             }
         }
 
@@ -155,5 +180,19 @@ namespace Tabstagram
             storyboard.Begin();
         }
 
+        void onLogoutCommand(IUICommand command)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["access_token"] = null;
+            this.Frame.Navigate(typeof(LoginPage));
+        }
+
+        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
+        {
+            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
+
+            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
+            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
+        }
     }
 }
