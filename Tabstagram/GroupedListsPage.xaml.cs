@@ -6,6 +6,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
@@ -66,11 +67,17 @@ namespace Tabstagram
             var m = (MediaList)((Button)sender).DataContext;
 
             var b = (Button)sender;
-
+            int to = 359;
+            CompositeTransform rotation = b.RenderTransform as CompositeTransform;
+            if (rotation != null)
+            {
+                to = (int)rotation.Rotation;
+                to += 359;
+            }
             var rotatingStoryboard = new Storyboard();
             var opacityAnimation = new DoubleAnimation
             {
-                To = 359,
+                To = to,
                 Duration = TimeSpan.FromSeconds(1),
                 RepeatBehavior = RepeatBehavior.Forever
             };
