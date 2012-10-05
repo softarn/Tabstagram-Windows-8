@@ -25,10 +25,10 @@ namespace Tabstagram
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class ImagePage : Tabstagram.Common.LayoutAwarePage
+    public sealed partial class ImagePage
     {
-        ImageViewModel viewModel;
-        DispatcherTimer timer = new DispatcherTimer();
+        ImageViewModel _viewModel;
+        readonly DispatcherTimer _timer = new DispatcherTimer();
 
         public ImagePage()
         {
@@ -62,67 +62,37 @@ namespace Tabstagram
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Media m = e.Parameter as Media;
-            viewModel = new ImageViewModel(m);
-            pageRoot.DataContext = viewModel;
-            pageTitle.Text = "Tabstagram - " + viewModel.CurrentMedia.user.username;
+            _viewModel = new ImageViewModel(m);
+            pageRoot.DataContext = _viewModel;
+            pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
             base.OnNavigatedTo(e);  
         }
 
-        private void RelatedMediaList_Click(object sender, ItemClickEventArgs e)
+        private void RelatedMediaListClick(object sender, ItemClickEventArgs e)
         {
             FullImage.FadeOut();
             Media media = e.ClickedItem as Media;
-            viewModel.LoadNewMedia(media);
+            _viewModel.LoadNewMedia(media);
         }
 
-        private void Image_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            viewModel.LikeOrUnlike();
+            _viewModel.LikeOrUnlike();
         }
 
         private void NewCommentClick(object sender, RoutedEventArgs e)
         {
-            if (WriteComment.Visibility != Windows.UI.Xaml.Visibility.Visible)
-            {
-                WriteComment.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }
-            else
-            {
-                WriteComment.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
+            WriteComment.Visibility = WriteComment.Visibility != Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void MakeCommentButton_Click(object sender, RoutedEventArgs e)
+        private void MakeCommentButtonClick(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine(
             Comment.Text
             );
 
-            viewModel.Comment(Comment.Text);
-            WriteComment.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-        }
-
-        private void DeleteCommentClick(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine(((Comment)CommentsList.SelectedItem).text);
-        }
-
-        private void CommentsList_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Debug.WriteLine("Go to user profile");
-        }
-
-        private void CommentControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            
-            // We don't want to obscure content, so pass in a rectangle representing the sender of the context menu event.
-            // We registered command callbacks; no need to handle the menu completion event
-            //OutputTextBlock.Text = "Context menu shown";
-            //var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)sender));
-            //if (chosenCommand == null) // The command is null if no command was invoked.
-            //{
-            //    OutputTextBlock.Text = "Context menu dismissed";
-            //}
+            _viewModel.Comment(Comment.Text);
+            WriteComment.Visibility = Visibility.Collapsed;
         }
 
         public static Rect GetElementRect(FrameworkElement element)
@@ -132,7 +102,7 @@ namespace Tabstagram
             return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
         }
         
-        private async void CommentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void CommentsListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CommentsList.SelectedItem == null)
                 return;
@@ -142,27 +112,24 @@ namespace Tabstagram
             // Create a menu and add commands specifying a callback delegate for each.
             // Since command delegates are unique, no need to specify command Ids.
             var menu = new PopupMenu();
-            menu.Commands.Add(new UICommand("Delete", (command) =>
-            {
-                HandleDelete((Comment)o);
-            }));
+            menu.Commands.Add(new UICommand("Delete", command => HandleDelete((Comment)o)));
 
             ListViewItem lvi = (ListViewItem)CommentsList.ItemContainerGenerator.ContainerFromItem(o);
 
-            var chosenCommand = await menu.ShowForSelectionAsync(GetElementRect((FrameworkElement)lvi));
+            await menu.ShowForSelectionAsync(GetElementRect(lvi));
         }
 
         private async void HandleDelete(Comment comment)
         {
-            bool deleteSuccess = await viewModel.DeleteComment(comment.id);
-            if (deleteSuccess == false)
-            {
-                CommentError.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                timer.Tick += (o, e) => { CommentError.Visibility = Windows.UI.Xaml.Visibility.Collapsed; };
-                timer.Tick += (o, e) => { timer.Stop(); };
-                timer.Interval = new TimeSpan(0, 0, 5);
-                timer.Start();
-            }
+            bool deleteSuccess = await _viewModel.DeleteComment(comment.id);
+
+            if (deleteSuccess != false) return;
+
+            CommentError.Visibility = Visibility.Visible;
+            _timer.Tick += (o, e) => { CommentError.Visibility = Visibility.Collapsed; };
+            _timer.Tick += (o, e) => _timer.Stop();
+            _timer.Interval = new TimeSpan(0, 0, 5);
+            _timer.Start();
         }
     }
 }

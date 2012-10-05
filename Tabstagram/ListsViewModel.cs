@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tabstagram.Models;
 using Windows.UI.Core;
@@ -49,8 +48,8 @@ namespace Tabstagram
                 _isLoaded = value;
                 OnPropertyChanged("IsLoaded");
                 
-                if(observer != null)
-                    observer.Update(value);
+                if(Observer != null)
+                    Observer.Update(value);
             }
         }
 
@@ -62,7 +61,7 @@ namespace Tabstagram
             }
         }
 
-        public Observer<Boolean> observer;
+        public IObserver<Boolean> Observer;
 
         protected virtual bool CanLoadMoreItems()
         {
@@ -73,14 +72,14 @@ namespace Tabstagram
         }
 
         public abstract string GetName();
-        public abstract Task<List<Media>> FetchNewMedia();
+        public abstract Task<IEnumerable<Media>> FetchNewMedia();
 
         public async virtual Task<bool> Init()
         {
             Debug.WriteLine(this.GetType());
 
             this.category = GetName();
-            MarkImportantMedia();
+            MarkImportantMedia(this);
             PopulateSubCollection();
             IsLoaded = true;
             return true;
@@ -88,7 +87,7 @@ namespace Tabstagram
 
         public async Task<bool> Refresh()
         {
-            List<Media> newMedia;
+            IEnumerable<Media> newMedia;
             try
             {
                 newMedia = await FetchNewMedia();
@@ -99,17 +98,19 @@ namespace Tabstagram
                 return false;
             }
 
-            if (newMedia.Count > 0)
+            var enumerable = newMedia as Media[] ?? newMedia.ToArray();
+            if (enumerable != null && enumerable.Any())
             {
-                AddAll(newMedia);
-                MarkImportantMedia();
-                UpdateSubCollection(newMedia);
+                AddAll(enumerable);
+                MarkImportantMedia(enumerable);
+                UpdateSubCollection(enumerable);
             }
             return true;
         }
 
         private void UpdateSubCollection(IEnumerable<Media> newMedia)
         {
+            newMedia = newMedia.Reverse();
             foreach (Media m in newMedia)
             {
                 SubCollection.Remove(SubCollection.Last());
@@ -141,12 +142,12 @@ namespace Tabstagram
 
             if (listString.Equals("popular"))
                 return new Popular();
-            else if (listString.Equals("feed"))
+            if (listString.Equals("feed"))
                 return new Feed();
-            else if (listString.Equals("selfmedia"))
+            if (listString.Equals("selfmedia"))
                 return new SelfMedia();
 
-            throw new System.ArgumentException("listString must be #hashtagname, popular or feed");
+            throw new ArgumentException("listString must be #hashtagname, popular or feed");
         }
 
         public virtual async Task<MultipleMedia> FetchMoreMedia()
@@ -156,19 +157,20 @@ namespace Tabstagram
             return mm;
         }
 
-        public virtual void MarkImportantMedia()
+        public virtual void MarkImportantMedia(IEnumerable<Media> enumerable)
         {
-            int initialSpan = 5; //Elements between first and second that could be marked as important
+            const int initialSpan = 2; //Elements between first and second that could be marked as important
+            const int span = 4;
 
-            if(this.Count > 0)
-                this.ElementAt(0).IsImportant = true;
+            if(enumerable.Count() > 0)
+                enumerable.ElementAt(0).IsImportant = true;
 
-            if (this.Count < initialSpan + 1)
+            if (enumerable.Count() < initialSpan + 1)
                 return;
 
             int count = 0;
-            Media mostImportant = this.ElementAt(initialSpan);
-            foreach(Media m in this.Skip(initialSpan))
+            Media mostImportant = enumerable.ElementAt(initialSpan);
+            foreach(Media m in enumerable.Skip(initialSpan))
             {
                 m.IsImportant = false;
                 if (mostImportant == null)
@@ -179,12 +181,11 @@ namespace Tabstagram
                 if(m.likes.count > mostImportant.likes.count)
                     mostImportant = m;
 
-                if (count > 10)
-                {
-                    mostImportant.IsImportant = true;
-                    mostImportant = null;
-                    count = 0;
-                }
+                if (count < span) continue;
+
+                mostImportant.IsImportant = true;
+                mostImportant = null;
+                count = 0;
             }
         }
 
@@ -205,18 +206,16 @@ namespace Tabstagram
         {
             CoreDispatcher dispatcher = Window.Current.Dispatcher;
 
-            return Task.Run<LoadMoreItemsResult>(
+            return Task.Run(
                async () =>
                {
                    MultipleMedia mm = await FetchMoreMedia();
 
                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>
-                        {
-                            AddAll(mm.data);
-                        });
+                        { if (mm != null) AddAll(mm.data); });
                    return new LoadMoreItemsResult() { Count = 40 };
-               }).AsAsyncOperation<LoadMoreItemsResult>();
+               }).AsAsyncOperation();
         }
 
         protected void OnPropertyChanged(string name)
@@ -230,8 +229,6 @@ namespace Tabstagram
 
     public class Feed : MediaList
     {
-        public Feed() {  }
-
         public async override Task<bool> Init()
         {
             Args args = new Args(new Arg(Arg.Type.COUNT, "20"));
@@ -247,7 +244,7 @@ namespace Tabstagram
             return "Feed";
         }
 
-        public async override Task<List<Media>> FetchNewMedia()
+        public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
             Args args = new Args();
             args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
@@ -260,8 +257,6 @@ namespace Tabstagram
 
     public class SelfMedia : MediaList
     {
-        public SelfMedia() {  }
-
         public async override Task<bool> Init()
         {
             Args args = new Args(new Arg(Arg.Type.COUNT, "20"));
@@ -277,12 +272,15 @@ namespace Tabstagram
             return "My Images";
         }
 
-        public async override Task<List<Media>> FetchNewMedia()
+        public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
             Args args = new Args();
             args.Add(new Arg(Arg.Type.MIN_ID, pagination.next_min_id));
             args.Add(new Arg(Arg.Type.COUNT, "100"));
             MultipleMedia mm = await Instagram.LoadSelfMedia(args);
+
+            if (mm.data.Count > 0)
+                return mm.data.Skip(1);
 
             return mm.data;
         }
@@ -290,13 +288,13 @@ namespace Tabstagram
 
     public class UserMedia : MediaList
     {
-        private User User;
+        private readonly User _user;
 
-        public UserMedia(User user) { User = user;  }
+        public UserMedia(User user) { _user = user; }
 
         public override async Task<bool> Init()
         {
-            MultipleMedia mm = await Instagram.LoadUserMedia(this.User);
+            MultipleMedia mm = await Instagram.LoadUserMedia(this._user);
             pagination = mm.pagination;
             AddAll(mm.data);
             base.Init();
@@ -305,15 +303,13 @@ namespace Tabstagram
 
         public override string GetName()
         {
-            return User.username;
+            return _user.username;
         }
 
-        public async override Task<List<Media>> FetchNewMedia()
+        public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
-            Args args = new Args();
-            args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
-            args.Add(new Arg(Arg.Type.COUNT, "100"));
-            MultipleMedia mm = await Instagram.LoadUserMedia(User, args);
+            Args args = new Args {new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id), new Arg(Arg.Type.COUNT, "100")};
+            MultipleMedia mm = await Instagram.LoadUserMedia(_user, args);
 
             return mm.data;
         }
@@ -321,8 +317,6 @@ namespace Tabstagram
 
     public class Popular : MediaList
     {
-        public Popular() {  }
-
         public override async Task<bool> Init()
         {
             MultipleMedia mm = await Instagram.LoadPopular();
@@ -347,7 +341,7 @@ namespace Tabstagram
             return true;
         }
 
-        public async override Task<List<Media>> FetchNewMedia()
+        public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
             MultipleMedia mm = await FetchMoreMedia();
             return mm.data;
@@ -361,7 +355,6 @@ namespace Tabstagram
         public HashTag(string tag)
         {
             this.Tag = tag;
-            
         }
 
         public override async Task<bool> Init()
@@ -378,9 +371,9 @@ namespace Tabstagram
             return "#" + this.Tag;
         }
 
-        public async override Task<List<Media>> FetchNewMedia()
+        public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
-            Args args = new Args();
+            var args = new Args();
             args.Add(new Arg(Arg.Type.COUNT, "100"));
             args.Add(new Arg(Arg.Type.MIN_TAG_ID, pagination.min_tag_id));
             MultipleMedia mm = await Instagram.LoadHashtag(Tag, args);
@@ -388,7 +381,7 @@ namespace Tabstagram
         }
     }
 
-    class ListsViewModel : INotifyPropertyChanged, Observer<Boolean>
+    class ListsViewModel : INotifyPropertyChanged, IObserver<Boolean>
     {
         public event EventHandler<NotificationEventArgs> CriticalNetworkErrorNotice;
         public ObservableCollection<MediaList> ItemGroups = new ObservableCollection<MediaList>();
@@ -425,13 +418,12 @@ namespace Tabstagram
         {
             List<string> list = UserSettings.MediaStringsList;
 
-            foreach (string str in list)
+            foreach (MediaList ml in list.Select(MediaList.GetClassFromString))
             {
-                MediaList ml = MediaList.GetClassFromString(str);
                 AddToItemsGroup(ml);
             }
 
-            ItemGroups.First().observer = this;
+            ItemGroups.First().Observer = this;
 
             try
             {
@@ -455,10 +447,9 @@ namespace Tabstagram
 
         public MediaList GetListFromString(string listName)
         {
-            foreach (MediaList g in ItemGroups)
+            foreach (MediaList g in ItemGroups.Where(g => g.category.ToLower().Equals(listName.ToLower())))
             {
-                if (g.category.ToLower().Equals(listName.ToLower()))
-                    return g;
+                return g;
             }
 
             throw new System.ArgumentException("listName must be the name of a Group category");
@@ -475,13 +466,13 @@ namespace Tabstagram
         public void Update(bool b)
         {
             if (b)
-                ItemGroups.First().observer = null;
+                ItemGroups.First().Observer = null;
 
             IsLoading = !b;
         }
     }
 
-    public interface Observer<T>
+    public interface IObserver<in T>
     {
         void Update(T b);
     }
