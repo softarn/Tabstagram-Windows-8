@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
@@ -12,8 +10,9 @@ namespace Tabstagram
     class ImageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<NotificationEventArgs> CriticalNetworkErrorNotice;
 
-        private DispatcherTimer timer = new DispatcherTimer(); 
+        private readonly DispatcherTimer _timer = new DispatcherTimer(); 
 
         private Media _currentMedia;
         public Media CurrentMedia
@@ -51,6 +50,14 @@ namespace Tabstagram
         {
             CurrentMedia = media;
             RelatedMedia = new UserMedia(media.user);
+            try
+            {
+                RelatedMedia.Init();
+            }
+            catch (Exception)
+            {
+                CriticalNetworkErrorNotice(null, new NotificationEventArgs());
+            }
             OnPropertyChanged("CurrentMedia");
             LoadUserInfo(media.user.id);
             LoadComments();
@@ -65,8 +72,15 @@ namespace Tabstagram
 
         public async void LoadUserInfo(string userId)
         {
-            User user = await Instagram.LoadUserInfo(userId);
-            CurrentMedia.user = user;
+            try
+            {
+                User user = await Instagram.LoadUserInfo(userId);
+                CurrentMedia.user = user;
+            }
+            catch (Exception)
+            {
+                CriticalNetworkErrorNotice(null, new NotificationEventArgs());
+            }
         }
 
         public async void LoadComments(bool forced = false)
@@ -128,16 +142,16 @@ namespace Tabstagram
 
         internal async void Comment(string comment)
         {
-            bool success = await Instagram.CommentMedia(this.CurrentMedia.id, comment);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
-            timer.Tick += timer_LoadComments;
-            timer.Start();
+            await Instagram.CommentMedia(this.CurrentMedia.id, comment);
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            _timer.Tick += TimerLoadComments;
+            _timer.Start();
         }
 
-        void timer_LoadComments(object sender, object e)
+        void TimerLoadComments(object sender, object e)
         {
             LoadComments(true);
-            timer.Stop();
+            _timer.Stop();
         }
 
         internal async Task<bool> DeleteComment(string commentId)
@@ -151,12 +165,27 @@ namespace Tabstagram
                 if (index > -1)
                     relatedMediaItem = RelatedMedia.ElementAt(index);
 
-                Comment tmpComment = new Comment();
-                tmpComment.id = commentId;
+                Comment tmpComment = new Comment {id = commentId};
                 CurrentMedia.comments.RemoveComment(tmpComment);
-                relatedMediaItem.comments.RemoveComment(tmpComment);
+                if (relatedMediaItem != null) relatedMediaItem.comments.RemoveComment(tmpComment);
             }
             return success;
+        }
+
+        internal void Reset()
+        {
+            try
+            {
+                RelatedMedia.Init();
+            }
+            catch (Exception)
+            {
+                CriticalNetworkErrorNotice(null, new NotificationEventArgs());
+            }
+            OnPropertyChanged("CurrentMedia");
+            LoadUserInfo(CurrentMedia.user.id);
+            CurrentMedia.comments.data = new List<Comment>();
+            LoadComments();
         }
     }
 }

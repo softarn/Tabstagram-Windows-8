@@ -11,6 +11,7 @@ namespace Tabstagram
 
     class Instagram
     {
+        public static int NumOfRetries = 2;
         public static string AccessToken { get; set; }
 
         private static string BASE_URL = "https://api.instagram.com/v1/";
@@ -56,10 +57,10 @@ namespace Tabstagram
             try { response = await client.DeleteAsync(url); }
             catch (Exception e)
             {
-                if (tries > 3)
+                if (tries >= NumOfRetries)
                     throw new HttpRequestException("Failed to do Delete", e.InnerException);
-                else
-                    task = Delete(url, null, tries + 1);
+                
+                task = Delete(url, null, tries + 1);
             }
 
             if (task != null)
@@ -80,7 +81,7 @@ namespace Tabstagram
             try { response = await client.PostAsync(url, new StringContent(argsString)); }
             catch (Exception e)
             {
-                if (tries > 3)
+                if (tries >= NumOfRetries)
                     throw new HttpRequestException("Failed to do Post", e.InnerException);
                 else
                     task = Post(url, null, tries + 1);
@@ -105,7 +106,7 @@ namespace Tabstagram
             try { response = await client.GetStringAsync(url); }
             catch (Exception e)
             {
-                if (tries > 3)
+                if (tries >= NumOfRetries)
                     throw new HttpRequestException("Failed to do Get", e.InnerException);
                 else
                     task = Get(url, null, tries + 1);

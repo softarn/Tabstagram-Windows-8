@@ -30,10 +30,7 @@
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
-        <ContentControl Content="{Binding CurrentMedia.user.full_name}" Style="{StaticResource Background}" Grid.Row="1" FontFamily="Segoe Script"/>
-
-        <!-- Back button and page title -->
-        <Grid x:Name="MediaGrid" Grid.Row="1" Margin="0">
+        <Grid x:Name="MediaGrid" Grid.Row="1" Margin="0" Background="#FF171717">
         	<Grid.RowDefinitions>
         		<RowDefinition/>
         		<RowDefinition/>
@@ -45,12 +42,12 @@
             </Grid.ColumnDefinitions>
 
             <!--Left Grid-->
-            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia}" IsItemClickEnabled="True" ItemClick="RelatedMediaListClick" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="#FF171717" HorizontalContentAlignment="Stretch" Grid.RowSpan="2">
+            <ListView x:Name="RelatedMediaList" ItemsSource="{Binding RelatedMedia}" IsItemClickEnabled="True" ItemClick="RelatedMediaListClick" SelectionMode="None" HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" Grid.RowSpan="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Viewbox>
+                        <!--<Viewbox>-->
                             <local:ThumbnailControl HorizontalAlignment="Center"/>
-                        </Viewbox>
+                        <!--</Viewbox>-->
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -66,7 +63,7 @@
             	</StackPanel>
             </Grid>
             <!--Right grid-->
-            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Background="#FF171717" Grid.RowSpan="2">
+            <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Grid.RowSpan="2">
                 <Grid Margin="0" Grid.RowSpan="2" MaxWidth="450">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

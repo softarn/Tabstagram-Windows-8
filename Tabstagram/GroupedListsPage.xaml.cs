@@ -28,12 +28,12 @@ namespace Tabstagram
         {
             this.InitializeComponent();
 
-            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void OnErrorNotice(object sender, NotificationEventArgs nea)
         {
-            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", new UICommandInvokedHandler(this.TryAgainCommand)));
+            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
         }
 
         /// <summary>

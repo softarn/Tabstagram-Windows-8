@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -33,6 +24,16 @@ namespace Tabstagram
         public ImagePage()
         {
             this.InitializeComponent();
+        }
+
+        private void OnErrorNotice(object sender, NotificationEventArgs nea)
+        {
+            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
+        }
+
+        private async void TryAgainCommand(IUICommand command)
+        {
+            _viewModel.Reset();
         }
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace Tabstagram
         {
             Media m = e.Parameter as Media;
             _viewModel = new ImageViewModel(m);
+            _viewModel.CriticalNetworkErrorNotice += OnErrorNotice;
             pageRoot.DataContext = _viewModel;
             pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
             base.OnNavigatedTo(e);  

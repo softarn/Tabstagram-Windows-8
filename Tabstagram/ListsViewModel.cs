@@ -26,6 +26,7 @@ namespace Tabstagram
         protected override event PropertyChangedEventHandler PropertyChanged;
         public static List<DispatcherTimer> timers = new List<DispatcherTimer>();
         protected Pagination pagination;
+        public bool Error = false;
 
         private ObservableCollection<Media> _subCollection;
         public ObservableCollection<Media> SubCollection
@@ -65,6 +66,9 @@ namespace Tabstagram
 
         protected virtual bool CanLoadMoreItems()
         {
+            if (Error)
+                return false;
+
             if (pagination == null)
                 return false;
 
@@ -209,11 +213,19 @@ namespace Tabstagram
             return Task.Run(
                async () =>
                {
-                   MultipleMedia mm = await FetchMoreMedia();
+                   MultipleMedia mm = null;
+                   try { mm = await FetchMoreMedia(); }
+                   catch (Exception) { this.Error = true; }
 
                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                         () =>
-                        { if (mm != null) AddAll(mm.data); });
+                        {
+                            if (this.Error)
+                                this.CriticalNetworkErrorNotice(null, new NotificationEventArgs());
+
+                            if (mm != null)
+                                AddAll(mm.data);
+                        });
                    return new LoadMoreItemsResult() { Count = 40 };
                }).AsAsyncOperation();
         }
@@ -224,6 +236,11 @@ namespace Tabstagram
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        internal void Reset()
+        {
+            Error = false;
         }
     }
 
@@ -275,7 +292,7 @@ namespace Tabstagram
         public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
             Args args = new Args();
-            args.Add(new Arg(Arg.Type.MIN_ID, pagination.next_min_id));
+            args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
             args.Add(new Arg(Arg.Type.COUNT, "100"));
             MultipleMedia mm = await Instagram.LoadSelfMedia(args);
 

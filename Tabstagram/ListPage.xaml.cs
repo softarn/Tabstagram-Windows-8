@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Tabstagram.Models;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
@@ -31,16 +21,24 @@ namespace Tabstagram
             this.InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             mediaList = e.Parameter as MediaList;
+            mediaList.CriticalNetworkErrorNotice += OnErrorNotice;
             pageTitle.Text = "Tabstagram - " + mediaList.category;
             this.DefaultViewModel["Items"] = mediaList;
-            //if (mediaList.Count < 50 && !mediaList.category.Equals("Popular"))
-            //    await mediaList.LoadMore();
-            //AddLoadMore();
 
             base.OnNavigatedTo(e);
+        }
+
+        private void OnErrorNotice(object sender, NotificationEventArgs nea)
+        {
+            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
+        }
+
+        private async void TryAgainCommand(IUICommand command)
+        {
+            mediaList.Reset();
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace Tabstagram
         //    mediaList.ItemsAll.Add(m);
         //}
 
-        private async void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
+        private void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
         {
             Media m = e.ClickedItem as Media;
 
