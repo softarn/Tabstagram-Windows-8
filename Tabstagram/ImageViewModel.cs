@@ -46,20 +46,40 @@ namespace Tabstagram
 
         public MediaList RelatedMedia { get; set; }
 
+        public ImageViewModel(User user)
+        {
+            RelatedMedia = new UserMedia(user);
+            Init();
+        }
+
         public ImageViewModel(Media media)
         {
             CurrentMedia = media;
-            RelatedMedia = new UserMedia(media.user);
+            RelatedMedia = new UserMedia(CurrentMedia.user);
+            Init();
+        }
+
+        public async void Init()
+        {
             try
             {
-                RelatedMedia.Init();
+                await RelatedMedia.Init();
             }
             catch (Exception)
             {
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
+
+            /* If we haven't selected any media yet, select the first one in the list */
+            if (CurrentMedia == null)
+            {
+                /* NEEDS A CHECK TO SEE THAT WE'VE GOT ITEMS! */
+                /* Otherwise, just close the page and show a message about the user not having any images */
+                CurrentMedia = RelatedMedia.First();
+            }
+
             OnPropertyChanged("CurrentMedia");
-            LoadUserInfo(media.user.id);
+            LoadUserInfo(CurrentMedia.user.id);
             LoadComments();
         }
 

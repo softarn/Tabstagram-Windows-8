@@ -63,11 +63,21 @@ namespace Tabstagram
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Media m = e.Parameter as Media;
-            _viewModel = new ImageViewModel(m);
+            if (e.Parameter is Media)
+            {
+                Media m = e.Parameter as Media;
+                _viewModel = new ImageViewModel(m);
+                pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
+            }
+            else if (e.Parameter is User)
+            {
+                User u = e.Parameter as User;
+                _viewModel = new ImageViewModel(u);
+                pageTitle.Text = "Tabstagram - " + u.username;
+            }
+
             _viewModel.CriticalNetworkErrorNotice += OnErrorNotice;
             pageRoot.DataContext = _viewModel;
-            pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
             base.OnNavigatedTo(e);  
         }
 
@@ -145,7 +155,7 @@ namespace Tabstagram
 
         private async void HandleGoToUser(Comment comment)
         {
-            /* TODO: Go to user images here! */  
+            this.Frame.Navigate(typeof(ImagePage), comment.from);
         }
     }
 }
