@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -114,7 +115,15 @@ namespace Tabstagram
             // Create a menu and add commands specifying a callback delegate for each.
             // Since command delegates are unique, no need to specify command Ids.
             var menu = new PopupMenu();
-            menu.Commands.Add(new UICommand("Delete", command => HandleDelete((Comment)o)));
+
+            string userId = await UserSettings.retreiveUserId();
+
+            if (userId == _viewModel.CurrentMedia.user.id || userId == ((Comment)o).from.id)
+            {
+                menu.Commands.Add(new UICommand("Delete", command => HandleDelete((Comment)o)));
+            }
+            
+            menu.Commands.Add(new UICommand("Go to user", command => HandleGoToUser((Comment)o)));
 
             ListViewItem lvi = (ListViewItem)CommentsList.ItemContainerGenerator.ContainerFromItem(o);
 
@@ -132,6 +141,11 @@ namespace Tabstagram
             _timer.Tick += (o, e) => _timer.Stop();
             _timer.Interval = new TimeSpan(0, 0, 5);
             _timer.Start();
+        }
+
+        private async void HandleGoToUser(Comment comment)
+        {
+            /* TODO: Go to user images here! */  
         }
     }
 }

@@ -25,6 +25,31 @@ namespace Tabstagram.Models
             set { Save(ACITVE_LIST_KEY, value); } 
         }
 
+        public static async Task<string> retreiveUserId()
+        {
+            Task<string> task = null;
+
+            string userId = Get<string>(USER_ID_KEY);
+
+            if (userId != null)
+            {
+                return userId;
+            }
+            else
+            {
+                try
+                {
+                    User user = await Instagram.LoadUserInfo("self");
+                    Save(USER_ID_KEY, user.id);
+                    return user.id;
+                }
+                catch (Exception)
+                {
+                    return "-1";
+                }
+            }
+        }
+
         public string UserId
         {
             get { return Get<string>(USER_ID_KEY); }
