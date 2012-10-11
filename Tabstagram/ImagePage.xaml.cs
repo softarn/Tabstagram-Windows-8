@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -18,8 +19,10 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class ImagePage
     {
-        ImageViewModel _viewModel;
-        readonly DispatcherTimer _timer = new DispatcherTimer();
+        private ImageViewModel _viewModel;
+        private Button MarkedButton;
+        private Grid VisibleGrid;
+        private readonly DispatcherTimer _timer = new DispatcherTimer();
 
         public ImagePage()
         {
@@ -47,7 +50,7 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-             
+
         }
 
         /// <summary>
@@ -67,7 +70,57 @@ namespace Tabstagram
             _viewModel.CriticalNetworkErrorNotice += OnErrorNotice;
             pageRoot.DataContext = _viewModel;
             pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
-            base.OnNavigatedTo(e);  
+
+            if (MarkedButton == null || VisibleGrid == null)
+            {
+                SwitchMarkedButton(CommentsButton);
+                SwitchVisibleGrid(CommentsGrid);
+            }
+
+            base.OnNavigatedTo(e);
+        }
+
+        void FollowersGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("loaded followersgrid");
+        }
+
+        private void SwitchMarkedButton(Button b)
+        {
+            if (MarkedButton != null)
+                MarkedButton.IsEnabled = true;
+
+            MarkedButton = b;
+            MarkedButton.IsEnabled = false;
+        }
+
+        private void SwitchVisibleGrid(Grid g)
+        {
+            if (VisibleGrid != null)
+                VisibleGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            VisibleGrid = g;
+            VisibleGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+
+        private async void RightGridInfoSwitchClick(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Task loaded = null;
+            SwitchMarkedButton(button);
+            RightGridProgressBar.IsActive = true;
+            switch (button.Name)
+            {
+                case "FollowedByButton": loaded = _viewModel.LoadFollowedBy(); SwitchVisibleGrid(FollowedByGrid); break;
+                case "CommentsButton":  SwitchVisibleGrid(CommentsGrid); break;
+                case "FollowsButton": loaded = _viewModel.LoadFollows(); SwitchVisibleGrid(FollowsGrid); break;
+                case "LikesButton": loaded = _viewModel.LoadLikes(); SwitchVisibleGrid(LikesGrid); break;
+            }
+
+            if(loaded != null)
+                await loaded;
+
+            RightGridProgressBar.IsActive = false;
         }
 
         private void RelatedMediaListClick(object sender, ItemClickEventArgs e)
@@ -84,14 +137,16 @@ namespace Tabstagram
 
         private void NewCommentClick(object sender, RoutedEventArgs e)
         {
-            WriteComment.Visibility = WriteComment.Visibility != Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
+            WriteComment.Visibility = WriteComment.Visibility != Visibility.Visible
+                                          ? Visibility.Visible
+                                          : Visibility.Collapsed;
         }
 
         private void MakeCommentButtonClick(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine(
-            Comment.Text
-            );
+                Comment.Text
+                );
 
             _viewModel.Comment(Comment.Text);
             WriteComment.Visibility = Visibility.Collapsed;
@@ -103,7 +158,7 @@ namespace Tabstagram
             Point point = buttonTransform.TransformPoint(new Point());
             return new Rect(point, new Size(element.ActualWidth, element.ActualHeight));
         }
-        
+
         private async void CommentsListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CommentsList.SelectedItem == null)

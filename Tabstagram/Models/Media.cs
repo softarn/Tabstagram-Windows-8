@@ -101,7 +101,16 @@ namespace Tabstagram
                 OnPropertyChanged("count");
             }
         }
-        public List<User> data { get; set; }
+        private List<User> _data;
+        public List<User> data
+        {
+            get { return _data; }
+            set
+            {
+                _data = value;
+                OnPropertyChanged("data");
+            }
+        }
 
         protected void OnPropertyChanged(string name)
         {

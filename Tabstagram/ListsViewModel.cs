@@ -80,8 +80,6 @@ namespace Tabstagram
 
         public async virtual Task<bool> Init()
         {
-            Debug.WriteLine(this.GetType());
-
             this.category = GetName();
             MarkImportantMedia(this);
             PopulateSubCollection();
@@ -156,7 +154,7 @@ namespace Tabstagram
 
         public virtual async Task<MultipleMedia> FetchMoreMedia()
         {
-            MultipleMedia mm = await Instagram.LoadFromCustomUrl(pagination.next_url);
+            MultipleMedia mm = await Instagram.LoadMultipleMediaFromCustomUrl(pagination.next_url);
             pagination = mm.pagination;
             return mm;
         }
@@ -252,7 +250,7 @@ namespace Tabstagram
             MultipleMedia mm = await Instagram.LoadFeed(args);
             pagination = mm.pagination;
             AddAll(mm.data);
-            base.Init();
+            await base.Init();
             return true;
         }
 
@@ -338,7 +336,7 @@ namespace Tabstagram
         {
             MultipleMedia mm = await Instagram.LoadPopular();
             AddAll(mm.data);
-            base.Init();
+            await base.Init();
             return true;
         }
 
@@ -379,7 +377,7 @@ namespace Tabstagram
             MultipleMedia mm = await Instagram.LoadHashtag(Tag);
             pagination = mm.pagination;
             AddAll(mm.data);
-            base.Init();
+            await base.Init();
             return true;
         }
 

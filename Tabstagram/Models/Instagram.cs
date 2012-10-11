@@ -20,14 +20,16 @@ namespace Tabstagram
         private static string FEED_URL { get { return BASE_URL + "users/self/feed"; } }
         private static string POPULAR_URL { get { return BASE_URL + "media/popular"; } }
 
-        private static string GetTagUrl(string Tag) { return String.Format("{0}tags/{1}/media/recent",  BASE_URL, Tag); }
-        private static string GetUserMediaUrl(User u) { return String.Format("{0}users/{1}/media/recent", BASE_URL, u.id); }
-        private static string GetSelfMediaUrl() { return String.Format("{0}users/self/media/recent", BASE_URL); }
+        private static string GetTagUrl(string Tag)     { return String.Format("{0}tags/{1}/media/recent",  BASE_URL, Tag); }
+        private static string GetUserMediaUrl(User u)   { return String.Format("{0}users/{1}/media/recent", BASE_URL, u.id); }
+        private static string GetSelfMediaUrl()         { return String.Format("{0}users/self/media/recent", BASE_URL); }
         private static string GetUserInfoUrl(string id) { return String.Format("{0}users/{1}", BASE_URL, id); }
         private static string GetCommentsUrl(string id) { return String.Format("{0}media/{1}/comments", BASE_URL, id); }
         private static string GetDeleteCommentsUrl(string mediaId, string commentId) { return String.Format("{0}media/{1}/comments/{2}", BASE_URL, mediaId, commentId); }
-        private static string GetLikeUrl(string id) { return String.Format("{0}media/{1}/likes", BASE_URL, id); }
-
+        private static string GetLikeUrl(string id)     { return String.Format("{0}media/{1}/likes", BASE_URL, id); }
+        private static string GetFollowedByUrl(string id) { return String.Format("{0}users/{1}/followed-by", BASE_URL, id); }
+        private static string GetFollowsUrl(string id)  { return String.Format("{0}users/{1}/follows", BASE_URL, id); }
+        
         private static HttpClient client = GetHttpClient();
 
         private static HttpClient GetHttpClient()
@@ -83,8 +85,8 @@ namespace Tabstagram
             {
                 if (tries >= NumOfRetries)
                     throw new HttpRequestException("Failed to do Post", e.InnerException);
-                else
-                    task = Post(url, null, tries + 1);
+                
+                task = Post(url, null, tries + 1);
             }
 
             if (task != null)
@@ -108,8 +110,8 @@ namespace Tabstagram
             {
                 if (tries >= NumOfRetries)
                     throw new HttpRequestException("Failed to do Get", e.InnerException);
-                else
-                    task = Get(url, null, tries + 1);
+                
+                task = Get(url, null, tries + 1);
             }
 
             if (task != null)
@@ -132,6 +134,13 @@ namespace Tabstagram
             string response = await Get(url, args);
             User user = User.SingleFromJSON(response);
             return user;
+        }
+
+        private static async Task<MultipleUsers> LoadUserList(string url, Args args = null)
+        {
+            args = SafeAddAccessToken(args);
+            string response = await Get(url, args);
+            return User.MultipleFromJSON(response);
         }
 
         public static async Task<List<Comment>> LoadComments(string mediaId, Args args = null)
@@ -195,7 +204,7 @@ namespace Tabstagram
             return await LoadMediaList(GetTagUrl(hashtag), args);
         }
 
-        public static async Task<MultipleMedia> LoadFromCustomUrl(string url, Args args = null)
+        public static async Task<MultipleMedia> LoadMultipleMediaFromCustomUrl(string url, Args args = null)
         {
             string response = await Get(url, args);
             MultipleMedia mm = Media.ListFromJSON(response);
@@ -216,6 +225,29 @@ namespace Tabstagram
         {
             return await LoadUser(GetUserInfoUrl(userId), args);
         }
+
+        public static async Task<MultipleUsers> LoadFollowedBy(string userId)
+        {
+            return await LoadUserList(GetFollowedByUrl(userId));
+        }
+
+        public static async Task<MultipleUsers> LoadFollows(string userId)
+        {
+            return await LoadUserList(GetFollowsUrl(userId));
+        }
+        
+        public static async Task<MultipleUsers> LoadLikes(string userId)
+        {
+            return await LoadUserList(GetLikeUrl(userId));
+        }
+
+        public static async Task<MultipleUsers> LoadMultipleUsersFromCustomUrl(string url, Args args = null)
+        {
+            string response = await Get(url, args);
+            MultipleUsers ml = User.MultipleFromJSON(response);
+            return ml;
+        }
+
     }
 
     public class Args : List<Arg>

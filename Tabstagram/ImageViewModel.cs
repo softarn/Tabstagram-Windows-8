@@ -172,6 +172,41 @@ namespace Tabstagram
             return success;
         }
 
+        internal async Task LoadFollowedBy()
+        {
+            if (CurrentMedia.user.followed_by != null)
+                return;
+
+            MultipleUsers users = await Instagram.LoadFollowedBy(CurrentMedia.user.id);
+            UserList userList = new UserList(users.data);
+            userList.pagination = users.pagination;
+            CurrentMedia.user.followed_by = userList;
+            return;
+        }
+
+        internal async Task LoadFollows()
+        {
+            if (CurrentMedia.user.follows != null)
+                return;
+
+            MultipleUsers users = await Instagram.LoadFollows(CurrentMedia.user.id);
+            UserList userList = new UserList(users.data);
+            userList.pagination = users.pagination;
+            CurrentMedia.user.follows = userList;
+            return;
+        }
+
+        internal async Task LoadLikes()
+        {
+            if (CurrentMedia.likes.data.Count == CurrentMedia.likes.count)
+                return;
+
+            CurrentMedia.likes.data = null;
+            MultipleUsers users = await Instagram.LoadLikes(CurrentMedia.id);
+            CurrentMedia.likes.data = users.data.ToList();
+            return;
+        }
+
         internal void Reset()
         {
             try
