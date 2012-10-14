@@ -61,7 +61,7 @@ namespace Tabstagram
         //    m.id = "load more";
         //    m.images = new Images();
         //    m.images.thumbnail = new Thumbnail();
-        //    m.images.thumbnail.url = "ms-appx:/Assets/HeartIcon.png";
+        //    m.images.thumbnail.url = "ms-appx:/ms-appx:/Assets/HeartIcon.png";
         //    mediaList.ItemsAll.Add(m);
         //}
 

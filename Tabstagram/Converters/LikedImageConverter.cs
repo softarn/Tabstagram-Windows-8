@@ -14,7 +14,7 @@ namespace Tabstagram
             bool val = (bool) value;
 
             if(val) {
-                return  new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:/Assets/HeartIcon.png")); ;
+                return new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:/Assets/HeartIcon.png")); ;
             } else {
                 return new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:/Assets/HeartIcon_white.png")); ;
             }

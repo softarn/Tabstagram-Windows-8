@@ -141,12 +141,12 @@
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Instagram.cs" />
+    <Compile Include="Data\Instagram.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Pagination.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\UserSettings.cs" />
+    <Compile Include="Data\Settings.cs" />
+    <Compile Include="Data\UserSettings.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="UIElements\MyGridView.cs" />

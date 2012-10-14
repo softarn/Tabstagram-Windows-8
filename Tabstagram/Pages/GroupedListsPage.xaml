@@ -139,7 +139,7 @@
                                                 <Button.RenderTransform>
                                                     <CompositeTransform CenterX="16" CenterY="16"/>
                                                 </Button.RenderTransform>
-                                                <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
+                                                <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
                                             </Button>
                                             <Button
                     							AutomationProperties.Name="category"
@@ -206,16 +206,12 @@
                         <DataTemplate>
                             <Grid Margin="7,7,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
-                                        <Button.RenderTransform>
-                                            <CompositeTransform CenterX="16" CenterY="16"/>
-                                        </Button.RenderTransform>
-                                        <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
+                                    <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
+                                        <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
                                     </Button>
-                                    <Button
-                    							AutomationProperties.Name="category"
-                    							Style="{StaticResource TextPrimaryButtonStyle}"
-                    							Click="ButtonClick">
+                                    <Button AutomationProperties.Name="category"
+                    				        Style="{StaticResource TextPrimaryButtonStyle}"
+                    						Click="ButtonClick">
                                         <StackPanel Orientation="Horizontal" >
                                             <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
                                             <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
@@ -237,7 +233,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36" Width="48"/>
-            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
+            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
         </Grid>
         <Grid x:Name="LoadingGrid" Visibility="{Binding IsLoading, Converter={StaticResource BoolConverter}}" Margin="0" Grid.Row="1" Grid.ColumnSpan="2" Opacity="0.995">
