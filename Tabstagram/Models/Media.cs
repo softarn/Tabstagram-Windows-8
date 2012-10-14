@@ -77,7 +77,8 @@ namespace Tabstagram
             bool removed = observableData.Remove(comment);
             if (removed == false) return false;
 
-            count--;
+            if(count > 0) 
+                count--;
             return true;
         }
 
