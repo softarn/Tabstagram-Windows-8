@@ -88,7 +88,9 @@ namespace Tabstagram.Models
             l.Add("popular");
             l.Add("selfmedia");
             l.Add("#tabstagram");
-
+            l.Add("#instamood");
+            l.Add("#winter");
+            l.Add("#photooftheday");
             MediaStringsList = l;
             return l;
         }
