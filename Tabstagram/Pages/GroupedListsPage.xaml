@@ -206,17 +206,19 @@
                         <DataTemplate>
                             <Grid Margin="7,7,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}" Visibility="{Binding IsLoaded, Converter={StaticResource BoolConverter}}">
-                                        <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" Margin="10, 0, 10, 5" VerticalAlignment="Center"/>
+                                    <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
+                                        <Button.RenderTransform>
+                                            <CompositeTransform CenterX="16" CenterY="16"/>
+                                        </Button.RenderTransform>
+                                        <Image Source="/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
                                     </Button>
                                     <Button
-            						AutomationProperties.Name="Group Title"
-            						Style="{StaticResource TextPrimaryButtonStyle}"
-									Click="ButtonClick"
-                                    Foreground="Green">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding category}" Margin="3,-7,10,10" Style="{StaticResource GroupHeaderTextStyle}" Foreground="Green" />
-                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}" />
+                    							AutomationProperties.Name="category"
+                    							Style="{StaticResource TextPrimaryButtonStyle}"
+                    							Click="ButtonClick">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
+                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
