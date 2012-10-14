@@ -21,7 +21,7 @@ namespace Tabstagram
     public sealed partial class GroupedListsPage
     {
         private bool settingsMenuRegistered;
-        ListsViewModel _lvm;
+        GroupedListsViewModel _lvm;
 
         public GroupedListsPage()
         {
@@ -48,7 +48,7 @@ namespace Tabstagram
         {
             if (_lvm != null) return;
 
-            _lvm = new ListsViewModel();
+            _lvm = new GroupedListsViewModel();
             _lvm.CriticalNetworkErrorNotice += OnErrorNotice;
             Instagram.AccessToken = UserSettings.AccessToken;
             this.DefaultViewModel["Groups"] = _lvm.ItemGroups;
@@ -82,14 +82,14 @@ namespace Tabstagram
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            var m = (MediaList)((Button)sender).DataContext;
+            var m = (MediaListViewModel)((Button)sender).DataContext;
 
             this.Frame.Navigate(typeof(ListPage), m);
         }
 
         private async void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
-            var m = (MediaList)((Button)sender).DataContext;
+            var m = (MediaListViewModel)((Button)sender).DataContext;
 
             var b = (Button)sender;
             int to = 359;

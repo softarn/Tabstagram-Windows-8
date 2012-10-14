@@ -14,7 +14,7 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class ListPage : Tabstagram.Common.LayoutAwarePage
     {
-        MediaList mediaList = null;
+        MediaListViewModel mediaList = null;
 
         public ListPage()
         {
@@ -23,7 +23,7 @@ namespace Tabstagram
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            mediaList = e.Parameter as MediaList;
+            mediaList = e.Parameter as MediaListViewModel;
             mediaList.CriticalNetworkErrorNotice += OnErrorNotice;
             pageTitle.Text = "Tabstagram - " + mediaList.category;
             this.DefaultViewModel["Items"] = mediaList;

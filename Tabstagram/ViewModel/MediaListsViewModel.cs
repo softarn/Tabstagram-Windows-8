@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Tabstagram
 {
-    public abstract class MediaList : ObservableCollection<Media>, ISupportIncrementalLoading, INotifyPropertyChanged
+    public abstract class MediaListViewModel : ObservableCollection<Media>, ISupportIncrementalLoading, INotifyPropertyChanged
     {
         public event EventHandler<NotificationEventArgs> CriticalNetworkErrorNotice;
         private string _category;
@@ -135,7 +135,7 @@ namespace Tabstagram
             }
         }
 
-        public static MediaList GetClassFromString(string listString)
+        public static MediaListViewModel GetClassFromString(string listString)
         {
             if (listString[0] == '#')
             {
@@ -201,7 +201,7 @@ namespace Tabstagram
 
         public override bool Equals(object obj)
         {
-            return this.GetName().Equals(((MediaList)obj).GetName());
+            return this.GetName().Equals(((MediaListViewModel)obj).GetName());
         }
 
         public Windows.Foundation.IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync(uint count)
@@ -242,7 +242,7 @@ namespace Tabstagram
         }
     }
 
-    public class Feed : MediaList
+    public class Feed : MediaListViewModel
     {
         public async override Task<bool> Init()
         {
@@ -270,7 +270,7 @@ namespace Tabstagram
         }
     }
 
-    public class SelfMedia : MediaList
+    public class SelfMedia : MediaListViewModel
     {
         public async override Task<bool> Init()
         {
@@ -300,8 +300,8 @@ namespace Tabstagram
             return mm.data;
         }
     }
-
-    public class UserMedia : MediaList
+    
+    public class UserMedia : MediaListViewModel
     {
         private readonly User _user;
 
@@ -337,7 +337,7 @@ namespace Tabstagram
         }
     }
 
-    public class Popular : MediaList
+    public class Popular : MediaListViewModel
     {
         public override async Task<bool> Init()
         {
@@ -370,7 +370,7 @@ namespace Tabstagram
         }
     }
 
-    public class HashTag : MediaList
+    public class HashTag : MediaListViewModel
     {
         public string Tag { get; set; }
 
@@ -401,101 +401,5 @@ namespace Tabstagram
             MultipleMedia mm = await Instagram.LoadHashtag(Tag, args);
             return mm.data;
         }
-    }
-
-    class ListsViewModel : INotifyPropertyChanged, IObserver<Boolean>
-    {
-        public event EventHandler<NotificationEventArgs> CriticalNetworkErrorNotice;
-        public ObservableCollection<MediaList> ItemGroups = new ObservableCollection<MediaList>();
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get
-            {
-                return _isLoading;
-            }
-
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged("IsLoading");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ListsViewModel()
-        {
-            IsLoading = true;
-        }
-
-        public async Task Reset()
-        {
-            IsLoading = true;
-            ItemGroups.Clear();
-            await this.LoadFromSettings();
-        }
-
-        public async Task LoadFromSettings()
-        {
-            List<string> list = UserSettings.MediaStringsList;
-
-            foreach (MediaList ml in list.Select(MediaList.GetClassFromString))
-            {
-                AddToItemsGroup(ml);
-            }
-
-            ItemGroups.First().Observer = this;
-
-            try
-            {
-                foreach (MediaList ml in ItemGroups)
-                   await ml.Init();
-            }
-            catch (Exception)
-            {
-                CriticalNetworkErrorNotice(this, new NotificationEventArgs());
-            }
-        }
-
-        public bool AddToItemsGroup(MediaList ml)
-        {
-            if (ItemGroups.Contains(ml))
-                return false;
-
-            ItemGroups.Add(ml);
-            return true;
-        }
-
-        public MediaList GetListFromString(string listName)
-        {
-            foreach (MediaList g in ItemGroups.Where(g => g.category.ToLower().Equals(listName.ToLower())))
-            {
-                return g;
-            }
-
-            throw new System.ArgumentException("listName must be the name of a Group category");
-        }
-
-        protected void OnPropertyChanged(string name)
-        {
-            if (null != PropertyChanged)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public void Update(bool b)
-        {
-            if (b)
-                ItemGroups.First().Observer = null;
-
-            IsLoading = !b;
-        }
-    }
-
-    public interface IObserver<in T>
-    {
-        void Update(T b);
     }
 }

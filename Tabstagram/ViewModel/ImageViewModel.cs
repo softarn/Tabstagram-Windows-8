@@ -44,7 +44,7 @@ namespace Tabstagram
             }
         }
 
-        public MediaList RelatedMedia { get; set; }
+        public MediaListViewModel RelatedMedia { get; set; }
 
         public ImageViewModel(User user)
         {
