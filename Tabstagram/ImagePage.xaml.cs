@@ -128,8 +128,8 @@ namespace Tabstagram
                 case "LikesButton": loaded = _viewModel.LoadLikes(); SwitchVisibleGrid(LikesGrid); break;
             }
 
-            if(loaded != null)
-                await loaded;
+            if (loaded != null)
+               await loaded;
 
             RightGridProgressBar.IsActive = false;
         }
@@ -141,9 +141,9 @@ namespace Tabstagram
             _viewModel.LoadNewMedia(media);
         }
 
-        private void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private async void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            _viewModel.LikeOrUnlike();
+            await _viewModel.LikeOrUnlike();
         }
 
         private void NewCommentClick(object sender, RoutedEventArgs e)
@@ -182,15 +182,36 @@ namespace Tabstagram
             var menu = new PopupMenu();
 
             string userId = await UserSettings.retreiveUserId();
+            Comment comment = (Comment)o;
 
-            if (userId == _viewModel.CurrentMedia.user.id || userId == ((Comment)o).from.id)
+            if (userId == _viewModel.CurrentMedia.user.id || userId == comment.from.id)
             {
-                menu.Commands.Add(new UICommand("Delete", command => HandleDelete((Comment)o)));
+                menu.Commands.Add(new UICommand("Delete", command => HandleDelete(comment)));
             }
             
-            menu.Commands.Add(new UICommand("Go to user", command => HandleGoToUser((Comment)o)));
+            menu.Commands.Add(new UICommand("Go to user", command => HandleGoToUser(comment.from)));
 
             ListViewItem lvi = (ListViewItem)CommentsList.ItemContainerGenerator.ContainerFromItem(o);
+
+            await menu.ShowForSelectionAsync(GetElementRect(lvi));
+        }
+
+        private async void UserListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListView activeList = (ListView)sender;
+            if (activeList.SelectedItem == null)
+                return;
+
+            object o = activeList.SelectedItem;
+            activeList.SelectedItem = null;
+            // Create a menu and add commands specifying a callback delegate for each.
+            // Since command delegates are unique, no need to specify command Ids.
+            var menu = new PopupMenu();
+
+            string userId = await UserSettings.retreiveUserId();
+
+            menu.Commands.Add(new UICommand("Go to user", command => HandleGoToUser((User)o)));
+            ListViewItem lvi = (ListViewItem)activeList.ItemContainerGenerator.ContainerFromItem(o);
 
             await menu.ShowForSelectionAsync(GetElementRect(lvi));
         }
@@ -208,9 +229,14 @@ namespace Tabstagram
             _timer.Start();
         }
 
-        private async void HandleGoToUser(Comment comment)
+        private void HandleGoToUser(User user)
         {
-            this.Frame.Navigate(typeof(ImagePage), comment.from);
+            this.Frame.Navigate(typeof(ImagePage), user);
+        }
+
+        private void HomeClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(GroupedListsPage));
         }
     }
 }

@@ -30,6 +30,26 @@
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
+        <Grid Background="#FF171717" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Click="HomeClick" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" BorderThickness="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
+                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
+                </Grid>
+            </Button>
+            <Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
+            <Grid Grid.ColumnSpan="2" Grid.Column="1" Margin="0,17,0,16"/>
+        </Grid>
+
+        <!--Media grid-->
         <Grid x:Name="MediaGrid" Grid.Row="1" Margin="0" Background="#FF171717">
         	<Grid.RowDefinitions>
         		<RowDefinition/>
@@ -172,7 +192,7 @@
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
                     	<TextBlock x:Name="FollowersHeader" Margin="10" Text="Followers" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                    	<ListView ItemsSource="{Binding CurrentMedia.user.followed_by}" Margin="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" SelectionMode="None">
+                    	<ListView ItemsSource="{Binding CurrentMedia.user.followed_by}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
                     				<local:ListUserControl />
@@ -186,7 +206,7 @@
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
                     	<TextBlock x:Name="FollowsHeader" Margin="10" Text="Following" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                    	<ListView ItemsSource="{Binding CurrentMedia.user.follows}" Margin="0" Grid.Row="1" SelectionMode="None">
+                    	<ListView ItemsSource="{Binding CurrentMedia.user.follows}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
                     				<local:ListUserControl />
@@ -200,7 +220,7 @@
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
                     	<TextBlock x:Name="LikesHeader" Margin="10" Text="Likes" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                    	<ListView ItemsSource="{Binding CurrentMedia.likes.data}" Margin="0" VerticalContentAlignment="Top" Grid.Row="1" SelectionMode="None">
+                    	<ListView ItemsSource="{Binding CurrentMedia.likes.data}" SelectionChanged="UserListSelectionChanged" Margin="0" VerticalContentAlignment="Top" Grid.Row="1" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
                     				<local:ListUserControl />
@@ -212,16 +232,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Background="#FF171717" Margin="0">
-        	<Grid.ColumnDefinitions>
-        		<ColumnDefinition Width="Auto"/>
-        		<ColumnDefinition Width="Auto"/>
-        		<ColumnDefinition Width="*"/>
-        	</Grid.ColumnDefinitions>
-        	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
-        	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0"/>
-        	<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,35"/>
-        </Grid>
+
 
         <VisualStateManager.VisualStateGroups>
 

@@ -30,7 +30,7 @@ namespace Tabstagram
         }
 
         private User _currentUser;
-        public User currentUser
+        public User CurrentUser
         {
             get
             {
@@ -49,12 +49,14 @@ namespace Tabstagram
         public ImageViewModel(User user)
         {
             RelatedMedia = new UserMedia(user);
+            CurrentUser = user;
             Init();
         }
 
         public ImageViewModel(Media media)
         {
             CurrentMedia = media;
+            CurrentUser = CurrentMedia.user;
             RelatedMedia = new UserMedia(CurrentMedia.user);
             Init();
         }
@@ -75,7 +77,20 @@ namespace Tabstagram
             {
                 /* NEEDS A CHECK TO SEE THAT WE'VE GOT ITEMS! */
                 /* Otherwise, just close the page and show a message about the user not having any images */
-                CurrentMedia = RelatedMedia.First();
+                if (RelatedMedia.Any())
+                    CurrentMedia = RelatedMedia.First();
+                else
+                {
+                    Media tmpMedia = new Media();
+                    tmpMedia.images = new Images();
+                    tmpMedia.images.standard_resolution = new StandardResolution();
+                    tmpMedia.images.standard_resolution.url = "ms-appx:/Assets/HeartIcon.png";
+                    tmpMedia.comments = new Comments();
+                    tmpMedia.comments.count = 0;
+                    tmpMedia.comments.data = new List<Comment>();
+                    tmpMedia.user = CurrentUser;
+                    CurrentMedia = tmpMedia;
+                }
             }
 
             OnPropertyChanged("CurrentMedia");
@@ -95,7 +110,16 @@ namespace Tabstagram
             try
             {
                 User user = await Instagram.LoadUserInfo(userId);
-                CurrentMedia.user = user;
+
+                if (user != null)
+                    CurrentMedia.user = user;
+                else
+                {
+                    CurrentMedia.user.counts = new Counts();
+                    CurrentMedia.user.counts.followed_by = 0;
+                    CurrentMedia.user.counts.follows = 0;
+                    CurrentMedia.user.counts.media = 0;
+                }
             }
             catch (Exception)
             {
@@ -108,7 +132,16 @@ namespace Tabstagram
             if (CurrentMedia.comments.count == CurrentMedia.comments.observableData.Count && !forced)
                 return;
 
-            List<Comment> comments = await Instagram.LoadComments(CurrentMedia.id);
+            List<Comment> comments;
+            try
+            {
+                comments = await Instagram.LoadComments(CurrentMedia.id);
+            }
+            catch (Exception e)
+            {
+                comments = new List<Comment>();
+            }
+
             CurrentMedia.comments.ClearAndAddComments(comments);
 
             Media relatedMediaItem = null;
@@ -197,10 +230,17 @@ namespace Tabstagram
             if (CurrentMedia.user.followed_by != null)
                 return;
 
+            try
+            {
             MultipleUsers users = await Instagram.LoadFollowedBy(CurrentMedia.user.id);
             UserList userList = new UserList(users.data);
             userList.pagination = users.pagination;
             CurrentMedia.user.followed_by = userList;
+            }
+            catch (Exception e)
+            {
+                CurrentMedia.user.followed_by = new UserList(new List<User>());
+            }
             return;
         }
 
@@ -209,15 +249,30 @@ namespace Tabstagram
             if (CurrentMedia.user.follows != null)
                 return;
 
-            MultipleUsers users = await Instagram.LoadFollows(CurrentMedia.user.id);
-            UserList userList = new UserList(users.data);
-            userList.pagination = users.pagination;
-            CurrentMedia.user.follows = userList;
+            try
+            {
+                MultipleUsers users = await Instagram.LoadFollows(CurrentMedia.user.id);
+                UserList userList = new UserList(users.data);
+                userList.pagination = users.pagination;
+                CurrentMedia.user.follows = userList;
+            }
+            catch (Exception e)
+            {
+                CurrentMedia.user.follows = new UserList(new List<User>());
+            }
             return;
         }
 
         internal async Task LoadLikes()
         {
+            if (CurrentMedia == null || CurrentMedia.id == null)
+            {
+                CurrentMedia.likes = new Likes();
+                CurrentMedia.likes.count = 0;
+                CurrentMedia.likes.data = new List<User>();
+                return;
+            }
+
             if (CurrentMedia.likes.data.Count == CurrentMedia.likes.count)
                 return;
 
@@ -227,13 +282,13 @@ namespace Tabstagram
             return;
         }
 
-        internal void Reset()
+        internal async void Reset()
         {
             try
             {
-                RelatedMedia.Init();
+                await RelatedMedia.Init();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }

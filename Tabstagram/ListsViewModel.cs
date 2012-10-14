@@ -309,9 +309,16 @@ namespace Tabstagram
 
         public override async Task<bool> Init()
         {
-            MultipleMedia mm = await Instagram.LoadUserMedia(this._user);
-            pagination = mm.pagination;
-            AddAll(mm.data);
+            try
+            {
+                MultipleMedia mm = await Instagram.LoadUserMedia(this._user);
+                pagination = mm.pagination;
+                AddAll(mm.data);
+            }
+            catch (Exception e)
+            {
+
+            }
             base.Init();
             return true;
         }

@@ -11,7 +11,7 @@ namespace Tabstagram
 
     class Instagram
     {
-        public static int NumOfRetries = 2;
+        public static int NumOfRetries = 1;
         public static string AccessToken { get; set; }
 
         private static string BASE_URL = "https://api.instagram.com/v1/";
@@ -48,76 +48,53 @@ namespace Tabstagram
             return args;
         }
 
-        private static async Task<HttpResponseMessage> Delete(string url, Args args = null, int tries = 0)
+        delegate Task<HttpResponseMessage> RequestDelegate(string u);
+        private static async Task<HttpResponseMessage> MakeRequest(string url, Args args, int tries, RequestDelegate method)
         {
             Task<HttpResponseMessage> task = null;
             HttpResponseMessage response = null;
-
-            if (args != null)
-                url = url + args.ToGetString();
-
-            try { response = await client.DeleteAsync(url); }
-            catch (Exception e)
-            {
-                if (tries >= NumOfRetries)
-                    throw new HttpRequestException("Failed to do Delete", e.InnerException);
-                
-                task = Delete(url, null, tries + 1);
-            }
-
-            if (task != null)
-                response = await task;
-
-            return response;
-        }
-
-        private static async Task<HttpResponseMessage> Post(string url, Args args = null, int tries = 0)
-        {
-            Task<HttpResponseMessage> task = null;
-            HttpResponseMessage response = null;
-            String argsString = "";
-
-            if (args != null)
-                argsString = args.ToPostString();
-
-            try { response = await client.PostAsync(url, new StringContent(argsString)); }
-            catch (Exception e)
-            {
-                if (tries >= NumOfRetries)
-                    throw new HttpRequestException("Failed to do Post", e.InnerException);
-                
-                task = Post(url, null, tries + 1);
-            }
-
-            if (task != null)
-                response = await task;
-            
-            return response;
-        }
-
-        private static async Task<string> Get(string url, Args args, int tries = 0)
-        {
-            Task<string> task = null;
-            string response = null;
 
             if (args != null)
                 url = url + args.ToGetString();
 
             Debug.WriteLine("Get: " + url);
 
-            try { response = await client.GetStringAsync(url); }
-            catch (Exception e)
+            try { response = await method(url); }
+            catch (HttpRequestException hre)
             {
                 if (tries >= NumOfRetries)
-                    throw new HttpRequestException("Failed to do Get", e.InnerException);
+                    throw hre;
                 
-                task = Get(url, null, tries + 1);
+                task = MakeRequest(url, null, tries + 1, method);
             }
 
             if (task != null)
-                response = await task;
+                return await task;
 
             return response;
+        }
+
+        private static async Task<HttpResponseMessage> Delete(string url, Args args = null, int tries = 0)
+        {
+            RequestDelegate rd = (u) => { return client.DeleteAsync(u); };
+            return await MakeRequest(url, args, tries, rd);
+        }
+
+        private static async Task<HttpResponseMessage> Post(string url, Args args = null, int tries = 0)
+        {
+            string argsString = "";
+            if (args != null)
+                argsString = args.ToPostString();
+
+            RequestDelegate rd = (u) => { return client.PostAsync(url, new StringContent(argsString)); };
+            return await MakeRequest(url, args, tries, rd);
+        }
+
+        private static async Task<string> Get(string url, Args args, int tries = 0)
+        {
+            RequestDelegate rd = (u) => { return client.GetAsync(u, HttpCompletionOption.ResponseContentRead); };
+            HttpResponseMessage hrm = await MakeRequest(url, args, tries, rd);
+            return await hrm.Content.ReadAsStringAsync();
         }
 
         private static async Task<MultipleMedia> LoadMediaList(string url, Args args = null)
