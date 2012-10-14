@@ -41,7 +41,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
+                    <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
                     <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
                 </Grid>
             </Button>

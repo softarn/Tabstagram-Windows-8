@@ -88,11 +88,49 @@ namespace Tabstagram
         }
     }
 
-    public class Counts
+    public class Counts : INotifyPropertyChanged
     {
-        public int media { get; set; }
-        public int follows { get; set; }
-        public int followed_by { get; set; }
+        private int _media;
+        public int media
+        {
+            get { return _media; }
+            set
+            {
+                _media = value;
+                OnPropertyChanged("media");
+            }
+        }
+
+        private int _follows;
+        public int follows         
+        {
+            get { return _follows; }
+            set
+            {
+                _follows = value;
+                OnPropertyChanged("follows");
+            }
+        }
+
+        private int _followed_by;
+        public int followed_by {
+            get { return _followed_by; }
+            set
+            {
+                _followed_by = value;
+                OnPropertyChanged("followed_by");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (null != PropertyChanged)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
     }
 
     public class MultipleUsers

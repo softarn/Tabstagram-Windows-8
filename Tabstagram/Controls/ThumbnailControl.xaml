@@ -34,7 +34,7 @@
         			<TextBlock Text="{Binding likes.count}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
         		</StackPanel>
         		<StackPanel HorizontalAlignment="Right" Height="15" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,3,0">
-        			<Image Source="/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
+        			<Image Source="ms-appx:/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" RenderTransformOrigin="0.5,1.125"/>
         			<TextBlock Text="{Binding comments.count}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" FontSize="9.333" TextTrimming="WordEllipsis" />
         		</StackPanel>
         	</StackPanel>
