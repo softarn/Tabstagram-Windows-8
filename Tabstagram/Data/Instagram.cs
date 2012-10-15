@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Tabstagram.Models;
 
 namespace Tabstagram
 {
@@ -29,7 +30,8 @@ namespace Tabstagram
         private static string GetLikeUrl(string id)     { return String.Format("{0}media/{1}/likes", BASE_URL, id); }
         private static string GetFollowedByUrl(string id) { return String.Format("{0}users/{1}/followed-by", BASE_URL, id); }
         private static string GetFollowsUrl(string id)  { return String.Format("{0}users/{1}/follows", BASE_URL, id); }
-        
+        private static string GetRelationshipUrl(string id) { return String.Format("{0}users/{1}/relationship", BASE_URL, id); }
+
         private static HttpClient client = GetHttpClient();
 
         private static HttpClient GetHttpClient()
@@ -57,7 +59,7 @@ namespace Tabstagram
             if (args != null)
                 url = url + args.ToGetString();
 
-            Debug.WriteLine("Get: " + url);
+            Debug.WriteLine("Request Url: " + url);
 
             try { response = await method(url); }
             catch (HttpRequestException hre)
@@ -225,6 +227,36 @@ namespace Tabstagram
             return ml;
         }
 
+        public static async Task<Relationship> LoadRelationship(string userId)
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
+            string response = await Get(GetRelationshipUrl(userId), args);
+            Relationship r = Relationship.FromJSON(response);
+            return r;
+        }
+
+        internal static async Task<bool> Follow(string userId)
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
+            args.Add(new Arg(Arg.Type.ACTION, Relationship.Type.UNFOLLOW.ToString().ToLower()));
+            string url = GetRelationshipUrl(userId);
+            Debug.WriteLine("Following user: " + userId);
+            HttpResponseMessage response = await Post(url, args);
+            return response.IsSuccessStatusCode;
+        }
+
+        internal static async Task<bool> Unfollow(string userId)
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
+            args.Add(new Arg(Arg.Type.ACTION, Relationship.Type.UNFOLLOW.ToString().ToLower()));
+            string url = GetRelationshipUrl(userId);
+            Debug.WriteLine("Unfollowing user: " + userId);
+            HttpResponseMessage response = await Post(url, args);
+            return response.IsSuccessStatusCode;
+        }
     }
 
     public class Args : List<Arg>
@@ -268,7 +300,7 @@ namespace Tabstagram
 
     public class Arg
     {
-        public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT, TEXT, ACCESS_TOKEN }
+        public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT, TEXT, ACCESS_TOKEN, ACTION }
 
         public Type type { get; set; }
         public string value { get; set; }

@@ -238,5 +238,19 @@ namespace Tabstagram
         {
             this.Frame.Navigate(typeof(GroupedListsPage));
         }
+
+        private async void LikeButtonClick(object sender, RoutedEventArgs e)
+        {
+            LikeButton.IsEnabled = false;
+            await _viewModel.LikeOrUnlike();
+            LikeButton.IsEnabled = true;
+        }
+
+        private async void FollowerButtonClick(object sender, RoutedEventArgs e)
+        {
+            FollowButton.IsEnabled = false;
+            await _viewModel.FollowOrUnfollow();
+            FollowButton.IsEnabled = true;
+        }
     }
 }

@@ -13,10 +13,7 @@ namespace Tabstagram
 {
     public class User : INotifyPropertyChanged
     {
-        public User()
-        {
-            counts = new Counts();
-        }
+        public User() { counts = new Counts(); }
 
         public string id { get; set; }
         public string username { get; set; }
@@ -40,13 +37,22 @@ namespace Tabstagram
         public string bio { get; set; }
         public string website { get; set; }
         public Counts counts { get; set; }
+
+        private bool _user_is_following;
+        public bool user_is_following
+        {
+            get { return _user_is_following; }
+            set
+            {
+                _user_is_following = value;
+                OnPropertyChanged("user_is_following");
+            }
+        }
+
         private UserList _followed_by;
         public UserList followed_by
-        {
-            get
-            {
-                return _followed_by;
-            }
+        { 
+            get { return _followed_by; }
             set
             {
                 _followed_by = value;

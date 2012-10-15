@@ -16,6 +16,8 @@
         <x:String x:Key="AppName">Tabstagram</x:String>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>
         <local:UploadTimeConverter x:Name="TimeConverter"/>
+        <local:BooleanToLikeStringConverter x:Name="BooleanToLikeStringConverter"/>
+        <local:BooleanToFollowStringConverter x:Name="BooleanToFollowStringConverter"/>
     </Page.Resources>
 
     <!--
@@ -35,18 +37,38 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Click="HomeClick" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" BorderThickness="0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
-                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
-                </Grid>
-            </Button>
-            <Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
-            <Grid Grid.ColumnSpan="2" Grid.Column="1" Margin="0,17,0,16"/>
+            <Grid Grid.ColumnSpan="2" Grid.Column="1" Margin="0">
+            	<Grid.ColumnDefinitions>
+            		<ColumnDefinition Width="Auto"/>
+            		<ColumnDefinition Width="Auto"/>
+            		<ColumnDefinition/>
+            	</Grid.ColumnDefinitions>
+            	<Button Click="HomeClick" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Margin="0" Grid.Column="1">
+            		<Grid>
+            			<Grid.ColumnDefinitions>
+            				<ColumnDefinition Width="Auto"/>
+            				<ColumnDefinition/>
+            			</Grid.ColumnDefinitions>
+            			<Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
+            			<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
+            		</Grid>
+            	</Button>
+            	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
+            	<StackPanel Grid.Column="2" Margin="0,0,30,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            		<StackPanel x:Name="LikeStackpanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,0">
+            			<Button x:Name="LikeButton" Click="LikeButtonClick" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0" Padding="7,2,7,2">
+            				<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" Width="65" Height="65" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
+            			</Button>
+            			<TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.user_has_liked, Converter={StaticResource BooleanToLikeStringConverter}}" HorizontalAlignment="Center"/>
+            		</StackPanel>
+            		<StackPanel x:Name="FollowStackpanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            			<Button x:Name="FollowButton" Click="FollowerButtonClick" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0" Padding="15">
+            				<Image Width="40" Height="40" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill" Source="ms-appx:///Assets/add.png"/>
+            			</Button>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.user.user_is_following, Converter={StaticResource BooleanToFollowStringConverter}}" HorizontalAlignment="Center"/>
+            		</StackPanel>
+            	</StackPanel>
+            </Grid>
         </Grid>
 
         <!--Media grid-->

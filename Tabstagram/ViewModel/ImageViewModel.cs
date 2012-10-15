@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Tabstagram.Models;
 using Windows.UI.Xaml;
 
 namespace Tabstagram
@@ -32,10 +34,7 @@ namespace Tabstagram
         private User _currentUser;
         public User CurrentUser
         {
-            get
-            {
-                return _currentUser;
-            }
+            get { return _currentUser; }
 
             set
             {
@@ -66,9 +65,12 @@ namespace Tabstagram
             try
             {
                 await RelatedMedia.Init();
+                Relationship r = await Instagram.LoadRelationship(CurrentMedia.user.id);
+                CurrentMedia.user.user_is_following = r.data.outgoing_follow;
             }
             catch (Exception)
             {
+                Debug.WriteLine("Error when trying to init");
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
 
@@ -123,6 +125,7 @@ namespace Tabstagram
             }
             catch (Exception)
             {
+                Debug.WriteLine("Error when trying to load user info");
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
         }
@@ -163,22 +166,30 @@ namespace Tabstagram
             bool success = false;
             if (CurrentMedia.user_has_liked)
             {
+                CurrentMedia.Unlike();
+                if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                    relatedMediaItem.Unlike();
+
                 success = await Instagram.Unlike(CurrentMedia.id);
-                if (success)
-                {
-                    CurrentMedia.Unlike();
-                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                        relatedMediaItem.Unlike();
-                }
-            }
-            else
-            {
-                success = await Instagram.Like(CurrentMedia.id);
-                if (success)
+                if (!success)
                 {
                     CurrentMedia.Like();
                     if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
                         relatedMediaItem.Like();
+                }
+            }
+            else
+            {
+                CurrentMedia.Like();
+                if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                    relatedMediaItem.Like();
+
+                success = await Instagram.Like(CurrentMedia.id);
+                if (!success)
+                {
+                    CurrentMedia.Unlike();
+                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                        relatedMediaItem.Unlike();
                 }
             }
 
@@ -282,12 +293,37 @@ namespace Tabstagram
             }
             catch (Exception e)
             {
+                Debug.WriteLine("Error when trying reset");
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
             OnPropertyChanged("CurrentMedia");
             LoadUserInfo(CurrentMedia.user.id);
             CurrentMedia.comments.data = new List<Comment>();
             LoadComments();
+        }
+
+        internal async Task FollowOrUnfollow()
+        {
+            if (CurrentMedia.user == null)
+                return;
+
+            bool success;
+
+            bool InitialUserIsFollowing = CurrentMedia.user.user_is_following;
+
+            CurrentMedia.user.user_is_following = !InitialUserIsFollowing;
+
+            if (CurrentMedia.user.user_is_following)
+            {
+                success = await Instagram.Follow(CurrentMedia.user.id);
+            }
+            else
+            {
+                success = await Instagram.Unfollow(CurrentMedia.user.id);
+            }
+
+            if (!success)
+                CurrentMedia.user.user_is_following = InitialUserIsFollowing;
         }
     }
 }
