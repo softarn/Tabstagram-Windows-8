@@ -92,6 +92,11 @@ namespace Tabstagram
 
     public class Likes : INotifyPropertyChanged
     {
+        public Likes()
+        {
+            data = new List<User>();
+        }
+
         private int _count;
         public int count
         {
@@ -162,6 +167,11 @@ namespace Tabstagram
 
     public class Media : INotifyPropertyChanged
     {
+        public Media()
+        {
+            likes = new Likes();
+        }
+
         public bool IsImportant { get; set; }
         public string type { get; set; }
         public string filter { get; set; }

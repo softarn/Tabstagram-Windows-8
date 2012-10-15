@@ -232,10 +232,10 @@ namespace Tabstagram
 
             try
             {
-            MultipleUsers users = await Instagram.LoadFollowedBy(CurrentMedia.user.id);
-            UserList userList = new UserList(users.data);
-            userList.pagination = users.pagination;
-            CurrentMedia.user.followed_by = userList;
+                MultipleUsers users = await Instagram.LoadFollowedBy(CurrentMedia.user.id);
+                UserList userList = new UserList(users.data);
+                userList.pagination = users.pagination;
+                CurrentMedia.user.followed_by = userList;
             }
             catch (Exception e)
             {
@@ -265,14 +265,6 @@ namespace Tabstagram
 
         internal async Task LoadLikes()
         {
-            if (CurrentMedia == null || CurrentMedia.id == null)
-            {
-                CurrentMedia.likes = new Likes();
-                CurrentMedia.likes.count = 0;
-                CurrentMedia.likes.data = new List<User>();
-                return;
-            }
-
             if (CurrentMedia.likes.data.Count == CurrentMedia.likes.count)
                 return;
 

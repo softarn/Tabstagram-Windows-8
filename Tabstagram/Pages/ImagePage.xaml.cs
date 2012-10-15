@@ -35,7 +35,7 @@ namespace Tabstagram
             ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
         }
 
-        private async void TryAgainCommand(IUICommand command)
+        private void TryAgainCommand(IUICommand command)
         {
             _viewModel.Reset();
         }
@@ -108,10 +108,10 @@ namespace Tabstagram
         private void SwitchVisibleGrid(Grid g)
         {
             if (VisibleGrid != null)
-                VisibleGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                VisibleGrid.Visibility = Visibility.Collapsed;
 
             VisibleGrid = g;
-            VisibleGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            VisibleGrid.Visibility = Visibility.Visible;
         }
 
         private async void RightGridInfoSwitchClick(object sender, RoutedEventArgs e)

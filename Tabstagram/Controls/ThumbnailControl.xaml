@@ -9,7 +9,8 @@
     d:DesignHeight="150"
     d:DesignWidth="150"
     x:Name="MainGrid"
-    Opacity="0">
+    Opacity="0"
+    Visibility="Collapsed">
 
     <UserControl.Resources>
         <local:LikedImageConverter x:Name="LikedImageConverter"/>

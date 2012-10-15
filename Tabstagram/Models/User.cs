@@ -13,6 +13,11 @@ namespace Tabstagram
 {
     public class User : INotifyPropertyChanged
     {
+        public User()
+        {
+            counts = new Counts();
+        }
+
         public string id { get; set; }
         public string username { get; set; }
         private string _full_name;
