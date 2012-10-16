@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Tabstagram
 {
-    class ParameterExistsToVisibilityConverter
+    class ParameterExistsToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

@@ -66,6 +66,9 @@ namespace Tabstagram
 
         public void ClearAndAddComments(List<Comment> comments)
         {
+            if (comments == null)
+                return;
+
             observableData.Clear();
             AddAllToObservable(comments);
             // Commented out due to counts being wrong - didn't look like it broke anything. Kept in case.

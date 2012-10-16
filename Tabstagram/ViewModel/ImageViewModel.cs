@@ -74,11 +74,8 @@ namespace Tabstagram
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
 
-            /* If we haven't selected any media yet, select the first one in the list */
             if (CurrentMedia == null)
             {
-                /* NEEDS A CHECK TO SEE THAT WE'VE GOT ITEMS! */
-                /* Otherwise, just close the page and show a message about the user not having any images */
                 if (RelatedMedia.Any())
                     CurrentMedia = RelatedMedia.First();
                 else
@@ -93,9 +90,10 @@ namespace Tabstagram
                     tmpMedia.user = CurrentUser;
                     CurrentMedia = tmpMedia;
                 }
+
+                OnPropertyChanged("CurrentMedia");
             }
 
-            OnPropertyChanged("CurrentMedia");
             LoadUserInfo(CurrentMedia.user.id);
             LoadComments();
         }
@@ -135,15 +133,12 @@ namespace Tabstagram
             if (CurrentMedia.comments.count == CurrentMedia.comments.observableData.Count && !forced)
                 return;
 
-            List<Comment> comments;
+            List<Comment> comments = null;
             try
             {
                 comments = await Instagram.LoadComments(CurrentMedia.id);
             }
-            catch (Exception e)
-            {
-                comments = new List<Comment>();
-            }
+            catch (Exception) { }
 
             CurrentMedia.comments.ClearAndAddComments(comments);
 
