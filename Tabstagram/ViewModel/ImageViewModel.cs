@@ -158,6 +158,7 @@ namespace Tabstagram
 
         public async Task<bool> LikeOrUnlike()
         {
+
             Media relatedMediaItem = null;
             int index = RelatedMedia.IndexOf(CurrentMedia);
             if (index > -1)
@@ -166,30 +167,22 @@ namespace Tabstagram
             bool success = false;
             if (CurrentMedia.user_has_liked)
             {
-                CurrentMedia.Unlike();
-                if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                    relatedMediaItem.Unlike();
-
                 success = await Instagram.Unlike(CurrentMedia.id);
-                if (!success)
-                {
-                    CurrentMedia.Like();
-                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                        relatedMediaItem.Like();
-                }
-            }
-            else
-            {
-                CurrentMedia.Like();
-                if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                    relatedMediaItem.Like();
-
-                success = await Instagram.Like(CurrentMedia.id);
-                if (!success)
+                if (success)
                 {
                     CurrentMedia.Unlike();
                     if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
                         relatedMediaItem.Unlike();
+                }
+            }
+            else
+            {
+                success = await Instagram.Like(CurrentMedia.id);
+                if (success)
+                {
+                    CurrentMedia.Like();
+                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                        relatedMediaItem.Like();
                 }
             }
 

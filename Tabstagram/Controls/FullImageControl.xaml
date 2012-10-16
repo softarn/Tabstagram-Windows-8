@@ -22,7 +22,7 @@
             <ProgressRing x:Name="ImageProgressRing" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FF630D0D" Width="50" Height="50" IsActive="True"/>
             <Border x:Name="ImageBorder" BorderBrush="#000" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0">
             	<Image x:Name="image" Source="{Binding CurrentMedia.images.standard_resolution.url}" HorizontalAlignment="Center" 
-            		Margin="0" VerticalAlignment="Center" ImageOpened="fullImage_ImageOpened"/>
+            		Margin="0" VerticalAlignment="Center" ImageOpened="fullImage_ImageOpened" MaxWidth="765" MaxHeight="765"/>
             </Border>
         </Grid>
 </UserControl>

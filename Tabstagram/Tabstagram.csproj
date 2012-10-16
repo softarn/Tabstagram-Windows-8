@@ -107,6 +107,8 @@
     </Compile>
     <Compile Include="Converters\BooleanToFollowStringConverter.cs" />
     <Compile Include="Converters\BooleanToLikeStringConverter.cs" />
+    <Compile Include="Converters\FollowImageConverter.cs" />
+    <Compile Include="Converters\ParameterExistsToVisibilityConverter.cs" />
     <Compile Include="Helpers\AuthCallbackParser.cs" />
     <Compile Include="Converters\BooleanInverterConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -171,7 +173,8 @@
     <None Include="Tabstagram_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\add.png" />
+    <Content Include="Assets\FollowIcon_white.png" />
+    <Content Include="Assets\FollowIcon.png" />
     <Content Include="Assets\CommentIcon.png" />
     <Content Include="Assets\HeartIcon.png" />
     <Content Include="Assets\HeartIcon_white.png" />
