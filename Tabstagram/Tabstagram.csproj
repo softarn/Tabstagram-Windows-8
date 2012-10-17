@@ -12,9 +12,10 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Tabstagram_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Tabstagram_StoreKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>5.0.30709.0</ExpressionBlendVersion>
-    <PackageCertificateThumbprint>A708E7B91327B0DBBF84905A191C80C612FA73F0</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>210EDD70004F3B7695892D5C956F5E320B41DEBB</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -170,7 +171,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Tabstagram_StoreKey.pfx" />
     <None Include="Tabstagram_TemporaryKey.pfx" />
+    <None Include="Tabstagram_TemporaryKey2.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\FollowIcon_white.png" />
@@ -186,6 +189,7 @@
     <Content Include="Assets\Tabstagram_splash.png" />
     <Content Include="Common\ReadMe.txt" />
     <Content Include="Assets\RefreshIcon.png" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

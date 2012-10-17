@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="4c9d0db6-8f07-4e61-b58e-84f804728849" Publisher="CN=Tabstagram" Version="1.0.0.0" />
+  <Identity Name="61816Tabstagram.Tabstagram" Publisher="CN=04BBE2F4-099E-41BD-B0D3-5CCF27745E95" Version="0.1.0.2" />
   <Properties>
     <DisplayName>Tabstagram</DisplayName>
     <PublisherDisplayName>Tabstagram</PublisherDisplayName>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Tabstagram.App">
-      <VisualElements DisplayName="Tabstagram" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Tabstagram" ForegroundText="light" BackgroundColor="#171717">
+      <VisualElements DisplayName="Tabstagram" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Tabstagram is tailored to bring you the best Instagram viewing experience on Windows 8. Browse through the latest images in your feed, or check out the most popular images currently on Instagram. Tabstagram fully supports commenting and liking images, all with a sleek, good looking Windows 8 inspired interface." ForegroundText="light" BackgroundColor="#171717">
         <DefaultTile ShowName="allLogos" ShortName="Tabstagram" />
         <SplashScreen Image="Assets\Tabstagram_splash.png" BackgroundColor="#171717" />
         <InitialRotationPreference>

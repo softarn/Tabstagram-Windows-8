@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -15,6 +16,7 @@ namespace Tabstagram
     public sealed partial class ListPage : Tabstagram.Common.LayoutAwarePage
     {
         MediaListViewModel mediaList = null;
+        private bool settingsMenuRegistered;
 
         public ListPage()
         {
@@ -23,12 +25,32 @@ namespace Tabstagram
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
+
             mediaList = e.Parameter as MediaListViewModel;
             mediaList.CriticalNetworkErrorNotice += OnErrorNotice;
             pageTitle.Text = "Tabstagram - " + mediaList.category;
             this.DefaultViewModel["Items"] = mediaList;
 
-            base.OnNavigatedTo(e);
+            if (!this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                this.settingsMenuRegistered = true;
+            }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            if (mediaList != null)
+                mediaList.CriticalNetworkErrorNotice -= OnErrorNotice;
+
+            if (this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                this.settingsMenuRegistered = false;
+            }
+
+            base.OnNavigatedFrom(e);
         }
 
         private void OnErrorNotice(object sender, NotificationEventArgs nea)
@@ -55,30 +77,35 @@ namespace Tabstagram
 
         }
 
-        //private void AddLoadMore()
-        //{
-        //    Media m = new Media();
-        //    m.id = "load more";
-        //    m.images = new Images();
-        //    m.images.thumbnail = new Thumbnail();
-        //    m.images.thumbnail.url = "ms-appx:/ms-appx:/Assets/HeartIcon.png";
-        //    mediaList.ItemsAll.Add(m);
-        //}
-
         private void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
         {
             Media m = e.ClickedItem as Media;
 
-            //if (m.id.Equals("load more"))
-            //{
-            //    mediaList.ItemsAll.RemoveAt(mediaList.ItemsAll.Count - 1);
-            //    await mediaList.LoadMore();
-            //    AddLoadMore();
-            //}
-            //else
-            //{
-                this.Frame.Navigate(typeof(ImagePage), m);
-            //}
+            this.Frame.Navigate(typeof(ImagePage), m);
+        }
+
+        void onLogoutCommand(IUICommand command)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["access_token"] = null;
+            this.Frame.Navigate(typeof(LoginPage));
+        }
+
+        async void onPrivacyCommand(IUICommand command)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
+        }
+
+        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
+        {
+            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
+            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
+
+            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
+            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
+
+            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
+            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
     }
 }

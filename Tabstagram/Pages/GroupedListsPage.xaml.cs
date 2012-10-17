@@ -181,12 +181,21 @@ namespace Tabstagram
             this.Frame.Navigate(typeof(LoginPage));
         }
 
+        async void onPrivacyCommand(IUICommand command)
+        {
+           await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
+        }
+
         void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
         {
             UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
+            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
 
             SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
+            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
+            
             eventArgs.Request.ApplicationCommands.Add(logoutCommand);
+            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
     }
 }

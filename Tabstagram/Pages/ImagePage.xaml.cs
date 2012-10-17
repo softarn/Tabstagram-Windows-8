@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Tabstagram.Models;
 using Windows.Foundation;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,6 +21,7 @@ namespace Tabstagram
     /// </summary>
     public sealed partial class ImagePage
     {
+        private bool settingsMenuRegistered;
         private ImageViewModel _viewModel;
         private Button MarkedButton;
         private Grid VisibleGrid;
@@ -88,7 +90,27 @@ namespace Tabstagram
                 SwitchVisibleGrid(CommentsGrid);
             }
 
+            if (!this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                this.settingsMenuRegistered = true;
+            }
+
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (_viewModel != null)
+                _viewModel.CriticalNetworkErrorNotice -= OnErrorNotice;
+
+            if (this.settingsMenuRegistered)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                this.settingsMenuRegistered = false;
+            }
+            
+            base.OnNavigatingFrom(e);
         }
 
         void FollowersGrid_Loaded(object sender, RoutedEventArgs e)
@@ -257,6 +279,30 @@ namespace Tabstagram
             FollowButton.IsEnabled = false;
             await _viewModel.FollowOrUnfollow();
             FollowButton.IsEnabled = true;
+        }
+
+        void onLogoutCommand(IUICommand command)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["access_token"] = null;
+            this.Frame.Navigate(typeof(LoginPage));
+        }
+
+        async void onPrivacyCommand(IUICommand command)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
+        }
+
+        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
+        {
+            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
+            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
+
+            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
+            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
+
+            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
+            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
     }
 }
