@@ -188,8 +188,9 @@
                     			<RowDefinition/>
                     			<RowDefinition Height="Auto"/>
                     		</Grid.RowDefinitions>
-                    		<TextBox x:Name="Comment" TextWrapping="Wrap" Background="Black" Foreground="White" Grid.Row="1" HorizontalContentAlignment="Stretch" MinHeight="150"/>
-                    		<Button x:Name="MakeCommentButton" Click="MakeCommentButtonClick" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2"/>
+                    		<TextBox x:Name="Comment" TextWrapping="Wrap" Background="Black" Foreground="White" Grid.Row="1" HorizontalContentAlignment="Stretch" MinHeight="80"/>
+                    		<Button x:Name="MakeCommentButton" Click="MakeCommentButtonClick" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,0,0"/>
+                    		<Button x:Name="CancelCommentButton" Click="CancelCommentButtonClick" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,7,0"/>
                     		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
                     	</Grid>
                         <ListView x:Name="CommentsList" SelectionChanged="CommentsListSelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="3">
@@ -252,7 +253,7 @@
                     		</ListView.ItemTemplate>
                     	</ListView>
                     </Grid>
-                    <ProgressRing x:Name="RightGridProgressBar" HorizontalAlignment="Center" Height="100" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="100" IsDoubleTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" IsTapEnabled="False"/>
+                    <ProgressRing x:Name="RightGridProgressBar" HorizontalAlignment="Center" Height="80" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="80" IsDoubleTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" IsTapEnabled="False" Foreground="#FFBF2424"/>
                 </Grid>
             </Grid>
         </Grid>

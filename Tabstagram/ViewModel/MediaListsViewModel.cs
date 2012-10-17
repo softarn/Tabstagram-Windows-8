@@ -254,7 +254,7 @@ namespace Tabstagram
     {
         public async override Task<bool> Init()
         {
-            Args args = new Args(new Arg(Arg.Type.COUNT, "20"));
+            Args args = new Args(new Arg(Arg.Type.COUNT, "30"));
             MultipleMedia mm = await Instagram.LoadFeed(args);
             pagination = mm.pagination;
             AddAll(mm.data);
@@ -271,7 +271,7 @@ namespace Tabstagram
         {
             Args args = new Args();
             args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
-            args.Add(new Arg(Arg.Type.COUNT, "100"));
+            args.Add(new Arg(Arg.Type.COUNT, "30"));
             MultipleMedia mm = await Instagram.LoadFeed(args);
 
             return mm.data;
@@ -282,7 +282,7 @@ namespace Tabstagram
     {
         public async override Task<bool> Init()
         {
-            Args args = new Args(new Arg(Arg.Type.COUNT, "20"));
+            Args args = new Args(new Arg(Arg.Type.COUNT, "30"));
             MultipleMedia mm = await Instagram.LoadSelfMedia(args);
             pagination = mm.pagination;
             AddAll(mm.data);
@@ -299,7 +299,7 @@ namespace Tabstagram
         {
             Args args = new Args();
             args.Add(new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id));
-            args.Add(new Arg(Arg.Type.COUNT, "100"));
+            args.Add(new Arg(Arg.Type.COUNT, "30"));
             MultipleMedia mm = await Instagram.LoadSelfMedia(args);
 
             if (mm.data.Count > 0)
@@ -319,7 +319,8 @@ namespace Tabstagram
         {
             try
             {
-                MultipleMedia mm = await Instagram.LoadUserMedia(this._user);
+                Args args = new Args(new Arg(Arg.Type.COUNT, "30"));
+                MultipleMedia mm = await Instagram.LoadUserMedia(this._user, args);
                 pagination = mm.pagination;
                 AddAll(mm.data);
             }
@@ -338,7 +339,7 @@ namespace Tabstagram
 
         public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
-            Args args = new Args {new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id), new Arg(Arg.Type.COUNT, "100")};
+            Args args = new Args {new Arg(Arg.Type.MIN_ID, this.ElementAt(0).id), new Arg(Arg.Type.COUNT, "30")};
             MultipleMedia mm = await Instagram.LoadUserMedia(_user, args);
 
             return mm.data;
@@ -349,7 +350,8 @@ namespace Tabstagram
     {
         public override async Task<bool> Init()
         {
-            MultipleMedia mm = await Instagram.LoadPopular();
+            Args args = new Args(new Arg(Arg.Type.COUNT, "30"));
+            MultipleMedia mm = await Instagram.LoadPopular(args);
             AddAll(mm.data);
             await base.Init();
             return true;
@@ -389,7 +391,8 @@ namespace Tabstagram
 
         public override async Task<bool> Init()
         {
-            MultipleMedia mm = await Instagram.LoadHashtag(Tag);
+            Args args = new Args(new Arg(Arg.Type.COUNT, "30"));
+            MultipleMedia mm = await Instagram.LoadHashtag(Tag, args);
             pagination = mm.pagination;
             AddAll(mm.data);
             await base.Init();
@@ -404,7 +407,7 @@ namespace Tabstagram
         public async override Task<IEnumerable<Media>> FetchNewMedia()
         {
             var args = new Args();
-            args.Add(new Arg(Arg.Type.COUNT, "100"));
+            args.Add(new Arg(Arg.Type.COUNT, "30"));
             args.Add(new Arg(Arg.Type.MIN_TAG_ID, pagination.min_tag_id));
             MultipleMedia mm = await Instagram.LoadHashtag(Tag, args);
             return mm.data;

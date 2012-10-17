@@ -163,6 +163,12 @@ namespace Tabstagram
             WriteComment.Visibility = Visibility.Collapsed;
         }
 
+        private void CancelCommentButtonClick(object sender, RoutedEventArgs e)
+        {
+            Comment.Text = "";
+            WriteComment.Visibility = Visibility.Collapsed;
+        }
+
         public static Rect GetElementRect(FrameworkElement element)
         {
             GeneralTransform buttonTransform = element.TransformToVisual(null);
