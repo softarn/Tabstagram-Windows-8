@@ -32,7 +32,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Horizontal scrolling grid used in most view states -->
         <ContentControl x:Name="Background" Content="Tabstagram" Style="{StaticResource Background}" Grid.Row="1"/>
 
         <!-- Horizontal scrolling grid used in most view states -->
@@ -47,18 +46,17 @@
             SelectionMode="None"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
-            ItemClick="itemGridView_ItemClick_1"
-            >
+            ItemClick="itemGridView_ItemClick_1">
             <local:MyGridView.ItemTemplate>
                 <DataTemplate>
-                    <local:ThumbnailControl Width="150" Height="150"/>
+                    <local:ThumbnailControl/>
                 </DataTemplate>
             </local:MyGridView.ItemTemplate>
-            <!--<local:MyGridView.ItemsPanel>
+            <local:MyGridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VariableSizedWrapGrid ItemWidth="150" ItemHeight="150" Orientation="Vertical" Margin="0,0,80,0"/>
+                    <WrapGrid ItemWidth="150" ItemHeight="150" Orientation="Vertical"/>
                 </ItemsPanelTemplate>
-            </local:MyGridView.ItemsPanel>-->
+            </local:MyGridView.ItemsPanel>
         </local:MyGridView>
 
         <!-- Vertical scrolling list only used when snapped -->

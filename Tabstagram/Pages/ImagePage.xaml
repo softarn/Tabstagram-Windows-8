@@ -65,7 +65,7 @@
             		</StackPanel>
             		<StackPanel x:Name="FollowStackpanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             			<Button x:Name="FollowButton" Click="FollowerButtonClick" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0" Padding="15">
-                            <Image  Width="40" Height="40" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
+                            <Image Source="{Binding CurrentMedia.user.user_is_following, Converter={StaticResource FollowImageConverter}}" Width="40" Height="40" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
             			</Button>
                         <TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.user.user_is_following, Converter={StaticResource BooleanToFollowStringConverter}}" HorizontalAlignment="Center"/>
             		</StackPanel>
