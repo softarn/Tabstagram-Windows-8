@@ -207,8 +207,8 @@
                 				</DataTemplate>
                 			</ListView.ItemTemplate>
                 		</ListView>
-                		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Click="NewCommentClick">
-							<TextBlock Text="+"/>
+                		<Button HorizontalAlignment="Right" VerticalAlignment="Center" Click="NewCommentClick" BorderThickness="0">
+							<Image Height="36" Width="36" Source="ms-appx:///Assets/CommentIcon.png"/>
 						</Button>
                 	</Grid>
                     <Grid x:Name="FollowedByGrid" Margin="20,15,20,0" Grid.Row="2" Visibility="Collapsed">
