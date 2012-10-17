@@ -37,10 +37,6 @@
         * Row 1 contains the rest of the page layout
     -->
     <Grid Style="{StaticResource LayoutRootStyle}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="140">
             </RowDefinition>
@@ -101,88 +97,63 @@
         </VisualStateManager.VisualStateGroups>
 
         <!-- Horizontal scrolling grid used in most view states -->
-        <ContentControl x:Name="Background" Grid.ColumnSpan="2" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}" />
-        <!-- Horizontal scrolling grid used in most view states -->
-        <SemanticZoom x:Name="semanticZoom"
-                      Grid.Row="1"
-                      Padding="0,30,0,35" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Foreground="Black">
-            <!-- Details View -->
-            <SemanticZoom.ZoomedInView>
-                <local:MyGridView
-                x:Name="itemGridView"
-                AutomationProperties.AutomationId="ItemGridView"
-                AutomationProperties.Name="Grouped Items"
-                Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
-                ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-                ItemClick="ItemClick"
-                IsItemClickEnabled="True"
-                SelectionMode="None"
-                IsSwipeEnabled="false" 
-                Padding="120,10,0,10" BorderThickness="0,2" Foreground="White">
-                    <local:MyGridView.ItemTemplate>
-                        <DataTemplate>
-                            <local:ThumbnailControl />
-                        </DataTemplate>
-                    </local:MyGridView.ItemTemplate>
-                    <local:MyGridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </local:MyGridView.ItemsPanel>
-                    <local:MyGridView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="1,0,0,6">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
-                                                <Button.RenderTransform>
-                                                    <CompositeTransform CenterX="16" CenterY="16"/>
-                                                </Button.RenderTransform>
-                                                <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
-                                            </Button>
-                                            <Button
-                    							AutomationProperties.Name="category"
-                    							Style="{StaticResource TextPrimaryButtonStyle}"
-                    							Click="ButtonClick">
-                                                <StackPanel Orientation="Horizontal" >
-                                                    <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
-                                                    <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                            <GroupStyle.Panel>
-                                <ItemsPanelTemplate>
-                                    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
-                                </ItemsPanelTemplate>
-                            </GroupStyle.Panel>
-                        </GroupStyle>
-                    </local:MyGridView.GroupStyle>
-                </local:MyGridView>
-            </SemanticZoom.ZoomedInView>
-            <!-- Zoomed out View -->
-            <SemanticZoom.ZoomedOutView>
-                <GridView
-                    x:Name="gridView"
-                    AutomationProperties.AutomationId="ItemsGridView"
-                    AutomationProperties.Name="Items"
-                    TabIndex="1"
-                    ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-                    SelectionMode="None"
-                    IsSwipeEnabled="false"
-                    Margin="0">
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <local:ThumbnailControl />
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </SemanticZoom.ZoomedOutView>
-        </SemanticZoom>
+        <ContentControl x:Name="Background" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}" />
 
+        <local:MyGridView
+            x:Name="itemGridView"
+            AutomationProperties.AutomationId="ItemGridView"
+            AutomationProperties.Name="Grouped Items"
+            Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+            ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
+            ItemClick="ItemClick"
+            IsItemClickEnabled="True"
+            SelectionMode="None"
+            IsSwipeEnabled="false" 
+            Padding="120,10,0,10" 
+            BorderThickness="0,2" 
+            Foreground="White"
+            Grid.Row="1">
+            <local:MyGridView.ItemTemplate>
+                <DataTemplate>
+                    <local:ThumbnailControl />
+                </DataTemplate>
+            </local:MyGridView.ItemTemplate>
+            <local:MyGridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </local:MyGridView.ItemsPanel>
+            <local:MyGridView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Margin="1,0,0,6">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
+                                        <Button.RenderTransform>
+                                            <CompositeTransform CenterX="16" CenterY="16"/>
+                                        </Button.RenderTransform>
+                                        <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button AutomationProperties.Name="category" Style="{StaticResource TextPrimaryButtonStyle}" Click="ButtonClick">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
+                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </local:MyGridView.GroupStyle>
+        </local:MyGridView>
+        
         <!-- Vertical scrolling list only used when snapped -->
         <ListView
             x:Name="itemListView"
@@ -194,7 +165,7 @@
             Padding="10,0,0,60"
             ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
             SelectionMode="None"
-            IsSwipeEnabled="false" Grid.ColumnSpan="2">
+            IsSwipeEnabled="false">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <local:ThumbnailControl />
@@ -226,7 +197,7 @@
         </ListView>
 
         <!-- Back button and page title -->
-        <Grid Grid.ColumnSpan="2" Background="#FF171717">
+        <Grid Background="#FF171717">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -236,7 +207,7 @@
             <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
         </Grid>
-        <Grid x:Name="LoadingGrid" Visibility="{Binding IsLoading, Converter={StaticResource BoolConverter}}" Margin="0" Grid.Row="1" Grid.ColumnSpan="2" Opacity="0.995">
+        <Grid x:Name="LoadingGrid" Visibility="{Binding IsLoading, Converter={StaticResource BoolConverter}}" Margin="0" Grid.Row="1" Opacity="0.995">
             <Grid.Background>
                 <ImageBrush/>
             </Grid.Background>

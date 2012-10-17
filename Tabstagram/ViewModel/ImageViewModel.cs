@@ -62,6 +62,9 @@ namespace Tabstagram
 
         public async void Init()
         {
+            if (CurrentMedia.comments.count != CurrentMedia.comments.observableData.Count)
+                CurrentMedia.comments.observableData.Clear();
+
             try
             {
                 await RelatedMedia.Init();
@@ -130,8 +133,11 @@ namespace Tabstagram
 
         public async void LoadComments(bool forced = false)
         {
+
             if (CurrentMedia.comments.count == CurrentMedia.comments.observableData.Count && !forced)
                 return;
+            else
+                CurrentMedia.comments.observableData.Clear();
 
             List<Comment> comments = null;
             try

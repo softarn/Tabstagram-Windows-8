@@ -89,6 +89,8 @@ namespace Tabstagram
 
         private async void RefreshButtonClick(object sender, RoutedEventArgs e)
         {
+            ButtonPointerExited(sender, null);
+
             var m = (MediaListViewModel)((Button)sender).DataContext;
 
             var b = (Button)sender;
@@ -142,7 +144,7 @@ namespace Tabstagram
             var opacityAnimation = new DoubleAnimation
             {
                 From = 1,
-                To = 0.5,
+                To = 0.4,
                 Duration = TimeSpan.FromSeconds(0.1)
             };
             storyboard.Children.Add(opacityAnimation);
@@ -160,7 +162,7 @@ namespace Tabstagram
 
             var opacityAnimation = new DoubleAnimation
             {
-                From = 0.5,
+                From = 0.4,
                 To = 1,
                 Duration = TimeSpan.FromSeconds(0.1)
             };

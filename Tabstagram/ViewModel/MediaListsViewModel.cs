@@ -112,11 +112,19 @@ namespace Tabstagram
 
         private void UpdateSubCollection(IEnumerable<Media> newMedia)
         {
-            newMedia = newMedia.Reverse();
-            foreach (Media m in newMedia)
+            int initialCount = SubCollection.Count();
+            if (SubCollection.Count <= newMedia.Count())
+                SubCollection.Clear();
+            else
             {
-                SubCollection.Remove(SubCollection.Last());
-                SubCollection.Insert(0, m);
+                SubCollection.Reverse();
+                SubCollection.Take(newMedia.Count());
+                SubCollection.Reverse();
+            }
+            int toAddCount = initialCount - SubCollection.Count();
+            for (int i = 0; i < toAddCount; i++)
+            {
+                SubCollection.Insert(i, newMedia.ElementAt(i));
             }
         }
 
