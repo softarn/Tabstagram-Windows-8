@@ -17,6 +17,10 @@ namespace Tabstagram
         public bool Error;
 
         public UserList(IEnumerable<User> enumerable) : base(enumerable) { }
+        public UserList(MultipleUsers users) : base(users.data) 
+        {
+            pagination = users.pagination;
+        }
 
         public Pagination pagination { get; set; }
 

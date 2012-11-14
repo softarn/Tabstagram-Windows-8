@@ -56,25 +56,19 @@ namespace Tabstagram
         {
             CurrentMedia = media;
             CurrentUser = CurrentMedia.user;
-            RelatedMedia = new UserMedia(CurrentMedia.user);
+            RelatedMedia = new UserMedia(CurrentUser);
             Init();
         }
 
         public async void Init()
         {
-            if (CurrentMedia.comments.count != CurrentMedia.comments.observableData.Count)
-                CurrentMedia.comments.observableData.Clear();
-
             try
             {
                 await RelatedMedia.Init();
-                Relationship r = await Instagram.LoadRelationship(CurrentMedia.user.id);
-                CurrentMedia.user.user_is_following = r.data.outgoing_follow;
             }
             catch (Exception)
             {
                 Debug.WriteLine("Error when trying to init");
-                CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
 
             if (CurrentMedia == null)
@@ -96,14 +90,19 @@ namespace Tabstagram
 
                 OnPropertyChanged("CurrentMedia");
             }
+            else
+            {
+                if (CurrentMedia.comments.count != CurrentMedia.comments.observableData.Count)
+                    CurrentMedia.comments.observableData.Clear();
+            }
 
-            LoadUserInfo(CurrentMedia.user.id);
+            LoadUserInfo(CurrentUser.id);
             LoadComments();
         }
 
         public void LoadNewMedia(Media media)
         {
-            media.user = CurrentMedia.user;
+            media.user = CurrentUser;
             CurrentMedia = media;
             OnPropertyChanged("CurrentMedia");
         }
@@ -115,19 +114,36 @@ namespace Tabstagram
                 User user = await Instagram.LoadUserInfo(userId);
 
                 if (user != null)
-                    CurrentMedia.user = user;
+                {
+                    CurrentUser = user;
+                }
                 else
                 {
-                    CurrentMedia.user.counts = new Counts();
-                    CurrentMedia.user.counts.followed_by = 0;
-                    CurrentMedia.user.counts.follows = 0;
-                    CurrentMedia.user.counts.media = 0;
+                    CurrentUser.counts = new Counts();
+                    CurrentUser.counts.followed_by = 0;
+                    CurrentUser.counts.follows = 0;
+                    CurrentUser.counts.media = 0;
                 }
             }
             catch (Exception)
             {
                 Debug.WriteLine("Error when trying to load user info");
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
+            }
+
+            LoadRelationship();
+        }
+
+        public async void LoadRelationship()
+        {
+            try
+            {
+                Relationship r = await Instagram.LoadRelationship(CurrentUser.id);
+                CurrentUser.user_is_following = r.data.outgoing_follow;
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Error when trying to load user info");
             }
         }
 
@@ -201,7 +217,7 @@ namespace Tabstagram
         internal async void Comment(string comment)
         {
             await Instagram.CommentMedia(this.CurrentMedia.id, comment);
-            _timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
             _timer.Tick += TimerLoadComments;
             _timer.Start();
         }
@@ -232,38 +248,38 @@ namespace Tabstagram
 
         internal async Task LoadFollowedBy()
         {
-            if (CurrentMedia.user.followed_by != null)
+            if (CurrentUser.followed_by != null)
                 return;
 
             try
             {
-                MultipleUsers users = await Instagram.LoadFollowedBy(CurrentMedia.user.id);
+                MultipleUsers users = await Instagram.LoadFollowedBy(CurrentUser.id);
                 UserList userList = new UserList(users.data);
                 userList.pagination = users.pagination;
-                CurrentMedia.user.followed_by = userList;
+                CurrentUser.followed_by = userList;
             }
             catch (Exception e)
             {
-                CurrentMedia.user.followed_by = new UserList(new List<User>());
+                CurrentUser.followed_by = new UserList(new List<User>());
             }
             return;
         }
 
         internal async Task LoadFollows()
         {
-            if (CurrentMedia.user.follows != null)
+            if (CurrentUser.follows != null)
                 return;
 
             try
             {
-                MultipleUsers users = await Instagram.LoadFollows(CurrentMedia.user.id);
+                MultipleUsers users = await Instagram.LoadFollows(CurrentUser.id);
                 UserList userList = new UserList(users.data);
                 userList.pagination = users.pagination;
-                CurrentMedia.user.follows = userList;
+                CurrentUser.follows = userList;
             }
             catch (Exception e)
             {
-                CurrentMedia.user.follows = new UserList(new List<User>());
+                CurrentUser.follows = new UserList(new List<User>());
             }
             return;
         }
@@ -291,33 +307,33 @@ namespace Tabstagram
                 CriticalNetworkErrorNotice(null, new NotificationEventArgs());
             }
             OnPropertyChanged("CurrentMedia");
-            LoadUserInfo(CurrentMedia.user.id);
+            LoadUserInfo(CurrentUser.id);
             CurrentMedia.comments.data = new List<Comment>();
             LoadComments();
         }
 
         internal async Task FollowOrUnfollow()
         {
-            if (CurrentMedia.user == null)
+            if (CurrentUser == null)
                 return;
 
             bool success;
 
-            bool InitialUserIsFollowing = CurrentMedia.user.user_is_following;
+            bool InitialUserIsFollowing = CurrentUser.user_is_following;
 
-            CurrentMedia.user.user_is_following = !InitialUserIsFollowing;
+            CurrentUser.user_is_following = !InitialUserIsFollowing;
 
-            if (CurrentMedia.user.user_is_following)
+            if (CurrentUser.user_is_following)
             {
-                success = await Instagram.Follow(CurrentMedia.user.id);
+                success = await Instagram.Follow(CurrentUser.id);
             }
             else
             {
-                success = await Instagram.Unfollow(CurrentMedia.user.id);
+                success = await Instagram.Unfollow(CurrentUser.id);
             }
 
             if (!success)
-                CurrentMedia.user.user_is_following = InitialUserIsFollowing;
+                CurrentUser.user_is_following = InitialUserIsFollowing;
         }
     }
 }

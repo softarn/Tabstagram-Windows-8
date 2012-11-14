@@ -42,21 +42,21 @@
             <Grid Grid.ColumnSpan="2" Grid.Column="1" Margin="0">
             	<Grid.ColumnDefinitions>
             		<ColumnDefinition Width="Auto"/>
-            		<ColumnDefinition Width="Auto"/>
-            		<ColumnDefinition/>
-            	</Grid.ColumnDefinitions>
-            	<Button Click="HomeClick" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Margin="0" Grid.Column="1">
-            		<Grid>
-            			<Grid.ColumnDefinitions>
-            				<ColumnDefinition Width="Auto"/>
-            				<ColumnDefinition/>
-            			</Grid.ColumnDefinitions>
-            			<Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
-            			<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
-            		</Grid>
-            	</Button>
-            	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
-            	<StackPanel Grid.Column="2" Margin="0,0,30,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Click="HomeClick" VerticalAlignment="Center" BorderThickness="0" Margin="0" >
+                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Width="72" Height="72" Margin="0"/>
+                    </Button>
+                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" Padding="23,0,0,0"/>
+                </Grid>
+                <Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,28"/>
+                <StackPanel Grid.Column="2" Margin="0,0,30,0" Orientation="Horizontal" HorizontalAlignment="Right">
             		<StackPanel x:Name="LikeStackpanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,15,0">
             			<Button x:Name="LikeButton" Click="LikeButtonClick" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0" Padding="7,2,7,2">
             				<Image Source="{Binding CurrentMedia.user_has_liked, Converter={StaticResource LikedImageConverter}}" Width="65" Height="65" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
@@ -65,9 +65,9 @@
             		</StackPanel>
             		<StackPanel x:Name="FollowStackpanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             			<Button x:Name="FollowButton" Click="FollowerButtonClick" HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0" Padding="15">
-                            <Image Source="{Binding CurrentMedia.user.user_is_following, Converter={StaticResource FollowImageConverter}}" Width="40" Height="40" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
+                            <Image Source="{Binding CurrentUser.user_is_following, Converter={StaticResource FollowImageConverter}}" Width="40" Height="40" RenderTransformOrigin="0.5,1.125" Stretch="UniformToFill"/>
             			</Button>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding CurrentMedia.user.user_is_following, Converter={StaticResource BooleanToFollowStringConverter}}" HorizontalAlignment="Center"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding CurrentUser.user_is_following, Converter={StaticResource BooleanToFollowStringConverter}}" HorizontalAlignment="Center"/>
             		</StackPanel>
             	</StackPanel>
             </Grid>
@@ -125,9 +125,9 @@
                 				<ColumnDefinition Width="4*"/>
                 			</Grid.ColumnDefinitions>
                 			<Border HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.RowSpan="2" Background="Black" BorderThickness="2">
-                				<Image Source="{Binding CurrentMedia.user.profile_picture}"/>
+                				<Image Source="{Binding CurrentUser.profile_picture}"/>
                 			</Border>
-                			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" FontFamily="Segoe UI" Margin="0" Grid.Column="1" Text="{Binding CurrentMedia.user.full_name}"/>
+                			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="16" FontFamily="Segoe UI" Margin="0" Grid.Column="1" Text="{Binding CurrentUser.full_name}"/>
                 			<Grid Grid.Column="1" Margin="0,3,0,0" Grid.Row="1">
                 				<Grid.ColumnDefinitions>
                 					<ColumnDefinition/>
@@ -137,18 +137,18 @@
                                 <Button x:Name="FollowedByButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Padding="0" MinWidth="70" Width="80">
                 					<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
                 						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
-                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 					</StackPanel>
                 				</Button>
                                 <Button x:Name="FollowsButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" BorderThickness="0" Grid.Column="1" Width="80">
                 					<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
                 						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Following " VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
-                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 					</StackPanel>
                 				</Button>
                                 <StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="2">
                                 	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Images" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
-                                	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.user.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                                	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 				</StackPanel>
                 			</Grid>
                 		</Grid>
@@ -217,7 +217,7 @@
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
                     	<TextBlock x:Name="FollowersHeader" Margin="10" Text="Followers" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                    	<ListView ItemsSource="{Binding CurrentMedia.user.followed_by}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" SelectionMode="Single">
+                    	<ListView ItemsSource="{Binding CurrentUser.followed_by}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
                     				<local:ListUserControl />
@@ -231,7 +231,7 @@
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
                     	<TextBlock x:Name="FollowsHeader" Margin="10" Text="Following" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                    	<ListView ItemsSource="{Binding CurrentMedia.user.follows}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" SelectionMode="Single">
+                    	<ListView ItemsSource="{Binding CurrentUser.follows}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
                     				<local:ListUserControl />

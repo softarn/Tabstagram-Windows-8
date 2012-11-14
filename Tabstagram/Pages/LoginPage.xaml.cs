@@ -82,7 +82,7 @@ namespace Tabstagram
             try
             {
                 authButton.IsEnabled = false;
-                String clientId = "692bbb1e60d34b048988fdf205d67696";
+                String clientId = "6ed42bea88f2433eacadb2d593cf62ca";
                 String redirectURI = "tabstagram://oauth";
 
                 String InstagramURL = "https://instagram.com/oauth/authorize/?client_id=" + Uri.EscapeDataString(clientId) + "&redirect_uri=" + Uri.EscapeDataString(redirectURI) + "&response_type=token&display=touch&scope=relationships+likes+comments";

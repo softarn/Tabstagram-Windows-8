@@ -115,6 +115,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\CommentTimeConverter.cs" />
     <Compile Include="Models\Relationship.cs" />
+    <Compile Include="UserListViewModel.cs" />
     <Compile Include="ViewModel\GroupedListsViewModel.cs" />
     <Compile Include="Pages\ImagePage.xaml.cs">
       <DependentUpon>ImagePage.xaml</DependentUpon>
@@ -164,6 +165,9 @@
     <Compile Include="Converters\UploadTimeConverter.cs" />
     <Compile Include="Controls\ListUserControl.xaml.cs">
       <DependentUpon>ListUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SearchResultsPage1.xaml.cs">
+      <DependentUpon>SearchResultsPage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\UserListViewModel.cs" />
   </ItemGroup>
@@ -233,6 +237,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ListUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchResultsPage1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

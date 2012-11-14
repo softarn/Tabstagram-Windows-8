@@ -158,7 +158,7 @@ namespace Tabstagram
             if (listString.Equals("selfmedia"))
                 return new SelfMedia();
 
-            throw new ArgumentException("listString must be #hashtagname, popular or feed");
+            throw new ArgumentException("listString must be #hashtagname, popular, selfmedia or feed");
         }
 
         public virtual async Task<MultipleMedia> FetchMoreMedia()
@@ -330,7 +330,7 @@ namespace Tabstagram
             }
             catch (Exception e)
             {
-
+                Debug.WriteLine("Could not init UserMedia");
             }
             base.Init();
             return true;
@@ -391,6 +391,7 @@ namespace Tabstagram
         public HashTag(string tag)
         {
             this.Tag = tag;
+            this.category = GetName();
         }
 
         public override async Task<bool> Init()

@@ -72,7 +72,7 @@ namespace Tabstagram
             {
                 Media m = e.Parameter as Media;
                 _viewModel = new ImageViewModel(m);
-                pageTitle.Text = "Tabstagram - " + _viewModel.CurrentMedia.user.username;
+                pageTitle.Text = "Tabstagram - " + _viewModel.CurrentUser.username;
             }
             else if (e.Parameter is User)
             {
@@ -212,7 +212,7 @@ namespace Tabstagram
             string userId = await UserSettings.retreiveUserId();
             Comment comment = (Comment)o;
 
-            if (userId == _viewModel.CurrentMedia.user.id || userId == comment.from.id)
+            if (userId == _viewModel.CurrentUser.id || userId == comment.from.id)
             {
                 menu.Commands.Add(new UICommand("Delete", command => HandleDelete(comment)));
             }

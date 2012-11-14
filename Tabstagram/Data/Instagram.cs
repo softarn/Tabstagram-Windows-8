@@ -31,6 +31,8 @@ namespace Tabstagram
         private static string GetFollowedByUrl(string id) { return String.Format("{0}users/{1}/followed-by", BASE_URL, id); }
         private static string GetFollowsUrl(string id)  { return String.Format("{0}users/{1}/follows", BASE_URL, id); }
         private static string GetRelationshipUrl(string id) { return String.Format("{0}users/{1}/relationship", BASE_URL, id); }
+        private static string GetSearchUsersUrl() { return String.Format("{0}users/search", BASE_URL); }
+        private static string GetSearchTagsUrl() { return String.Format("{0}tags/search", BASE_URL); }
 
         private static HttpClient client = GetHttpClient();
 
@@ -120,6 +122,13 @@ namespace Tabstagram
             args = SafeAddAccessToken(args);
             string response = await Get(url, args);
             return User.MultipleFromJSON(response);
+        }
+
+        private static async Task<MultipleTags> LoadTagList(string url, Args args = null)
+        {
+            args = SafeAddAccessToken(args);
+            string response = await Get(url, args);
+            return Tag.MultipleFromJSON(response);
         }
 
         public static async Task<List<Comment>> LoadComments(string mediaId, Args args = null)
@@ -227,6 +236,20 @@ namespace Tabstagram
             return ml;
         }
 
+        public static async Task<MultipleUsers> SearchUsers(string query)
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.Q, query));
+            return await LoadUserList(GetSearchUsersUrl(), args);
+        }
+
+        public static async Task<MultipleTags> SearchTags(string query)
+        {
+            Args args = new Args();
+            args.Add(new Arg(Arg.Type.Q, query));
+            return await LoadTagList(GetSearchTagsUrl(), args);
+        }
+
         public static async Task<Relationship> LoadRelationship(string userId)
         {
             Args args = new Args();
@@ -300,7 +323,7 @@ namespace Tabstagram
 
     public class Arg
     {
-        public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT, TEXT, ACCESS_TOKEN, ACTION }
+        public enum Type { MIN_ID, MAX_ID, MIN_TAG_ID, MAX_TAG_ID, COUNT, TEXT, ACCESS_TOKEN, ACTION, Q }
 
         public Type type { get; set; }
         public string value { get; set; }
