@@ -117,9 +117,10 @@ namespace Tabstagram
                 SubCollection.Clear();
             else
             {
-                SubCollection.Reverse();
-                SubCollection.Take(newMedia.Count());
-                SubCollection.Reverse();
+                for (int i = 0; i < newMedia.Count(); i++)
+                {
+                    SubCollection.RemoveAt(SubCollection.Count - 1);
+                }
             }
             int toAddCount = initialCount - SubCollection.Count();
             for (int i = 0; i < toAddCount; i++)
@@ -169,6 +170,9 @@ namespace Tabstagram
 
         public virtual void MarkImportantMedia(IEnumerable<Media> enumerable)
         {
+            if (enumerable.Count() < 3)
+                return;
+
             const int initialSpan = 2; //Elements between first and second that could be marked as important
             const int span = 4;
 
