@@ -27,6 +27,9 @@ namespace Tabstagram
         private const string USERS = "Users";
         private const string TAGS = "Tags";
 
+        private const string USER_VM = "UserResults";
+        private const string TAG_VM = "TagResults";
+
         List<User> userList = null;
         List<Tag> tagList = null;
 
@@ -110,16 +113,19 @@ namespace Tabstagram
                 // Mirror the results into the corresponding Filter object to allow the
                 // RadioButton representation used when not snapped to reflect the change
                 selectedFilter.Active = true;
+                string vmValue = USER_VM;
                 if (selectedFilter.Name.Equals(USERS))
                 {
-                    this.DefaultViewModel["UserResults"] = userList;
+                    vmValue = USER_VM;
+                    this.DefaultViewModel[USER_VM] = userList;
                     this.DefaultViewModel["ShowUsers"] = true;
                     this.DefaultViewModel["ShowTags"] = false;
                     
                 }
                 else if (selectedFilter.Name.Equals(TAGS))
                 {
-                    this.DefaultViewModel["TagResults"] = tagList;
+                    vmValue = TAG_VM;
+                    this.DefaultViewModel[TAG_VM] = tagList;
                     this.DefaultViewModel["ShowUsers"] = false;
                     this.DefaultViewModel["ShowTags"] = true;
                 }
@@ -129,7 +135,7 @@ namespace Tabstagram
                 // Ensure results are found
                 object results;
                 ICollection resultsCollection;
-                if (this.DefaultViewModel.TryGetValue("UserResults", out results) &&
+                if (this.DefaultViewModel.TryGetValue(USER_VM, out results) &&
                     (resultsCollection = results as ICollection) != null &&
                     resultsCollection.Count != 0)
                 {
