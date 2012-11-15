@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToFollowStringConverter.cs" />
     <Compile Include="Converters\BooleanToLikeStringConverter.cs" />
+    <Compile Include="Converters\NumberConverter.cs" />
     <Compile Include="Converters\FollowImageConverter.cs" />
     <Compile Include="Converters\ParameterExistsToVisibilityConverter.cs" />
     <Compile Include="Helpers\AuthCallbackParser.cs" />

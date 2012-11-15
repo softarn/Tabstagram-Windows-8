@@ -113,19 +113,16 @@ namespace Tabstagram
                 // Mirror the results into the corresponding Filter object to allow the
                 // RadioButton representation used when not snapped to reflect the change
                 selectedFilter.Active = true;
-                string vmValue = USER_VM;
+                this.DefaultViewModel[TAG_VM] = tagList;
+                this.DefaultViewModel[USER_VM] = userList;
                 if (selectedFilter.Name.Equals(USERS))
                 {
-                    vmValue = USER_VM;
-                    this.DefaultViewModel[USER_VM] = userList;
                     this.DefaultViewModel["ShowUsers"] = true;
                     this.DefaultViewModel["ShowTags"] = false;
                     
                 }
                 else if (selectedFilter.Name.Equals(TAGS))
                 {
-                    vmValue = TAG_VM;
-                    this.DefaultViewModel[TAG_VM] = tagList;
                     this.DefaultViewModel["ShowUsers"] = false;
                     this.DefaultViewModel["ShowTags"] = true;
                 }
@@ -135,9 +132,13 @@ namespace Tabstagram
                 // Ensure results are found
                 object results;
                 ICollection resultsCollection;
-                if (this.DefaultViewModel.TryGetValue(USER_VM, out results) &&
+                if ((this.DefaultViewModel.TryGetValue(USER_VM, out results) &&
                     (resultsCollection = results as ICollection) != null &&
                     resultsCollection.Count != 0)
+                    ||
+                    (this.DefaultViewModel.TryGetValue(TAG_VM, out results) &&
+                    (resultsCollection = results as ICollection) != null &&
+                    resultsCollection.Count != 0))
                 {
                     VisualStateManager.GoToState(this, "ResultsFound", true);
                     return;

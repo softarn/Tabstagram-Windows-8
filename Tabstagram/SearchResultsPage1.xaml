@@ -16,6 +16,7 @@
         <CollectionViewSource x:Name="userResultsViewSource" Source="{Binding UserResults}"/>
         <CollectionViewSource x:Name="filtersViewSource" Source="{Binding Filters}"/>
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:NumberConverter x:Key="NumberConverter" />
         <!-- TODO: Update the following string to be the name of your app -->
         <x:String x:Key="AppName">Tabstagram</x:String>
     </Page.Resources>
@@ -120,11 +121,11 @@
                         </GridView.ItemContainerStyle>
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="#" HorizontalAlignment="Left" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text="{Binding name}" HorizontalAlignment="Right" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text=" - " HorizontalAlignment="Center" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text="{Binding media_count}" HorizontalAlignment="Right" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                <StackPanel Orientation="Horizontal" Width="330">
+                                    <TextBlock Text="#" Margin="5,0,0,0"  FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock Text="{Binding name}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock Text=" - " FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock Text="{Binding media_count, Converter={StaticResource NumberConverter}}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text=" photos" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                 </StackPanel>
                             </DataTemplate>
