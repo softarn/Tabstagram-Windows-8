@@ -263,7 +263,7 @@ namespace Tabstagram
         {
             Args args = new Args();
             args.Add(new Arg(Arg.Type.ACCESS_TOKEN, AccessToken));
-            args.Add(new Arg(Arg.Type.ACTION, Relationship.Type.UNFOLLOW.ToString().ToLower()));
+            args.Add(new Arg(Arg.Type.ACTION, Relationship.Type.FOLLOW.ToString().ToLower()));
             string url = GetRelationshipUrl(userId);
             Debug.WriteLine("Following user: " + userId);
             HttpResponseMessage response = await Post(url, args);

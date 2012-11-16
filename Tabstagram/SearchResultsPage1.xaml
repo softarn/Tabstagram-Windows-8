@@ -124,7 +124,7 @@
                                 <StackPanel Orientation="Horizontal" Width="330">
                                     <TextBlock Text="#" Margin="5,0,0,0"  FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text="{Binding name}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text=" - " FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock Text=" - " Margin="3,0,3,0" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text="{Binding media_count, Converter={StaticResource NumberConverter}}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text=" photos" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                 </StackPanel>
@@ -176,17 +176,30 @@
         </Grid>
 
         <!-- Back button, page title and subtitles-->
+
+        <!--<Grid Background="#FF171717">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36"/>
+            
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
+        </Grid>-->
         <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"  />
-            <TextBlock x:Name="resultText" Grid.Column="2" Text="Results for&#x00a0;" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
-            <TextBlock x:Name="queryText" Grid.Column="3" Text="{Binding QueryText}" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
+            <Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png"  Width="72" Height="72" Margin="0,15,30,0"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="2" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"  />
+            <TextBlock x:Name="resultText" Grid.Column="3" Text="Results for&#x00a0;" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
+            <TextBlock x:Name="queryText" Grid.Column="4" Text="{Binding QueryText}" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
         </Grid>
 
         <TextBlock

@@ -11,7 +11,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>
     </Page.Resources>
@@ -42,7 +41,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="420,0,400,27">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -55,10 +54,42 @@
                 <TextBlock x:Name="LogoText" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,-13" VerticalAlignment="Center" FontSize="82.667"/>
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Instagram experience, tailored for Windows 8" VerticalAlignment="Top" Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" FontFamily="Segoe Print" FontSize="21.333" Foreground="#FFAAAAAA"/>
             </Grid>
+            <Button x:Name="SignUpButton" Content="Sign up for Instagram" Click="SignUpButtonClick" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Canvas.ZIndex="1" />
             <Button Content="Login with Instagram" x:Name="authButton" Click="AuthButtonClick" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" FontSize="21.333" Height="75" Width="300" Grid.Row="1"/>
             <TextBlock x:Name="signinRequiredTextBlock" Visibility="Collapsed"/>
+            <CheckBox x:Name="FollowCheckBox" Content="Follow Tabstagram" HorizontalAlignment="Center" Margin="0,80,0,0" Grid.Row="1" VerticalAlignment="Top" IsChecked="True"/>
 
         </Grid>
+        <Popup x:Name="SignUpPopUp" Margin="-319,-418,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        	<Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        		<Grid Background="#FF0A0A0A" Height="418" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+        			<Grid.RowDefinitions>
+        				<RowDefinition Height="Auto"/>
+        				<RowDefinition/>
+        				<RowDefinition Height="Auto"/>
+        			</Grid.RowDefinitions>
+        			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Sign up" VerticalAlignment="Top" FontFamily="Global User Interface" FontSize="32"/>
+        			<TextBlock TextWrapping="Wrap" Grid.Row="1" Margin="10" FontSize="18.667">
+        				<Run Text="To register for Instagram:"/>
+        				<LineBreak/>
+        				<Run Text=""/>
+        				<LineBreak/>
+        				<Run Text="1. Download the Instagram app in the App Store on an iOS device (iPhone, iPod, iPad) or in Google Play for an Android device. "/>
+        				<LineBreak/>
+        				<Run/>
+        				<LineBreak/>
+        				<Run Text="2. After installing the app, open it "/>
+        				<LineBreak/>
+        				<Run Text="on your device"/>
+        				<LineBreak/>
+        				<Run/>
+        				<LineBreak/>
+        				<Run Text="3. Tap the 'Sign up' button to begin the account creation process (the 'Sign up' button is at the bottom left of the screen)."/>
+        			</TextBlock>
+                    <Button Click="SignUpButtonClick" Content="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2"/>
+        		</Grid>
+        	</Border>
+        </Popup>
 
         <VisualStateManager.VisualStateGroups>
 

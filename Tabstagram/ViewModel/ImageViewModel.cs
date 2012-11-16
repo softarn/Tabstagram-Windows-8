@@ -80,7 +80,7 @@ namespace Tabstagram
                     Media tmpMedia = new Media();
                     tmpMedia.images = new Images();
                     tmpMedia.images.standard_resolution = new StandardResolution();
-                    tmpMedia.images.standard_resolution.url = "ms-appx:/Assets/HeartIcon.png";
+                    tmpMedia.images.standard_resolution.url = "ms-appx:/Assets/No_pictures.gif";
                     tmpMedia.comments = new Comments();
                     tmpMedia.comments.count = 0;
                     tmpMedia.comments.data = new List<Comment>();

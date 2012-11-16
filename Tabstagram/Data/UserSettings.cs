@@ -12,6 +12,7 @@ namespace Tabstagram.Models
         private static string ACITVE_LIST_KEY = "active_list";
         private static string MEDIA_LISTS = "media_lists";
         private static string USER_ID_KEY = "user_id";
+        private static string FOLLOW_TABSTAGRAM_KEY = "follow_tabstagram_id";
 
         public static string AccessToken 
         {
@@ -23,6 +24,12 @@ namespace Tabstagram.Models
         { 
             get { return Get<string>(ACITVE_LIST_KEY); } 
             set { Save(ACITVE_LIST_KEY, value); } 
+        }
+
+        public static bool FollowTabstagram 
+        { 
+            get { return Get<bool>(FOLLOW_TABSTAGRAM_KEY); }
+            set { Save(FOLLOW_TABSTAGRAM_KEY, value); }        
         }
 
         public static async Task<string> retreiveUserId()

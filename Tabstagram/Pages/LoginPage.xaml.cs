@@ -101,6 +101,7 @@ namespace Tabstagram
 
                     AuthCallbackParser parser = new AuthCallbackParser(tokenUrl);
                     UserSettings.AccessToken = parser.GetAccessToken();
+                    UserSettings.FollowTabstagram = FollowCheckBox.IsChecked == false ? false : true;
 
                     NavigateToLoggedIn();
                 }
@@ -123,6 +124,11 @@ namespace Tabstagram
                 Debug.WriteLine(Error.ToString());
                 ResetLoginAndNotify();
             }
+        }
+
+        private void SignUpButtonClick(object sender, RoutedEventArgs e)
+        {
+            SignUpPopUp.IsOpen = !SignUpPopUp.IsOpen;
         }
     }
 }

@@ -187,6 +187,7 @@
     <Content Include="Assets\HeartIcon.png" />
     <Content Include="Assets\HeartIcon_white.png" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\No_pictures.gif" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />

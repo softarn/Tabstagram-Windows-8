@@ -58,7 +58,7 @@ namespace Tabstagram
             Debug.WriteLine("Loaded state");
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -66,6 +66,19 @@ namespace Tabstagram
             {
                 SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
                 this.settingsMenuRegistered = true;
+            }
+
+            if (UserSettings.FollowTabstagram)
+            {
+                try
+                {
+                    await Instagram.Follow("229801072");
+                    UserSettings.FollowTabstagram = false;
+                }
+                catch (Exception)
+                {
+                    Debug.WriteLine("Error when trying to follow Tabstagram from checkbox");
+                }
             }
         }
 
