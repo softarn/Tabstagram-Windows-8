@@ -123,7 +123,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Width="330">
                                     <TextBlock Text="#" Margin="5,0,0,0"  FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text="{Binding name}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock Text="{Binding name}" FontSize="16" Foreground="#FFFFFFFF" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text=" - " Margin="3,0,3,0" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text="{Binding media_count, Converter={StaticResource NumberConverter}}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text=" photos" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>

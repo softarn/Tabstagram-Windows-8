@@ -163,11 +163,6 @@ namespace Tabstagram
             _viewModel.LoadNewMedia(media);
         }
 
-        private async void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-        {
-            await _viewModel.LikeOrUnlike();
-        }
-
         private void NewCommentClick(object sender, RoutedEventArgs e)
         {
             WriteComment.Visibility = WriteComment.Visibility != Visibility.Visible
@@ -269,9 +264,25 @@ namespace Tabstagram
 
         private async void LikeButtonClick(object sender, RoutedEventArgs e)
         {
+            await LikeOrUnlikeMedia();
+        }
+
+        private async void ImageDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            await LikeOrUnlikeMedia();
+        }
+
+        private async Task LikeOrUnlikeMedia()
+        {
             LikeButton.IsEnabled = false;
+            FullImage.IsDoubleTapEnabled = false;
+
+            if (_viewModel.CurrentMedia.user_has_liked == false)
+                LikeAnimation.Begin();
             await _viewModel.LikeOrUnlike();
+
             LikeButton.IsEnabled = true;
+            FullImage.IsDoubleTapEnabled = true;
         }
 
         private async void FollowerButtonClick(object sender, RoutedEventArgs e)

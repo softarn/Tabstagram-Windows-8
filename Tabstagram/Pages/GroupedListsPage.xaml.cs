@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.ApplicationSettings;
+using Windows.ApplicationModel.Search;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
@@ -61,6 +62,7 @@ namespace Tabstagram
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
 
             if (!this.settingsMenuRegistered)
             {
@@ -85,6 +87,7 @@ namespace Tabstagram
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
+            SearchPane.GetForCurrentView().ShowOnKeyboardInput = false;
 
             if (this.settingsMenuRegistered)
             {

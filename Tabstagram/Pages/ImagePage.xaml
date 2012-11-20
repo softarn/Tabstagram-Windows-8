@@ -20,6 +20,27 @@
         <local:BooleanToFollowStringConverter x:Name="BooleanToFollowStringConverter"/>
         <local:ParameterExistsToVisibilityConverter x:Name="ParameterExistsToVisibilityConverter"/>
         <local:FollowImageConverter x:Name="FollowImageConverter"/>
+        <Storyboard x:Name="LikeAnimation">
+        	<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="heart">
+        		<DiscreteObjectKeyFrame KeyTime="0">
+        			<DiscreteObjectKeyFrame.Value>
+        				<Visibility>Visible</Visibility>
+        			</DiscreteObjectKeyFrame.Value>
+        		</DiscreteObjectKeyFrame>
+        	</ObjectAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="heart">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-3"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="heart">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-66"/>
+        	</DoubleAnimationUsingKeyFrames>
+        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="heart">
+        		<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+        		<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+        	</DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Page.Resources>
 
     <!--
@@ -99,12 +120,19 @@
             <Grid x:Name="MidGrid" Grid.Column="1" Canvas.ZIndex="2" Grid.RowSpan="2">
             	<Grid.RowDefinitions>
             		<RowDefinition/>
-            		<RowDefinition Height="Auto"/>
+            		<RowDefinition Height="90"/>
             	</Grid.RowDefinitions>
             	<local:FullImageControl x:Name="FullImage" DoubleTapped="ImageDoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,20" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                <StackPanel x:Name="CaptionPanel" Visibility="{Binding CurrentMedia.caption.text, Converter={StaticResource ParameterExistsToVisibilityConverter}}" Margin="60,5" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" HorizontalAlignment="Center" MaxHeight="130">
-            		<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="16" Margin="10,10,10,5"/>
-            	</StackPanel>
+            	<Image x:Name="heart" HorizontalAlignment="Center" Height="80" Margin="0" VerticalAlignment="Center" Width="80" Source="ms-appx:///Assets/HeartIcon.png" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5" Canvas.ZIndex="3">
+            		<Image.RenderTransform>
+            			<CompositeTransform/>
+            		</Image.RenderTransform>
+            	</Image>
+            	<ScrollViewer Margin="60,5,60,15" Grid.Row="1" VerticalAlignment="Top" MinHeight="50" MaxHeight="130" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
+            		<StackPanel x:Name="CaptionPanel" Visibility="{Binding CurrentMedia.caption.text, Converter={StaticResource ParameterExistsToVisibilityConverter}}" Orientation="Vertical" Background="#FF171717">
+            			<TextBlock x:Name="Caption" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="16" Margin="0"/>
+            		</StackPanel>
+            	</ScrollViewer>
             </Grid>
             <!--Right grid-->
             <Grid x:Name="RightGrid" Grid.Column="2" Margin="0" Grid.RowSpan="2">

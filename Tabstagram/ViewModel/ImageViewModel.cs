@@ -175,35 +175,54 @@ namespace Tabstagram
 
         public async Task<bool> LikeOrUnlike()
         {
-
-            Media relatedMediaItem = null;
-            int index = RelatedMedia.IndexOf(CurrentMedia);
-            if (index > -1)
-                relatedMediaItem = RelatedMedia.ElementAt(index);
-
             bool success = false;
             if (CurrentMedia.user_has_liked)
             {
+                Unlike();
                 success = await Instagram.Unlike(CurrentMedia.id);
-                if (success)
+                if (success == false)
                 {
-                    CurrentMedia.Unlike();
-                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                        relatedMediaItem.Unlike();
+                    CurrentMedia.Like();
                 }
             }
             else
             {
+                Like();
                 success = await Instagram.Like(CurrentMedia.id);
-                if (success)
+                if (success == false)
                 {
-                    CurrentMedia.Like();
-                    if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
-                        relatedMediaItem.Like();
+                    Unlike();
                 }
             }
 
             return success;
+        }
+
+        private void Unlike()
+        {
+            Media relatedMediaItem = GetRelatedMediaItem();
+
+            CurrentMedia.Unlike();
+            if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                relatedMediaItem.Unlike();
+        }
+
+        private void Like()
+        {
+            Media relatedMediaItem = GetRelatedMediaItem();
+
+            CurrentMedia.Like();
+            if (relatedMediaItem != null && relatedMediaItem != CurrentMedia)
+                relatedMediaItem.Like();
+        }
+
+        private Media GetRelatedMediaItem()
+        {
+            int index = RelatedMedia.IndexOf(CurrentMedia);
+            if (index > -1)
+                return RelatedMedia.ElementAt(index);
+
+            return null;
         }
 
         protected void OnPropertyChanged(string name)
