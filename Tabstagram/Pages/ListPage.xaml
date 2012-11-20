@@ -45,16 +45,23 @@
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             SelectionMode="None"
             IsSwipeEnabled="false"
-            IsItemClickEnabled="True"
-            ItemClick="itemGridView_ItemClick_1">
+            IsItemClickEnabled="False">
             <local:MyGridView.ItemTemplate>
                 <DataTemplate>
-                    <local:ThumbnailControl/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Opacity="0">
+                        <Button Click="ImageClick" Padding="0" Margin="0" BorderThickness="0">
+                            <Border x:Name="ImageBorder" Padding="0" Margin="0" BorderBrush="#000" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image x:Name="image" Width="306" Height="306" Source="{Binding images.standard_resolution.url}" HorizontalAlignment="Center" 
+            		                Margin="0" VerticalAlignment="Center" ImageOpened="fullImage_ImageOpened"/>
+                            </Border>
+                        </Button>
+                        <local:ImageInfoControl Height="310"/>
+                    </StackPanel>
                 </DataTemplate>
             </local:MyGridView.ItemTemplate>
             <local:MyGridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapGrid ItemWidth="150" ItemHeight="150" Orientation="Vertical"/>
+                    <WrapGrid ItemWidth="520" ItemHeight="326" VerticalAlignment="Center" Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </local:MyGridView.ItemsPanel>
         </local:MyGridView>

@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="Tabstagram.ImageInfoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Tabstagram"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="306"
+    d:DesignWidth="200">
+
+    <UserControl.Resources>
+        <local:LikedImageConverter x:Name="LikedImageConverter"/>
+        <local:ImportantThumbnailConverter x:Name="ImportantUrlConverter"/>
+    </UserControl.Resources>
+
+        <Grid Width="200" Margin="0" Background="#FF171717">
+    		<Grid.RowDefinitions>
+    			<RowDefinition Height="Auto"/>
+    			<RowDefinition Height="Auto"/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,2,5" BorderBrush="Black" BorderThickness="1">
+                <Image Source="{Binding user.profile_picture}" Width="45" Height="45"/>
+            </Border>
+            <StackPanel Orientation="Vertical" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Button x:Name="LikeButton" Click="LikeButtonClick" BorderThickness="0" Margin="0,0,5,0" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Right" Height="25" VerticalAlignment="Center" Orientation="Horizontal">
+                        <Image Source="{Binding user_has_liked, Converter={StaticResource LikedImageConverter}}" Margin="3,-2,5,0" Width="22" Height="22" />
+                        <TextBlock Margin="0,0,3,0" VerticalAlignment="Center" FontSize="13" TextTrimming="WordEllipsis" Text="{Binding likes.count}" />
+                    </StackPanel>
+                </Button>
+                <StackPanel HorizontalAlignment="Left" Height="25" VerticalAlignment="Center" Orientation="Horizontal" Margin="2,0,8,0">
+                    <Image Source="ms-appx:/Assets/CommentIcon.png" HorizontalAlignment="Left" Width="17" Height="17" VerticalAlignment="Center" Margin="7,0,7,0" RenderTransformOrigin="0.5,1.125"/>
+                    <TextBlock HorizontalAlignment="Right" Margin="0,0,3,0" VerticalAlignment="Center" FontSize="13" TextTrimming="WordEllipsis" Text="{Binding comments.count}" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <TextBlock HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Text="Comments" FontSize="13.333" Foreground="#FFA8A8A8"/>
+    		<ListView x:Name="CommentsList" IsItemClickEnabled="False" ItemsSource="{Binding comments.observableData}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
+    			<ListView.ItemContainerStyle>
+    				<Style TargetType="ListViewItem">
+    					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                        <Setter Property="Margin" Value="0" />
+    				</Style>
+    			</ListView.ItemContainerStyle>
+
+    			<ListView.ItemTemplate>
+    				<DataTemplate>
+    					<local:SmallCommentControl Background="#33000000" />
+    				</DataTemplate>
+    			</ListView.ItemTemplate>
+    		</ListView>
+    	</Grid>
+</UserControl>

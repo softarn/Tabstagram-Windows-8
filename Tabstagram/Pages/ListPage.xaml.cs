@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
@@ -79,7 +82,46 @@ namespace Tabstagram
 
         private void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
         {
-            Media m = e.ClickedItem as Media;
+
+        }
+
+        private void fullImage_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            StackPanel sp = FindAncestor<StackPanel>((Image)sender);
+            sp.Opacity = 0;
+            sp.Visibility = Visibility.Visible;
+
+            var storyboard = new Storyboard();
+
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.5),
+            };
+            storyboard.Children.Add(opacityAnimation);
+
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            Storyboard.SetTarget(storyboard, sp);
+
+            storyboard.Begin();
+        }
+
+        public static T FindAncestor<T>(DependencyObject dependencyObject)
+        where T : class
+        {
+            DependencyObject target = dependencyObject;
+            do
+            {
+                target = VisualTreeHelper.GetParent(target);
+            }
+            while (target != null && !(target is T));
+            return target as T;
+        }
+
+        private void ImageClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Media m = ((Button)sender).DataContext as Media;
 
             this.Frame.Navigate(typeof(ImagePage), m);
         }
@@ -107,5 +149,8 @@ namespace Tabstagram
             eventArgs.Request.ApplicationCommands.Add(logoutCommand);
             eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
+
+
+
     }
 }

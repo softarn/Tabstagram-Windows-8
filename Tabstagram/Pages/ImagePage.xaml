@@ -101,7 +101,7 @@
             		<RowDefinition/>
             		<RowDefinition Height="Auto"/>
             	</Grid.RowDefinitions>
-            	<local:FullImageControl x:Name="FullImage" DoubleTapped="ImageDoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,25" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+            	<local:FullImageControl x:Name="FullImage" DoubleTapped="ImageDoubleTapped" Canvas.ZIndex="2" Margin="30,30,30,20" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
                 <StackPanel x:Name="CaptionPanel" Visibility="{Binding CurrentMedia.caption.text, Converter={StaticResource ParameterExistsToVisibilityConverter}}" Margin="60,5" Orientation="Vertical" Grid.Row="1" Background="#FF171717" VerticalAlignment="Center" MinHeight="50" HorizontalAlignment="Center" MaxHeight="130">
             		<TextBlock x:Name="Caption" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.caption.text}" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="16" Margin="10,10,10,5"/>
             	</StackPanel>
