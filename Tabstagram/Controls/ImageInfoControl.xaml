@@ -37,7 +37,7 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <TextBlock HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Text="Comments" FontSize="13.333" Foreground="#FFA8A8A8"/>
+        <TextBlock x:Uid="CommentsText" HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="13.333" Foreground="#FFA8A8A8"/>
     		<ListView x:Name="CommentsList" IsItemClickEnabled="False" ItemsSource="{Binding comments.observableData}" SelectionMode="None" VerticalContentAlignment="Top" Margin="0" Grid.Row="2">
     			<ListView.ItemContainerStyle>
     				<Style TargetType="ListViewItem">

@@ -164,18 +164,18 @@
                 				</Grid.ColumnDefinitions>
                                 <Button x:Name="FollowedByButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Padding="0" MinWidth="70" Width="80">
                 					<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
-                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Followers" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                						<TextBlock x:Uid="FollowersText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                 						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.followed_by}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 					</StackPanel>
                 				</Button>
                                 <Button x:Name="FollowsButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" BorderThickness="0" Grid.Column="1" Width="80">
                 					<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
-                						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Following " VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                						<TextBlock x:Uid="FollowingText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                 						<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.follows}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 					</StackPanel>
                 				</Button>
                                 <StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="2">
-                                	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Images" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                                	<TextBlock x:Uid="ImagesText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                                 	<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentUser.counts.media}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 				</StackPanel>
                 			</Grid>
@@ -190,13 +190,13 @@
                     	</Grid.ColumnDefinitions>
                         <Button x:Name="LikesButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="0" Padding="0" MinWidth="64" Grid.Column="1" Width="80">
                     		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
-                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Likes" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                    			<TextBlock x:Uid="LikesText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                     			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.likes.count}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                     		</StackPanel>
                     	</Button>
                         <Button x:Name="CommentsButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0" Margin="0" Grid.Column="2" MinWidth="64" BorderThickness="0" Width="80">
                             <StackPanel  HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
-                    			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Comments" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
+                    			<TextBlock x:Uid="CommentsText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                     			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.comments.count}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                     		</StackPanel>
                     	</Button>
@@ -208,8 +208,8 @@
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
-                		<TextBlock x:Name="CommentsHeader" Margin="10" Text="Comments" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
-                		<TextBlock x:Name="CommentError" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Could not delete comment" VerticalAlignment="Center" Grid.Row="1" FontSize="14.667" Foreground="#FFCF1B1B" Visibility="Collapsed"/>
+                		<TextBlock x:Uid="CommentsText" x:Name="CommentsHeader" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                		<TextBlock x:Uid="CommentsErrorText" x:Name="CommentError" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="1" FontSize="14.667" Foreground="#FFCF1B1B" Visibility="Collapsed"/>
                 		<Grid x:Name="WriteComment" AllowDrop="True" Margin="0" Grid.Row="2" Visibility="Collapsed">
                     		<Grid.RowDefinitions>
                     			<RowDefinition Height="Auto"/>
@@ -217,9 +217,9 @@
                     			<RowDefinition Height="Auto"/>
                     		</Grid.RowDefinitions>
                     		<TextBox x:Name="Comment" TextWrapping="Wrap" Background="Black" Foreground="White" Grid.Row="1" HorizontalContentAlignment="Stretch" MinHeight="80"/>
-                    		<Button x:Name="MakeCommentButton" Click="MakeCommentButtonClick" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,0,0"/>
-                    		<Button x:Name="CancelCommentButton" Click="CancelCommentButtonClick" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,7,0"/>
-                    		<TextBlock TextWrapping="Wrap" Text="Write comment..." VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
+                    		<Button x:Uid="MakeCommentButton" Click="MakeCommentButtonClick" Content="Comment" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,0,0"/>
+                    		<Button x:Uid="CancelCommentButton" Click="CancelCommentButtonClick" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Margin="0,5,7,0"/>
+                    		<TextBlock x:Uid="WriteCommentText" VerticalAlignment="Top" FontSize="16" HorizontalAlignment="Center"/>
                     	</Grid>
                         <ListView x:Name="CommentsList" SelectionChanged="CommentsListSelectionChanged" IsItemClickEnabled="False" ItemsSource="{Binding CurrentMedia.comments.observableData}" SelectionMode="Single" VerticalContentAlignment="Top" Margin="0" Grid.Row="3">
                 			<ListView.ItemContainerStyle>
@@ -244,7 +244,7 @@
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
-                    	<TextBlock x:Name="FollowersHeader" Margin="10" Text="Followers" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                    	<TextBlock x:Uid="FollowersText" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
                     	<ListView ItemsSource="{Binding CurrentUser.followed_by}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalContentAlignment="Top" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
@@ -258,7 +258,7 @@
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
-                    	<TextBlock x:Name="FollowsHeader" Margin="10" Text="Following" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                    	<TextBlock x:Uid="FollowingText" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
                     	<ListView ItemsSource="{Binding CurrentUser.follows}" SelectionChanged="UserListSelectionChanged" Margin="0" Grid.Row="1" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>
@@ -272,7 +272,7 @@
                     		<RowDefinition Height="Auto"/>
                     		<RowDefinition/>
                     	</Grid.RowDefinitions>
-                    	<TextBlock x:Name="LikesHeader" Margin="10" Text="Likes" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
+                    	<TextBlock x:Uid="LikesText" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18.667"/>
                     	<ListView ItemsSource="{Binding CurrentMedia.likes.data}" SelectionChanged="UserListSelectionChanged" Margin="0" VerticalContentAlignment="Top" Grid.Row="1" SelectionMode="Single">
                     		<ListView.ItemTemplate>
                     			<DataTemplate>

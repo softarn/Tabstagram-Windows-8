@@ -52,13 +52,12 @@
                 </Grid.ColumnDefinitions>
                 <Image x:Name="Logo" Source="ms-appx:/Assets/Tabstagram_icon.png" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="120" />
                 <TextBlock x:Name="LogoText" Text="{StaticResource AppName}" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,-13" VerticalAlignment="Center" FontSize="82.667"/>
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Instagram experience, tailored for Windows 8" VerticalAlignment="Top" Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" FontFamily="Segoe Print" FontSize="21.333" Foreground="#FFAAAAAA"/>
+                <TextBlock x:Uid="SloganText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,10,0,0" Grid.Row="1" Grid.ColumnSpan="2" FontFamily="Segoe Print" FontSize="21.333" Foreground="#FFAAAAAA"/>
             </Grid>
-            <Button x:Name="SignUpButton" Content="Sign up for Instagram" Click="SignUpButtonClick" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Canvas.ZIndex="1" />
-            <Button Content="Login with Instagram" x:Name="authButton" Click="AuthButtonClick" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" FontSize="21.333" Height="75" Width="300" Grid.Row="1"/>
+            <Button x:Uid="SignUpButton" Click="SignUpButtonClick" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Canvas.ZIndex="1" />
+            <Button x:Uid="LoginButton" x:Name="authButton" Click="AuthButtonClick" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Top" FontSize="21.333" Height="75" Width="300" Grid.Row="1"/>
             <TextBlock x:Name="signinRequiredTextBlock" Visibility="Collapsed"/>
-            <CheckBox x:Name="FollowCheckBox" Content="Follow Tabstagram" HorizontalAlignment="Center" Margin="0,80,0,0" Grid.Row="1" VerticalAlignment="Top" IsChecked="True"/>
-
+            <CheckBox x:Uid="FollowTabstagramBox" x:Name="FollowCheckBox" HorizontalAlignment="Center" Margin="0,80,0,0" Grid.Row="1" VerticalAlignment="Top" IsChecked="True"/>
         </Grid>
         <Popup x:Name="SignUpPopUp" Margin="-319,-418,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
         	<Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">

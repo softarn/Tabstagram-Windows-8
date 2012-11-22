@@ -32,7 +32,6 @@ namespace Tabstagram
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
         }
 
         /// <summary>

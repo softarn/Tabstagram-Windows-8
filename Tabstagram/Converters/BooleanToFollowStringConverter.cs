@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Data;
 
 namespace Tabstagram
@@ -11,14 +12,15 @@ namespace Tabstagram
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            var res = new ResourceLoader("Resources");
             if (value == null)
-                return "Follow";
+                return res.GetString("Follow");
 
             bool val = (bool)value;
             if (val)
-                return "Unfollow";
+                return res.GetString("Unfollow");
 
-            return "Follow";
+            return res.GetString("Follow");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

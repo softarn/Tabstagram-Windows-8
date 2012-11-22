@@ -126,7 +126,7 @@
                                     <TextBlock Text="{Binding name}" FontSize="16" Foreground="#FFFFFFFF" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text=" - " Margin="3,0,3,0" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                     <TextBlock Text="{Binding media_count, Converter={StaticResource NumberConverter}}" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
-                                    <TextBlock Text=" photos" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
+                                    <TextBlock x:Uid="PhotosText" FontSize="16" Foreground="#FFA6A6A6" FontWeight="Bold" FontFamily="Segoe UI Semilight"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridView.ItemTemplate>
@@ -198,17 +198,18 @@
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <Image Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png"  Width="72" Height="72" Margin="0,15,30,0"/>
             <TextBlock x:Name="pageTitle" Grid.Column="2" Text="{StaticResource AppName}" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"  />
-            <TextBlock x:Name="resultText" Grid.Column="3" Text="Results for&#x00a0;" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
+            <TextBlock x:Uid="ResultsForText" x:Name="resultText" Grid.Column="3" Margin="0,0,5,40" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
             <TextBlock x:Name="queryText" Grid.Column="4" Text="{Binding QueryText}" IsHitTestVisible="false" Style="{StaticResource PageSubheaderTextStyle}"/>
         </Grid>
 
         <TextBlock
+            x:Uid="NoResultsText"
             x:Name="noResultsTextBlock"
             Grid.Row="1"
             Margin="120,50,0,0"
             Visibility="Collapsed"
             Style="{StaticResource SubheaderTextStyle}"
-            Text="No results match your search." />
+             />
 
         <VisualStateManager.VisualStateGroups>
 
