@@ -1,4 +1,4 @@
-﻿#OS junk files
+#OS junk files
 [Tt]humbs.db
 *.DS_Store
 
@@ -62,3 +62,5 @@ packages/
 
 #Test files
 *.testsettings
+
+AppPackages/

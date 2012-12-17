@@ -23,6 +23,7 @@ namespace Tabstagram
     {
         private bool settingsMenuRegistered;
         GroupedListsViewModel _lvm;
+        GlobalSettings globalSettings;
 
         public GroupedListsPage()
         {
@@ -31,9 +32,9 @@ namespace Tabstagram
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private void OnErrorNotice(object sender, NotificationEventArgs nea)
+        private async void OnErrorNotice(object sender, NotificationEventArgs nea)
         {
-            ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
+            await ErrorDisplayer.DisplayNetworkError(new UICommand("Try again", this.TryAgainCommand));
         }
 
         /// <summary>
@@ -47,11 +48,12 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected async override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
+            Instagram.AccessToken = UserSettings.AccessToken;
+
             if (_lvm != null) return;
 
             _lvm = new GroupedListsViewModel();
             _lvm.CriticalNetworkErrorNotice += OnErrorNotice;
-            Instagram.AccessToken = UserSettings.AccessToken;
             this.DefaultViewModel["Groups"] = _lvm.ItemGroups;
             LoadingGrid.DataContext = _lvm;
             itemGridView.DataContext = _lvm;
@@ -62,11 +64,12 @@ namespace Tabstagram
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            globalSettings = new GlobalSettings(this.Frame);
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
 
             if (!this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested += globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = true;
             }
 
@@ -91,7 +94,7 @@ namespace Tabstagram
 
             if (this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested -= globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = false;
             }
         }
@@ -188,30 +191,6 @@ namespace Tabstagram
             Storyboard.SetTarget(storyboard, b);
 
             storyboard.Begin();
-        }
-
-        void onLogoutCommand(IUICommand command)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values["access_token"] = null;
-            this.Frame.Navigate(typeof(LoginPage));
-        }
-
-        async void onPrivacyCommand(IUICommand command)
-        {
-           await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
-        }
-
-        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
-        {
-            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
-            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
-
-            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
-            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
-            
-            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
-            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
     }
 }

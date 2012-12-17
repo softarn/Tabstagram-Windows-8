@@ -17,7 +17,15 @@ namespace Tabstagram.Models
 
         protected static T Get<T>(string key)
         {
+            if (localSettings.Values[key] == null)
+                return default(T);
+
             return (T)localSettings.Values[key];
+        }
+
+        public static void Clear(string key)
+        {
+            localSettings.Values[key] = null;
         }
 
         public async static void ClearSettings()

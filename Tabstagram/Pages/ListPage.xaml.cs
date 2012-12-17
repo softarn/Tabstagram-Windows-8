@@ -20,6 +20,9 @@ namespace Tabstagram
     {
         MediaListViewModel mediaList = null;
         private bool settingsMenuRegistered;
+        private GlobalSettings globalSettings;
+        private Media selectedItem;
+        private string lastItemId;
 
         public ListPage()
         {
@@ -29,6 +32,7 @@ namespace Tabstagram
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            globalSettings = new GlobalSettings(this.Frame);
 
             mediaList = e.Parameter as MediaListViewModel;
             mediaList.CriticalNetworkErrorNotice += OnErrorNotice;
@@ -37,9 +41,17 @@ namespace Tabstagram
 
             if (!this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested += globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = true;
             }
+
+            this.Loaded += (sender, args) =>
+            {
+                if (lastItemId != "")
+                {
+                    itemGridView.ScrollIntoView(mediaList.Find(lastItemId));
+                }
+            };
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -49,7 +61,7 @@ namespace Tabstagram
 
             if (this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested -= globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = false;
             }
 
@@ -77,7 +89,20 @@ namespace Tabstagram
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
+            base.LoadState(navigationParameter, pageState);
 
+            if (pageState != null)
+            {
+                lastItemId = (string)pageState["lastMediaId"];
+            }
+        }
+
+        protected override void SaveState(Dictionary<string, object> pageState)
+        {
+            base.SaveState(pageState);
+
+            if(selectedItem != null)
+                pageState["lastMediaId"] = selectedItem.id;
         }
 
         private void itemGridView_ItemClick_1(object sender, ItemClickEventArgs e)
@@ -122,35 +147,9 @@ namespace Tabstagram
         private void ImageClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Media m = ((Button)sender).DataContext as Media;
+            selectedItem = m;
 
             this.Frame.Navigate(typeof(ImagePage), m);
         }
-
-        void onLogoutCommand(IUICommand command)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values["access_token"] = null;
-            this.Frame.Navigate(typeof(LoginPage));
-        }
-
-        async void onPrivacyCommand(IUICommand command)
-        {
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
-        }
-
-        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
-        {
-            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
-            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
-
-            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
-            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
-
-            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
-            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
-        }
-
-
-
     }
 }

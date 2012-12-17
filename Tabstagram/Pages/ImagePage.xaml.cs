@@ -26,6 +26,7 @@ namespace Tabstagram
         private Button MarkedButton;
         private Grid VisibleGrid;
         private readonly DispatcherTimer _timer = new DispatcherTimer();
+        private GlobalSettings globalSettings;
 
         public ImagePage()
         {
@@ -68,6 +69,7 @@ namespace Tabstagram
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            globalSettings = new GlobalSettings(this.Frame);
             if (e.Parameter is Media)
             {
                 Media m = e.Parameter as Media;
@@ -92,7 +94,7 @@ namespace Tabstagram
 
             if (!this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested += onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested += globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = true;
             }
 
@@ -106,7 +108,7 @@ namespace Tabstagram
 
             if (this.settingsMenuRegistered)
             {
-                SettingsPane.GetForCurrentView().CommandsRequested -= onCommandsRequested;
+                SettingsPane.GetForCurrentView().CommandsRequested -= globalSettings.onCommandsRequested;
                 this.settingsMenuRegistered = false;
             }
             
@@ -290,30 +292,6 @@ namespace Tabstagram
             FollowButton.IsEnabled = false;
             await _viewModel.FollowOrUnfollow();
             FollowButton.IsEnabled = true;
-        }
-
-        void onLogoutCommand(IUICommand command)
-        {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values["access_token"] = null;
-            this.Frame.Navigate(typeof(LoginPage));
-        }
-
-        async void onPrivacyCommand(IUICommand command)
-        {
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://tabstagram.com/privacy_policy"));
-        }
-
-        void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
-        {
-            UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
-            UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
-
-            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
-            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
-
-            eventArgs.Request.ApplicationCommands.Add(logoutCommand);
-            eventArgs.Request.ApplicationCommands.Add(privacyCommand);
         }
     }
 }

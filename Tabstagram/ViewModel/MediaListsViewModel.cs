@@ -252,6 +252,15 @@ namespace Tabstagram
         {
             Error = false;
         }
+
+        internal Media Find(string lastItemId)
+        {
+            foreach(Media m in this) 
+            {
+                if (m.id == lastItemId) return m;
+            }
+            return null;
+        }
     }
 
     public class Feed : MediaListViewModel

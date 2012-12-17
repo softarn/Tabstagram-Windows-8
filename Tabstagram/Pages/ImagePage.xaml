@@ -184,17 +184,17 @@
                     <Grid x:Name="ImageInfo" VerticalAlignment="Center" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     	<Grid.ColumnDefinitions>
                     		<ColumnDefinition/>
-                    		<ColumnDefinition Width="2*"/>
-                    		<ColumnDefinition Width="2*"/>
+                    		<ColumnDefinition Width="Auto"/>
+                    		<ColumnDefinition Width="Auto"/>
                     		<ColumnDefinition/>
                     	</Grid.ColumnDefinitions>
-                        <Button x:Name="LikesButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="0" Padding="0" MinWidth="64" Grid.Column="1" Width="80">
+                        <Button x:Name="LikesButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="0" Padding="0" MinWidth="64" Grid.Column="1" Margin="4,0">
                     		<StackPanel HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
                     			<TextBlock x:Uid="LikesText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                     			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.likes.count}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
                     		</StackPanel>
                     	</Button>
-                        <Button x:Name="CommentsButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0" Margin="0" Grid.Column="2" MinWidth="64" BorderThickness="0" Width="80">
+                        <Button x:Name="CommentsButton" Click="RightGridInfoSwitchClick" Style="{StaticResource GrayDisabledBackgroundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0" Margin="4,0" Grid.Column="2" MinWidth="64" BorderThickness="0">
                             <StackPanel  HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center">
                     			<TextBlock x:Uid="CommentsText" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="13.333" Foreground="#FFCBCBCB"/>
                     			<TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding CurrentMedia.comments.count}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="16"/>
