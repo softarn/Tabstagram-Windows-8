@@ -97,7 +97,14 @@
         </VisualStateManager.VisualStateGroups>
 
         <!-- Horizontal scrolling grid used in most view states -->
-        <ContentControl x:Name="Background" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}" />
+        <ContentControl x:Name="Background" Content="Tabstagram" Margin="0" Grid.Row="1" Style="{StaticResource Background}">
+            <ContentControl.Transitions>
+                <TransitionCollection/>
+            </ContentControl.Transitions>
+            <ContentControl.ContentTransitions>
+                <TransitionCollection/>
+            </ContentControl.ContentTransitions>
+        </ContentControl>
 
         <local:MyGridView
             x:Name="itemGridView"

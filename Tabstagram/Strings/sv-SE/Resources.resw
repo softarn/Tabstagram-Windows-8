@@ -185,4 +185,10 @@
   <data name="WriteCommentText" xml:space="preserve">
     <value>Skriv kommentar...</value>
   </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Sekretesspolicy</value>
+  </data>
 </root>

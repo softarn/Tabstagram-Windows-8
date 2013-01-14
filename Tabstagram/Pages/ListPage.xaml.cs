@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Navigation;
 namespace Tabstagram
 {
     /// <summary>
-    /// A page that displays a collection of item previews.  In the Split Application this page
+    /// A page that displays a collection of item previews. In the Split Application this page
     /// is used to display and select one of the available groups.
     /// </summary>
     public sealed partial class ListPage : Tabstagram.Common.LayoutAwarePage
@@ -79,8 +79,8 @@ namespace Tabstagram
         }
 
         /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided wh     en recreating a page from a prior session.
+        /// Populates the page with content passed during navigation. Any saved state is also
+        /// provided when recreating a page from a prior session.
         /// </summary>
         /// <param name="navigationParameter">The parameter value passed to
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.

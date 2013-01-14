@@ -29,11 +29,15 @@ namespace Tabstagram
 
         public void onCommandsRequested(SettingsPane settingsPane, SettingsPaneCommandsRequestedEventArgs eventArgs)
         {
+            var loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+            var logoutLabel = loader.GetString("LogOut");
+            var privacyLabel = loader.GetString("PrivacyPolicy");
+
             UICommandInvokedHandler logoutHandler = new UICommandInvokedHandler(onLogoutCommand);
             UICommandInvokedHandler privacyHandler = new UICommandInvokedHandler(onPrivacyCommand);
 
-            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", "Logout", logoutHandler);
-            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", "Privacy policy", privacyHandler);
+            SettingsCommand logoutCommand = new SettingsCommand("LogoutId", logoutLabel, logoutHandler);
+            SettingsCommand privacyCommand = new SettingsCommand("PrivacyId", privacyLabel, privacyHandler);
 
             eventArgs.Request.ApplicationCommands.Add(logoutCommand);
             eventArgs.Request.ApplicationCommands.Add(privacyCommand);

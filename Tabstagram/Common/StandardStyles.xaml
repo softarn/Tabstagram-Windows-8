@@ -1902,6 +1902,12 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="ContentControl">
 					<Grid>
+                        <Grid.ChildrenTransitions>
+                            <TransitionCollection/>
+                        </Grid.ChildrenTransitions>
+                        <Grid.Transitions>
+                            <TransitionCollection/>
+                        </Grid.Transitions>
 						<Rectangle IsHitTestVisible="False" StrokeThickness="75" Margin="0" Fill="#FFC1C1C1"/>
 						<ContentPresenter Margin="0,0,150,60.491" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" VerticalAlignment="Bottom" HorizontalAlignment="Right">
 							<ContentPresenter.RenderTransform>
@@ -1944,6 +1950,11 @@
 				</LinearGradientBrush>
 			</Setter.Value>
 		</Setter>
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <TransitionCollection/>
+            </Setter.Value>
+        </Setter>
 	</Style>
 	<x:String x:Key="AppName">Tabstagram</x:String>
 </ResourceDictionary>

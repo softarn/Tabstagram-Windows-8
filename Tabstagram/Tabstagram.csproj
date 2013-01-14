@@ -186,8 +186,12 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <PRIResource Include="Strings\en-US\Resources.resw" />
-    <PRIResource Include="Strings\sv-SE\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
+    <PRIResource Include="Strings\sv-SE\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <None Include="Tabstagram_StoreKey.pfx" />
     <None Include="Tabstagram_TemporaryKey.pfx" />
     <None Include="Tabstagram_TemporaryKey2.pfx" />
