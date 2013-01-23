@@ -68,7 +68,10 @@ namespace Tabstagram
             base.OnNavigatedTo(e);
 
             if (UserSettings.MediaListChanged)
+            {
                 await _lvm.Reset();
+                UserSettings.MediaListChanged = false;
+            }
 
             globalSettings = new GlobalSettings(this.Frame);
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;

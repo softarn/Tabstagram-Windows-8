@@ -30,7 +30,7 @@ namespace Tabstagram.Helpers
         public static bool AddMediaString(string str)
         {
             List<string> list = UserSettings.MediaStringsList;
-            if (FavouriteMediaListHelper.HasMediaString(str) == false)
+            if (FavouriteMediaListHelper.HasMediaString(str) == false && HashTag.IsHashTag(str))
             {
                 list.Add(str);
                 UserSettings.MediaStringsList = list;
