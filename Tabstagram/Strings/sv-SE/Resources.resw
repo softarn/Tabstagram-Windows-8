@@ -180,7 +180,7 @@
     <value>Följ ej</value>
   </data>
   <data name="Unlike" xml:space="preserve">
-    <value>Unlike</value>
+    <value>Gilla ej</value>
   </data>
   <data name="WriteCommentText" xml:space="preserve">
     <value>Skriv kommentar...</value>
@@ -190,5 +190,11 @@
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Sekretesspolicy</value>
+  </data>
+  <data name="AddListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Lägg till hashtag</value>
+  </data>
+  <data name="EditListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Editera hemskärm</value>
   </data>
 </root>

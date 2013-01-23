@@ -16,7 +16,6 @@
         <CollectionViewSource
             x:Name="itemsViewSource"
             Source="{Binding Items}"/>
-
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Tabstagram</x:String>
     </Page.Resources>
@@ -91,10 +90,12 @@
         		<ColumnDefinition Width="Auto"/>
         		<ColumnDefinition Width="Auto"/>
         		<ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
         	</Grid.ColumnDefinitions>
         	<Button x:Name="backButton1" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}" Margin="36,0,36,36"/>
         	<Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:/Assets/Tabstagram_icon.png" Grid.Column="1" Width="72" Height="72" Margin="0,15,0,0"/>
         	<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Grid.Column="2" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Margin="30,0,0,40"/>
+            <Button Grid.Column="3" Margin="0,17,10,0"  VerticalAlignment="Center" AutomationProperties.Name="Add to home" Style="{StaticResource AddAppBarButtonStyle}" Click="AddNewMediaListClick" />
         </Grid>
 
         <VisualStateManager.VisualStateGroups>
@@ -119,7 +120,6 @@
                 -->
                 <VisualState x:Name="Snapped">
                     <Storyboard>
-
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="itemListView" Storyboard.TargetProperty="Visibility">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                         </ObjectAnimationUsingKeyFrames>

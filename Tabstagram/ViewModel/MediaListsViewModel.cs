@@ -21,6 +21,8 @@ namespace Tabstagram
             {
                 _category = value;
                 OnPropertyChanged("category");
+                string str = "f";
+                
             }
         }
         protected override event PropertyChangedEventHandler PropertyChanged;
@@ -142,23 +144,6 @@ namespace Tabstagram
             {
                 SubCollection.Add(m);
             }
-        }
-
-        public static MediaListViewModel GetClassFromString(string listString)
-        {
-            if (listString[0] == '#')
-            {
-                return new HashTag(listString.Substring(1, listString.Length - 1));
-            }
-
-            if (listString.Equals("popular"))
-                return new Popular();
-            if (listString.Equals("feed"))
-                return new Feed();
-            if (listString.Equals("selfmedia"))
-                return new SelfMedia();
-
-            throw new ArgumentException("listString must be #hashtagname, popular, selfmedia or feed");
         }
 
         public virtual async Task<MultipleMedia> FetchMoreMedia()
@@ -425,6 +410,14 @@ namespace Tabstagram
             args.Add(new Arg(Arg.Type.MIN_TAG_ID, pagination.min_tag_id));
             MultipleMedia mm = await Instagram.LoadHashtag(Tag, args);
             return mm.data;
+        }
+
+        internal static bool IsHashTag(string str)
+        {
+            if (str[0] == '#')
+                return true;
+            else
+                return false;
         }
     }
 }

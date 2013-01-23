@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.ApplicationSettings;
 using Windows.ApplicationModel.Search;
+using Tabstagram.Data;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
@@ -28,7 +29,7 @@ namespace Tabstagram
         public GroupedListsPage()
         {
             this.InitializeComponent();
-
+            
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
@@ -57,6 +58,7 @@ namespace Tabstagram
             this.DefaultViewModel["Groups"] = _lvm.ItemGroups;
             LoadingGrid.DataContext = _lvm;
             itemGridView.DataContext = _lvm;
+            UserSettings.MediaListChanged = false;
             await _lvm.LoadFromSettings();
             Debug.WriteLine("Loaded state");
         }
@@ -64,8 +66,16 @@ namespace Tabstagram
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            if (UserSettings.MediaListChanged)
+                await _lvm.Reset();
+
             globalSettings = new GlobalSettings(this.Frame);
             SearchPane.GetForCurrentView().ShowOnKeyboardInput = true;
+
+            //Set the same itemsource for zoomedIn and zoomedOut
+            var collectionGroups = groupedItemsViewSource.View.CollectionGroups;
+            ((ListViewBase)this.Zoom.ZoomedOutView).ItemsSource = collectionGroups;
 
             if (!this.settingsMenuRegistered)
             {
@@ -153,6 +163,41 @@ namespace Tabstagram
             var m = e.ClickedItem as Media;
 
             this.Frame.Navigate(typeof(ImagePage), m);
+        }
+
+        private void GroupClick(object sender, ItemClickEventArgs e)
+        {
+            var m = e.ClickedItem as Media;
+        }
+
+        private void MoveRightButtonClick(object sender, RoutedEventArgs e)
+        {
+            var m = (MediaListViewModel)((Button)sender).DataContext;
+            _lvm.MoveMediaList(m, 1);
+        }
+
+        private void MoveLeftButtonClick(object sender, RoutedEventArgs e)
+        {
+            var m = (MediaListViewModel)((Button)sender).DataContext;
+            _lvm.MoveMediaList(m, -1);
+        }
+
+        private void DeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            var m = (MediaListViewModel)((Button)sender).DataContext;
+            _lvm.DeleteMediaList(m);
+        }
+
+        private void EditListAppBarClick(object sender, RoutedEventArgs e)
+        {
+            if(this.Zoom.IsZoomedInViewActive)
+                this.Zoom.ToggleActiveView();
+        }
+
+        private void AddListAppBarClick(object sender, RoutedEventArgs e)
+        {
+            Windows.ApplicationModel.Search.SearchPane searchPane = SearchPane.GetForCurrentView();
+            searchPane.Show();
         }
 
         private void ButtonPointerEntered(object sender, PointerRoutedEventArgs e)

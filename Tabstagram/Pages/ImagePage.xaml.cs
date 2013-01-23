@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Tabstagram.Data;
 using Tabstagram.Models;
 using Windows.Foundation;
 using Windows.UI.ApplicationSettings;
@@ -206,7 +207,7 @@ namespace Tabstagram
             // Since command delegates are unique, no need to specify command Ids.
             var menu = new PopupMenu();
 
-            string userId = await UserSettings.retreiveUserId();
+            string userId = await UserSettings.RetreiveUserId();
             Comment comment = (Comment)o;
 
             if (userId == _viewModel.CurrentUser.id || userId == comment.from.id)
@@ -233,7 +234,7 @@ namespace Tabstagram
             // Since command delegates are unique, no need to specify command Ids.
             var menu = new PopupMenu();
 
-            string userId = await UserSettings.retreiveUserId();
+            string userId = await UserSettings.RetreiveUserId();
 
             menu.Commands.Add(new UICommand("Go to user", command => HandleGoToUser((User)o)));
             ListViewItem lvi = (ListViewItem)activeList.ItemContainerGenerator.ContainerFromItem(o);

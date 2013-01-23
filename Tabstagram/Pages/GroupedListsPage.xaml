@@ -9,9 +9,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    
+    <Page.BottomAppBar>
+        <AppBar>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Uid="EditListAppBarButton" Style="{StaticResource EditAppBarButtonStyle}" Click="EditListAppBarClick" />
+                <Button x:Uid="AddListAppBarButton" Style="{StaticResource AddAppBarButtonStyle}" Click="AddListAppBarClick" />
+            </StackPanel>
+        </AppBar>
+    </Page.BottomAppBar>
 
     <Page.Resources>
-
         <!--
             Collection of grouped items displayed by this page, bound to a subset
             of the complete item list because items in groups cannot be virtualized
@@ -38,8 +46,7 @@
     -->
     <Grid Style="{StaticResource LayoutRootStyle}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="140">
-            </RowDefinition>
+            <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -106,61 +113,123 @@
             </ContentControl.ContentTransitions>
         </ContentControl>
 
-        <local:MyGridView
-            x:Name="itemGridView"
-            AutomationProperties.AutomationId="ItemGridView"
-            AutomationProperties.Name="Grouped Items"
-            Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
-            ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
-            ItemClick="ItemClick"
-            IsItemClickEnabled="True"
-            SelectionMode="None"
-            IsSwipeEnabled="false" 
-            Padding="120,10,0,10" 
-            BorderThickness="0,2" 
-            Foreground="White"
-            Grid.Row="1">
-            <local:MyGridView.ItemTemplate>
-                <DataTemplate>
-                    <local:ThumbnailControl />
-                </DataTemplate>
-            </local:MyGridView.ItemTemplate>
-            <local:MyGridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </local:MyGridView.ItemsPanel>
-            <local:MyGridView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
+        <SemanticZoom x:Name="Zoom" CanChangeViews="True" Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <local:MyGridView
+                    x:Name="itemGridView"
+                    AutomationProperties.AutomationId="ItemGridView"
+                    AutomationProperties.Name="Grouped Items"
+                    Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+                    ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
+                    ItemClick="ItemClick"
+                    IsItemClickEnabled="True"
+                    SelectionMode="None"
+                    IsSwipeEnabled="false" 
+                    Padding="120,10,0,10" 
+                    BorderThickness="0,2"
+                    Foreground="White">
+                    <local:MyGridView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="1,0,0,6">
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
-                                        <Button.RenderTransform>
-                                            <CompositeTransform CenterX="16" CenterY="16"/>
-                                        </Button.RenderTransform>
-                                        <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
-                                    </Button>
-                                    <Button AutomationProperties.Name="category" Style="{StaticResource TextPrimaryButtonStyle}" Click="ButtonClick">
-                                        <StackPanel Orientation="Horizontal" >
-                                            <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
-                                            <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
+                            <local:ThumbnailControl />
+                        </DataTemplate>
+                    </local:MyGridView.ItemTemplate>
+                    <local:MyGridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </local:MyGridView.ItemsPanel>
+                    <local:MyGridView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="1,0,0,6">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Background="Transparent" Margin="10, 0, 10, 5" PointerExited="ButtonPointerExited" PointerEntered="ButtonPointerEntered" Click="RefreshButtonClick" Style="{StaticResource TextPrimaryButtonStyle}">
+                                                <Button.RenderTransform>
+                                                    <CompositeTransform CenterX="16" CenterY="16"/>
+                                                </Button.RenderTransform>
+                                                <Image Source="ms-appx:/Assets/RefreshIcon.png" Width="32" Height="32" VerticalAlignment="Center"/>
+                                            </Button>
+                                            <Button AutomationProperties.Name="category" Style="{StaticResource TextPrimaryButtonStyle}" Click="ButtonClick">
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <TextBlock Text="{Binding category}" Style="{StaticResource GroupHeaderTextStyle}" FontWeight="Normal" Margin="3,-7,10,10" />
+                                                    <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-7,0,10" Style="{StaticResource GroupHeaderTextStyle}"/>
+                                                </StackPanel>
+                                            </Button>
                                         </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                            <GroupStyle.Panel>
+                                <ItemsPanelTemplate>
+                                    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
+                                </ItemsPanelTemplate>
+                            </GroupStyle.Panel>
+                        </GroupStyle>
+                    </local:MyGridView.GroupStyle>
+                </local:MyGridView>
+            </SemanticZoom.ZoomedInView>
+
+            <SemanticZoom.ZoomedOutView>
+                <GridView
+                    x:Name="collectionGridView"
+                    Visibility="{Binding IsLoading, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+                    ItemClick="GroupClick"
+                    IsItemClickEnabled="True"
+                    SelectionMode="None"
+                    IsSwipeEnabled="false" 
+                    Padding="100,10,0,50" 
+                    BorderThickness="0,2"
+                    Foreground="White">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="MoveLeftButtonClick" DataContext="{Binding Group}" BorderThickness="0">
+                                        <Image Source="ms-appx:/Assets/RightArrowIcon.png" Width="40" Height="40" RenderTransformOrigin="0.5,0.5" >
+                                            <Image.RenderTransform><CompositeTransform Rotation="180"/></Image.RenderTransform>
+                                        </Image>
+                                    </Button>
+                                    <Button Click="DeleteButtonClick" DataContext="{Binding Group}" BorderThickness="0">
+                                        <Image Source="ms-appx:/Assets/TrashcanIcon.png" Width="30" Height="30"/>
+                                    </Button>
+                                    <Button Click="MoveRightButtonClick" DataContext="{Binding Group}" BorderThickness="0">
+                                        <Image Source="ms-appx:/Assets/RightArrowIcon.png" Width="40" Height="40"/>
                                     </Button>
                                 </StackPanel>
+                                <Border x:Name="ImageBorder" Grid.Row="1" BorderBrush="#000" BorderThickness="1" HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" Height="450" Width="150" Margin="0">
+                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Image Source="{Binding Group.SubCollection[0].images.thumbnail.url}"/>
+                                            <Image Source="{Binding Group.SubCollection[1].images.thumbnail.url}" Grid.Row="1"/>
+                                            <Image Source="{Binding Group.SubCollection[2].images.thumbnail.url}" Grid.Row="2"/>
+                                        </Grid>
+                                        <Grid Background="#97000000" />
+                                        <TextBlock RenderTransformOrigin="0.5,0.5" Foreground="#FFECECEC" FontSize="26.667" Text="{Binding Group.category}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-138.883,209,-138.883,205" UseLayoutRounding="False" d:LayoutRounding="Auto" FontFamily="Segoe UI Semibold" Width="423.766" TextAlignment="Center" FontWeight="Bold">
+                                            <TextBlock.RenderTransform>
+                                                <CompositeTransform Rotation="90"/>
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
                             </Grid>
                         </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                    <GroupStyle.Panel>
-                        <ItemsPanelTemplate>
-                            <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="150" ItemWidth="150" Margin="0,0,80,0"/>
-                        </ItemsPanelTemplate>
-                    </GroupStyle.Panel>
-                </GroupStyle>
-            </local:MyGridView.GroupStyle>
-        </local:MyGridView>
-        
+                    </GridView.ItemTemplate>
+                </GridView>
+            </SemanticZoom.ZoomedOutView>
+
+        </SemanticZoom>
+
         <!-- Vertical scrolling list only used when snapped -->
         <ListView
             x:Name="itemListView"

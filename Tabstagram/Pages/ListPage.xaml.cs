@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tabstagram.Helpers;
+using Tabstagram.Models;
+using Windows.Data.Xml.Dom;
 using Windows.UI.ApplicationSettings;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -150,6 +154,31 @@ namespace Tabstagram
             selectedItem = m;
 
             this.Frame.Navigate(typeof(ImagePage), m);
+        }
+
+        private void AddNewMediaListClick(object sender, RoutedEventArgs e)
+        {
+            bool added = FavouriteMediaListHelper.AddMediaString(mediaList.GetName());
+
+            if (added == false) return;
+
+            ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
+            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
+
+            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
+            toastTextElements[0].AppendChild(toastXml.CreateTextNode("Added " + mediaList.GetName() + " to start screen"));
+
+            XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
+            if(mediaList.IsLoaded)
+                ((XmlElement)toastImageAttributes[0]).SetAttribute("src", mediaList[0].images.low_resolution.url);
+
+            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
+            ((XmlElement)toastNode).SetAttribute("duration", "short");
+
+            ((XmlElement)toastNode).SetAttribute("launch", "{\"type\":\"toast\"}");
+
+            ToastNotification toast = new ToastNotification(toastXml);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
     }
 }

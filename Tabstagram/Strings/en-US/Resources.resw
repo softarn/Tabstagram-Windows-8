@@ -189,4 +189,10 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>PrivacyPolicy</value>
   </data>
+  <data name="AddListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Add hashtag to home</value>
+  </data>
+  <data name="EditListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>Edit homescreen</value>
+  </data>
 </root>

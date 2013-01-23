@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tabstagram.Models
+namespace Tabstagram.Data
 {
     public class Settings
     {

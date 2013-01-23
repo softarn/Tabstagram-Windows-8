@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Tabstagram.App">
-      <VisualElements DisplayName="Tabstagram" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Tabstagram is tailored to bring you the best Instagram viewing experience on Windows 8. Browse through the latest images in your feed, or check out the most popular images currently on Instagram. Tabstagram fully supports commenting and liking images, all with a sleek, good looking Windows 8 inspired interface." ForegroundText="light" BackgroundColor="#171717">
+      <VisualElements DisplayName="Tabstagram" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Tabstagram is tailored to bring you the best Instagram viewing experience on Windows 8. Browse through the latest images in your feed, or check out the most popular images currently on Instagram. Tabstagram fully supports commenting and liking images, all with a sleek, good looking Windows 8 inspired interface." ForegroundText="light" BackgroundColor="#171717" ToastCapable="true">
         <DefaultTile ShowName="allLogos" ShortName="Tabstagram" />
         <SplashScreen Image="Assets\Tabstagram_splash.png" BackgroundColor="#171717" />
         <InitialRotationPreference>

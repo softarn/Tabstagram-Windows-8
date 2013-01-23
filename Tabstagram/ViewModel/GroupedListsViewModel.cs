@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tabstagram.Data;
+using Tabstagram.Helpers;
 using Tabstagram.Models;
 
 namespace Tabstagram
@@ -46,9 +48,13 @@ namespace Tabstagram
         {
             List<string> list = UserSettings.MediaStringsList;
 
-            foreach (MediaListViewModel ml in list.Select(MediaListViewModel.GetClassFromString))
+            foreach (string mediaStr in list)
             {
-                AddToItemsGroup(ml);
+                try 
+                {
+                    MediaListViewModel ml = FavouriteMediaListHelper.GetClassFromString(mediaStr);
+                    AddToItemsGroup(ml);
+                } catch (Exception) {}
             }
 
             ItemGroups.First().Observer = this;
@@ -56,7 +62,7 @@ namespace Tabstagram
             try
             {
                 foreach (MediaListViewModel ml in ItemGroups)
-                    await ml.Init();
+                    ml.Init();
             }
             catch (Exception)
             {
@@ -73,16 +79,6 @@ namespace Tabstagram
             return true;
         }
 
-        public MediaListViewModel GetListFromString(string listName)
-        {
-            foreach (MediaListViewModel g in ItemGroups.Where(g => g.category.ToLower().Equals(listName.ToLower())))
-            {
-                return g;
-            }
-
-            throw new System.ArgumentException("listName must be the name of a Group category");
-        }
-
         protected void OnPropertyChanged(string name)
         {
             if (null != PropertyChanged)
@@ -97,6 +93,47 @@ namespace Tabstagram
                 ItemGroups.First().Observer = null;
 
             IsLoading = !b;
+        }
+
+        internal void DeleteMediaList(MediaListViewModel m)
+        {
+            int currentPos = ItemGroups.IndexOf(m);
+            bool deleted = FavouriteMediaListHelper.DeleteMediaString(m.GetName());
+
+            if (deleted == false) return;
+            ItemGroups.RemoveAt(currentPos);
+        }
+
+        /// <summary>
+        /// Moves a MediaItem to a new position
+        /// </summary>
+        /// <param name="direction">Any negative for moving it backwards, any positive for moving it forward. 0 will not change its position</param>
+        internal void MoveMediaList(MediaListViewModel m, int direction)
+        {
+            if (direction == 0) return;
+
+            int currentPos = ItemGroups.IndexOf(m);
+
+            List<string> list = UserSettings.MediaStringsList;
+            int nextPos = currentPos;
+
+            if (currentPos == list.Count - 1 && direction > 0)
+                nextPos = 0;
+            else if (currentPos == 0 && direction < 0)
+                nextPos = list.Count - 1;
+            else
+                nextPos = direction < 0 ? currentPos-1 : currentPos+1;
+
+            string str = list[currentPos];
+            ItemGroups.Move(currentPos, nextPos);
+            list.Insert(nextPos, str);
+
+            if (nextPos < currentPos)
+                list.RemoveAt(currentPos + 1);
+            else
+                list.RemoveAt(currentPos);
+
+            UserSettings.MediaStringsList = list;
         }
     }
 

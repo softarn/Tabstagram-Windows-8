@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tabstagram.Models
+namespace Tabstagram.Data
 {
     public class UserSettings : Settings
     {
         private static string ACCESS_TOKEN_KEY = "access_token";
         private static string ACITVE_LIST_KEY = "active_list";
         private static string MEDIA_LISTS = "media_lists";
+        private static string MEDIA_LIST_CHANGED = "media_list_changed";
         private static string USER_ID_KEY = "user_id";
         private static string FOLLOW_TABSTAGRAM_KEY = "follow_tabstagram_id";
 
@@ -32,7 +33,13 @@ namespace Tabstagram.Models
             set { Save(FOLLOW_TABSTAGRAM_KEY, value); }        
         }
 
-        public static async Task<string> retreiveUserId()
+        public static bool MediaListChanged
+        {
+            get { return Get<bool>(MEDIA_LIST_CHANGED); }
+            set { Save(MEDIA_LIST_CHANGED, value); }
+        }
+
+        public static async Task<string> RetreiveUserId()
         {
             Task<string> task = null;
 
@@ -75,17 +82,9 @@ namespace Tabstagram.Models
 
             set
             {
+                UserSettings.MediaListChanged = true;
                 Save(MEDIA_LISTS, ListToString(value));
             }
-        }
-
-        public static void AddMediaString(string str)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(MediaStringsList);
-            sb.Append(str + ',');
-
-            Save(MEDIA_LISTS, sb.ToString());
         }
 
         private static List<string> LoadDefaultMediaLists()
