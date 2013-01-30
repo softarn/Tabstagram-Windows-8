@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.ApplicationSettings;
 using Windows.ApplicationModel.Search;
 using Tabstagram.Data;
+using Windows.ApplicationModel.Store;
+using Tabstagram.Helpers;
 
 // The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
 
@@ -61,6 +63,24 @@ namespace Tabstagram
             UserSettings.MediaListChanged = false;
             await _lvm.LoadFromSettings();
             Debug.WriteLine("Loaded state");
+
+            LicenseInformation licenseInformation;
+            // Initialize the license info for use in the app that is uploaded to the Store.
+            // uncomment for release
+               licenseInformation = CurrentApp.LicenseInformation;
+
+            // Initialize the license info for testing.
+            // comment the next line for release
+            //licenseInformation = CurrentAppSimulator.LicenseInformation;
+
+            if (licenseInformation.IsActive && UserSettings.HasAskedForRating == false)
+            {
+                if (licenseInformation.IsTrial == false)
+                {
+                    RatingDisplayer.AskForRating();
+                    UserSettings.HasAskedForRating = true;
+                }
+            }
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)

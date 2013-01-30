@@ -20,9 +20,7 @@ namespace Tabstagram
             set
             {
                 _category = value;
-                OnPropertyChanged("category");
-                string str = "f";
-                
+                OnPropertyChanged("category");                
             }
         }
         protected override event PropertyChangedEventHandler PropertyChanged;

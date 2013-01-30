@@ -15,7 +15,7 @@
     <PackageCertificateKeyFile>Tabstagram_StoreKey.pfx</PackageCertificateKeyFile>
     <ExpressionBlendVersion>5.0.30709.0</ExpressionBlendVersion>
     <PackageCertificateThumbprint>210EDD70004F3B7695892D5C956F5E320B41DEBB</PackageCertificateThumbprint>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -129,6 +129,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\CommentTimeConverter.cs" />
     <Compile Include="Helpers\FavouriteMediaListHelper.cs" />
+    <Compile Include="Helpers\RatingDisplayer.cs" />
     <Compile Include="Models\Relationship.cs" />
     <Compile Include="UserListViewModel.cs" />
     <Compile Include="ViewModel\GroupedListsViewModel.cs" />

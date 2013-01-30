@@ -14,6 +14,13 @@ namespace Tabstagram.Data
         private static string MEDIA_LIST_CHANGED = "media_list_changed";
         private static string USER_ID_KEY = "user_id";
         private static string FOLLOW_TABSTAGRAM_KEY = "follow_tabstagram_id";
+        private static string ASKED_RATING_KEY = "asked_rating";
+
+        public static bool HasAskedForRating
+        {
+            get { return Get<bool>(ASKED_RATING_KEY); }
+            set { Save(ASKED_RATING_KEY, value); }
+        }
 
         public static string AccessToken 
         {
