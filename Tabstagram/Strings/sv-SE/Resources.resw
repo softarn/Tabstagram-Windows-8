@@ -197,4 +197,7 @@
   <data name="EditListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>Editera hemskärm</value>
   </data>
+  <data name="PurchaseThanksText" xml:space="preserve">
+    <value>Tack för att du köpt Tabstagram!\n\nTack vare dig kan vi fortsätta utveckla appar  som denna. Ta gärna några sekunder och betygsätt och säg vad du tycker om appen i Windows Store.</value>
+  </data>
 </root>

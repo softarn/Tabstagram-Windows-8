@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Popups;
 
 namespace Tabstagram.Helpers
@@ -13,7 +14,8 @@ namespace Tabstagram.Helpers
         public static async void AskForRating()
         {
             // Create the message dialog and set its content
-            var messageDialog = new MessageDialog("Thank you for purchasing this app!\n\nIt is thanks to people like you we can develop apps that you will love to use. Please spread your thoughts on our app by giving it a rating at the Store.");
+            var res = new ResourceLoader("Resources");
+            var messageDialog = new MessageDialog(res.GetString("PurchaseThanksText"));
 
             UICommand ok = new UICommand("Sure", RatingDisplayer.GoToMarket);
             UICommand no = new UICommand("No thanks");

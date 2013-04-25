@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="61816Tabstagram.Tabstagram" Publisher="CN=04BBE2F4-099E-41BD-B0D3-5CCF27745E95" Version="0.2.0.11" />
+  <Identity Name="61816Tabstagram.Tabstagram" Publisher="CN=04BBE2F4-099E-41BD-B0D3-5CCF27745E95" Version="0.2.2.13" />
   <Properties>
     <DisplayName>Tabstagram</DisplayName>
     <PublisherDisplayName>Tabstagram</PublisherDisplayName>

@@ -197,6 +197,12 @@
     <PRIResource Include="Strings\sv-SE\Resources.resw">
       <SubType>Designer</SubType>
     </PRIResource>
+    <PRIResource Include="Strings\zh-Hans\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
+    <PRIResource Include="Strings\zh-Hant\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <None Include="Tabstagram_StoreKey.pfx" />
     <None Include="Tabstagram_TemporaryKey.pfx" />
     <None Include="Tabstagram_TemporaryKey2.pfx" />

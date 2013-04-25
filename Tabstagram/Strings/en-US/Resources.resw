@@ -195,4 +195,7 @@
   <data name="EditListAppBarButton.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>Edit homescreen</value>
   </data>
+  <data name="PurchaseThanksText" xml:space="preserve">
+    <value>Thank you for purchasing this app!\n\nIt is thanks to people like you we can develop apps that you will love to use. Please spread your thoughts on our app by giving it a rating at the Store.</value>
+  </data>
 </root>
